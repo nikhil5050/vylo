@@ -56,22 +56,22 @@ const faqs = [
   {
     question: "Do I need an appointment to visit the Belhe boutique?",
     answer:
-      "Walk-ins are always welcome! However, for custom design consultations or bespoke bridal enquiries, booking an appointment ensures dedicated time with our master jeweller.",
+      "Walk-ins are always welcome — no appointment required to browse. For custom design consultations or wedding jewelry enquiries, we recommend booking ahead: it's the difference between browsing and getting our master jeweller's full attention on your piece.",
   },
   {
     question: "How long do custom jewellery requests typically take?",
     answer:
-      "Custom designs usually take 2 to 4 weeks from initial concept approval to hand-crafting and final polish, depending on design complexity.",
+      "Most custom jewelry design requests take two to four weeks from start to finish. That includes approving your design concept, hand-crafting the piece, and final polishing — with the exact timeline depending on how detailed the design is. We commit to realistic timeframes and hold to them.",
   },
   {
     question: "Can I make changes to an existing online order?",
     answer:
-      "If your order hasn't been dispatched yet, we can easily update your details or item requests. Reach out to us via phone or WhatsApp for immediate help.",
+      "Provided your order has not yet been dispatched, we are able to update your order details or item selection. For prompt assistance, please contact us via phone or WhatsApp.",
   },
   {
     question: "Do you offer international shipping and valuation certificates?",
     answer:
-      "Yes, we ship globally with insured express courier partners. All our gold and diamond jewellery comes with certified authenticity documentation.",
+      "Yes we ship internationally through insured, express courier partners, so your order arrives protected regardless of destination. Every piece is accompanied by documentation verifying 925 sterling silver purity, giving you the same transparency and confidence wherever in the world you're ordering from.",
   },
 ];
 
@@ -146,11 +146,14 @@ export default function ContactPage() {
           <div className="flex min-w-0 flex-col lg:col-span-5">
             <FadeIn>
               <h1 className="mt-6 font-serif text-4xl text-charcoal sm:text-5xl tracking-tight">
-                Get in touch
+                Connect With Us
               </h1>
               <p className="mt-4 text-base leading-relaxed text-muted">
-                Questions about an order, a piece, or a custom design? Reach out
-                however&apos;s easiest for you.
+                Already own a piece, waiting on an order, or picturing a custom
+                design that doesn&apos;t exist yet? Whichever it is, reach us
+                through whatever&apos;s easiest — we treat every enquiry, from a
+                quick question to a personalised jewellery request, with the
+                same commitment to a clear and timely response.
               </p>
             </FadeIn>
 
@@ -312,8 +315,8 @@ export default function ContactPage() {
               Everything You Need to Know
             </h2>
             <p className="mt-2 text-sm text-muted">
-              Quick answers to common questions about visiting us, custom
-              orders, and services.
+              The details behind the design custom orders and services, answered
+              plainly before you have to ask.
             </p>
           </FadeIn>
 
@@ -343,9 +346,9 @@ export default function ContactPage() {
                   Come See Us in Belhe
                 </h3>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/70">
-                  Nothing quite compares to holding a piece in your hands. Stop
-                  by our flagship boutique to experience our craftsmanship in
-                  person.
+                  A piece is meant to be felt, not just seen. Visit our Belhe
+                  boutique and hold the craftsmanship for yourself — the weight,
+                  the finish, the detail no photograph fully captures.
                 </p>
                 <div className="mt-4 flex items-center gap-2 text-xs text-white/80">
                   <MapPin className="h-4 w-4 shrink-0 text-burgundy" />
