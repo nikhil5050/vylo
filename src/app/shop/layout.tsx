@@ -31,7 +31,7 @@ export const metadata: Metadata = buildMetadata({
     "silver pendant necklace",
     "buy silver rings online",
     "silver rings for women",
-    "designer silver rings",
+    "designer silver rings", 
     "silver band ring",
     "cocktail silver ring",
     "silver ear cuffs for women",
