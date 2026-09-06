@@ -58,8 +58,8 @@ export default function Home() {
       <CategoryGrid />
       {/* <HeroGrid /> */}
       <OfferBanner />
-      <TrustSection />
       <Bestsellers />
+      <TrustSection />
       <MaterialStory /> 
       <Testimonials />
       <FinalCta />
