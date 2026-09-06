@@ -1,5 +1,6 @@
-import { apiFetch } from "@/lib/api";
+import { apiFetch, apiFetchBlob } from "@/lib/api";
 import type { AdminOrder, OrderShipment } from "@/types/admin";
+import { downloadBlob } from "@/utils/downloadBlob";
 
 interface BackendOrderItem {
   id: number;
@@ -196,4 +197,9 @@ export async function updateOrderShipment(orderId: string, input: ShipmentUpdate
     shippedAt: shipment.shipped_at ?? undefined,
     deliveredAt: shipment.delivered_at ?? undefined,
   };
+}
+
+export async function downloadAdminOrderInvoice(id: string, orderNumber: string): Promise<void> {
+  const blob = await apiFetchBlob(`/admin/orders/${id}/invoice`);
+  downloadBlob(blob, `invoice-${orderNumber}.pdf`);
 }

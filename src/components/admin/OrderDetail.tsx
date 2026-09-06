@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, Truck } from "lucide-react";
+import { ArrowLeft, Download, Truck } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/admin/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/admin/ui/table";
 import { Input } from "@/components/admin/ui/input";
@@ -14,7 +14,7 @@ import { ImagePlaceholder } from "@/components/admin/ImagePlaceholder";
 import { orderStatusTone, paymentStatusTone, shippingStatusTone } from "@/lib/admin/status";
 import { formatAdminDate, formatAdminDateTime } from "@/lib/admin/format";
 import { formatPrice } from "@/utils/formatPrice";
-import { updateOrderShipment } from "@/lib/admin/api";
+import { downloadOrderInvoice, updateOrderShipment } from "@/lib/admin/api";
 import type { AdminOrder, OrderShipment } from "@/types/admin";
 
 interface OrderDetailProps {
@@ -31,6 +31,18 @@ export function OrderDetail({ order, shipment: initialShipment }: OrderDetailPro
     trackingUrl: initialShipment?.trackingUrl ?? "",
   });
   const [saving, setSaving] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+
+  async function handleDownloadInvoice() {
+    setDownloading(true);
+    try {
+      await downloadOrderInvoice(order.id, order.orderNumber);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Couldn't download the invoice.");
+    } finally {
+      setDownloading(false);
+    }
+  }
 
   async function saveShipment() {
     setSaving(true);
@@ -58,6 +70,9 @@ export function OrderDetail({ order, shipment: initialShipment }: OrderDetailPro
           </div>
           <p className="mt-1 text-sm text-muted-foreground">Placed on {formatAdminDate(order.placedAt)}</p>
         </div>
+        <Button variant="outline" onClick={handleDownloadInvoice} disabled={downloading}>
+          <Download className="h-4 w-4" /> {downloading ? "Preparing…" : "Download Invoice"}
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">

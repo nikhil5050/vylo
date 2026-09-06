@@ -131,3 +131,29 @@ export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): 
 
   return payload as T;
 }
+
+// For binary responses (e.g. an invoice PDF) apiFetch's JSON/text parsing
+// doesn't apply — this mirrors its auth/error handling but returns a Blob.
+export async function apiFetchBlob(path: string): Promise<Blob> {
+  const headers: Record<string, string> = {};
+  const token = getStoredToken();
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, { headers, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+  } catch (error) {
+    throw new ApiError(0, "Could not reach the Vylore backend. Please try again.", error);
+  }
+
+  if (response.status === 401) {
+    unauthorizedHandler?.();
+    return new Promise<Blob>(() => {});
+  }
+
+  if (!response.ok) {
+    throw new ApiError(response.status, `Request failed with status ${response.status}`);
+  }
+
+  return response.blob();
+}

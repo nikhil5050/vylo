@@ -58,6 +58,9 @@ export const getOrder = orderService.getAdminOrder;
 export const getOrderShipment = orderService.getOrderShipment;
 export const updateOrderShipment = orderService.updateOrderShipment;
 
+// GET /api/v1/admin/orders/:id/invoice
+export const downloadOrderInvoice = orderService.downloadAdminOrderInvoice;
+
 // GET /api/v1/admin/customers, GET /api/v1/admin/customers/:id
 export const getCustomers = customerService.getAdminCustomers;
 export const getCustomer = customerService.getAdminCustomer;

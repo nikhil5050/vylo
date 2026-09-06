@@ -1,5 +1,6 @@
-import { apiFetch } from "@/lib/api";
+import { apiFetch, apiFetchBlob } from "@/lib/api";
 import type { Order, OrderItem, OrderStatus } from "@/types/order";
+import { downloadBlob } from "@/utils/downloadBlob";
 
 interface BackendOrderItem {
   id: number;
@@ -96,4 +97,9 @@ export async function getOrderByNumber(orderNumber: string): Promise<Order | und
 
 export async function cancelOrder(id: number): Promise<Order> {
   return mapOrder(await apiFetch<BackendOrder>(`/orders/${id}/cancel`, { method: "POST" }));
+}
+
+export async function downloadOrderInvoice(id: number, orderNumber: string): Promise<void> {
+  const blob = await apiFetchBlob(`/orders/${id}/invoice`);
+  downloadBlob(blob, `invoice-${orderNumber}.pdf`);
 }

@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { OrderTimeline } from "@/components/order/OrderTimeline";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { getOrder } from "@/services/order.service";
+import { downloadOrderInvoice, getOrder } from "@/services/order.service";
 import type { Order } from "@/types/order";
 import { formatPrice } from "@/utils/formatPrice";
 
@@ -22,6 +22,21 @@ function OrderDetailContent() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [order, setOrder] = useState<Order | null | undefined>(undefined);
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState(false);
+
+  async function handleDownloadInvoice() {
+    if (!order) return;
+    setDownloading(true);
+    setDownloadError(false);
+    try {
+      await downloadOrderInvoice(order.id, order.orderNumber);
+    } catch {
+      setDownloadError(true);
+    } finally {
+      setDownloading(false);
+    }
+  }
 
   useEffect(() => {
     if (!id) return;
@@ -57,10 +72,18 @@ function OrderDetailContent() {
             {new Date(order.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
           </p>
         </div>
-        <Link href="/account/orders" className="eyebrow text-xs text-burgundy">
-          Back to Orders
-        </Link>
+        <div className="flex items-center gap-4">
+          <Button variant="secondary" size="sm" onClick={handleDownloadInvoice} disabled={downloading}>
+            {downloading ? "Preparing…" : "Download Invoice"}
+          </Button>
+          <Link href="/account/orders" className="eyebrow text-xs text-burgundy">
+            Back to Orders
+          </Link>
+        </div>
       </div>
+      {downloadError && (
+        <p className="mt-2 text-xs text-red-600">Couldn&apos;t download the invoice. Please try again.</p>
+      )}
 
       <div className="mt-8">
         <OrderTimeline status={order.orderStatus} />
