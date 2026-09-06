@@ -3,15 +3,20 @@ import type { ReactNode } from "react";
 import { buildMetadata } from "@/utils/metadata";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Contact",
-  description: "Get in touch with Vylore for enquiries, support, or custom jewellery requests.",
+  title: "Contact Vylore Jewellery | Customer Support & Enquiries",
+  description:
+    "Contact Vylore for jewellery orders, product questions, custom sterling silver designs, WhatsApp support, and boutique visits in Belhe, Maharashtra.",
   path: "/contact",
   keywords: [
-    "contact Vylore",
+    "contact Vylore jewellery",
     "Vylore customer support",
-    "custom jewellery enquiry",
-    "Vylore boutique Belhe",
-    "jewellery store contact India",
+    "Vylore contact number",
+    "Vylore WhatsApp support",
+    "jewellery order support India",
+    "custom sterling silver jewellery enquiry",
+    "Vylore jewellery store Belhe",
+    "jewellery boutique Maharashtra",
+    "silver jewellery customer service",
   ],
 });
 
