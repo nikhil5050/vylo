@@ -8,7 +8,7 @@ import { OfferBanner } from "@/components/home/OfferBanner";
 import { Testimonials } from "@/components/home/Testimonials";
 import { TrustSection } from "@/components/home/TrustSection";
 import { isComingSoon } from "@/config/launch";
-import { HeroGrid } from "@/components/home/HeroGrid";
+// import { HeroGrid } from "@/components/home/HeroGrid";
 import { Faq } from "@/components/home/Faq";
 import { VyloreExperienceLazy as VyloreExperience } from "@/components/home/vylore-experience/VyloreExperienceLazy";
 import { buildMetadata } from "@/utils/metadata";
@@ -56,14 +56,15 @@ export default function Home() {
     <main className="flex flex-1 flex-col">
      <VyloreExperience />
       <CategoryGrid />
-      <HeroGrid />
+      {/* <HeroGrid /> */}
       <OfferBanner />
       <TrustSection />
       <Bestsellers />
       <MaterialStory /> 
       <Testimonials />
-      <Faq />
       <FinalCta />
+      <Faq />
+      
     </main>
   );
 }

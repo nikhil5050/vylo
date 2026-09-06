@@ -1,6 +1,8 @@
 import { ProductListing } from "@/components/shop/ProductListing";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
+import { siteConfig } from "@/config/site";
 import { getCategories } from "@/services/category.service";
 import { getAllProducts } from "@/services/product.service";
 
@@ -18,8 +20,20 @@ export default async function ShopPage() {
     getCategories().catch(() => []),
   ]);
 
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: products.map((product, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${siteConfig.url}/product/${product.slug}`,
+      name: product.name,
+    })),
+  };
+
   return (
     <main className="flex flex-1 flex-col py-16 lg:py-24">
+      {products.length > 0 && <JsonLd data={itemListJsonLd} />}
       <Container>
         <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Shop" }]} />
         <h1 className="mt-4 font-serif text-4xl text-charcoal sm:text-5xl">Shop All</h1>

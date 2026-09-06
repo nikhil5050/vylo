@@ -16,8 +16,8 @@ export async function OfferBanner() {
         <div className="space-y-6">
           {banners.map((banner, index) => {
             const image = (
-              <div className="relative aspect-[16/5] w-full overflow-hidden rounded-2xl">
-                <ProductThumbnail src={banner.imageUrl} alt={banner.title ?? "Offer"} transform="w-1600" />
+              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
+                <ProductThumbnail src={banner.imageUrl} alt={banner.title ?? "Offer"} fit="contain" transform="w-1600" />
               </div>
             );
             return (

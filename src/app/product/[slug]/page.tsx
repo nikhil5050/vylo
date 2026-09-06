@@ -8,6 +8,7 @@ import { StickyMobileCta } from "@/components/product/StickyMobileCta";
 import { Accordion, type AccordionItem } from "@/components/ui/Accordion";
 import { Container } from "@/components/ui/Container";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { siteConfig } from "@/config/site";
 import { getAllProducts, getProductBySlug, getRelatedProducts } from "@/services/product.service";
 
@@ -118,7 +119,7 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
 
   return (
     <main className="flex flex-1 flex-col pb-24 pt-16 lg:pb-0 lg:pt-24">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
+      <JsonLd data={productJsonLd} />
       <Container>
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           <ProductGallery productName={product.name} images={product.images} />

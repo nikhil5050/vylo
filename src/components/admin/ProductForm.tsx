@@ -60,10 +60,6 @@ export function ProductForm({ product, categories }: { product?: Product; catego
   });
 
   const values = watch();
-  const discountPercent =
-    values.compareAtPrice && values.compareAtPrice > values.basePrice
-      ? Math.round(((values.compareAtPrice - values.basePrice) / values.compareAtPrice) * 100)
-      : 0;
 
   async function onSubmit(data: ProductFormValues) {
     setSubmitting(true);
@@ -203,28 +199,11 @@ export function ProductForm({ product, categories }: { product?: Product; catego
                   <Input id="basePrice" type="number" step="0.01" {...register("basePrice", { valueAsNumber: true })} />
                   {errors.basePrice && <p className="text-xs text-destructive">{errors.basePrice.message}</p>}
                 </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="compareAtPrice">Compare-at Price (₹)</Label>
-                  <Input
-                    id="compareAtPrice"
-                    type="number"
-                    step="0.01"
-                    {...register("compareAtPrice", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })}
-                  />
-                  {errors.compareAtPrice && <p className="text-xs text-destructive">{errors.compareAtPrice.message}</p>}
-                </div>
               </div>
 
               <div className="space-y-2 rounded-lg border border-border bg-muted/40 p-4 text-sm">
                 <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">Price Preview</p>
-                <Row label="Compare-at Price" value={values.compareAtPrice ?? 0} />
                 <Row label="Selling Price" value={values.basePrice || 0} />
-                {discountPercent > 0 && (
-                  <div className="mt-2 flex items-center justify-between border-t border-border pt-2 font-medium text-success">
-                    <span>Discount</span>
-                    <span>{discountPercent}% off</span>
-                  </div>
-                )}
               </div>
             </CardContent>
           </Card>

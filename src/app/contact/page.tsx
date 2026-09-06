@@ -10,10 +10,12 @@ import {
   Sparkles,
 } from "lucide-react";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { contactInfo } from "@/config/contact";
+import { siteConfig } from "@/config/site";
 
 const quickContacts = [
   {
@@ -76,9 +78,63 @@ const faqs = [
 const mapEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(contactInfo.address)}&output=embed`;
 const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(contactInfo.address)}`;
 
+// Mirrors boutiqueHours above — schema.org wants one entry per day (or a
+// dayOfWeek array), not the "Monday – Friday" range string shown to shoppers.
+const localBusinessJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "JewelryStore",
+  name: siteConfig.name,
+  url: `${siteConfig.url}/contact`,
+  image: `${siteConfig.url}/logo/logo.png`,
+  telephone: contactInfo.phone,
+  email: contactInfo.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "152, Chandani Chowk",
+    addressLocality: "Belhe",
+    addressRegion: "Maharashtra",
+    postalCode: "412410",
+    addressCountry: "IN",
+  },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "10:00",
+      closes: "20:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Saturday",
+      opens: "10:00",
+      closes: "21:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Sunday",
+      opens: "11:00",
+      closes: "18:00",
+    },
+  ],
+};
+
+const contactFaqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+};
+
 export default function ContactPage() {
   return (
     <main className="relative flex flex-1 flex-col overflow-hidden bg-white py-12 sm:py-16 lg:py-20">
+      <JsonLd data={[localBusinessJsonLd, contactFaqJsonLd]} />
       <Container className="relative z-10">
         <Breadcrumb
           items={[{ label: "Home", href: "/" }, { label: "Contact" }]}

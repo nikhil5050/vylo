@@ -1,6 +1,7 @@
 import { Accordion } from "@/components/ui/Accordion";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { faqCategories } from "@/config/faq";
 
 const faqJsonLd = {
@@ -21,7 +22,7 @@ const faqJsonLd = {
 export default function FaqPage() {
   return (
     <main className="flex flex-1 flex-col py-16 lg:py-24">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <JsonLd data={faqJsonLd} />
       <Container className="max-w-3xl">
         <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "FAQ" }]} />
         <h1 className="mt-4 font-serif text-4xl text-charcoal sm:text-5xl">Frequently Asked Questions</h1>

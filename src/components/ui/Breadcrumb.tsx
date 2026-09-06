@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Fragment } from "react";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { siteConfig } from "@/config/site";
 
 interface BreadcrumbItem {
@@ -21,7 +22,7 @@ export function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
 
   return (
     <nav aria-label="Breadcrumb" className="eyebrow flex flex-wrap items-center gap-2 text-[11px] text-muted">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <JsonLd data={breadcrumbJsonLd} />
       {items.map((item, index) => (
         <Fragment key={item.label}>
           {index > 0 && <span aria-hidden="true">/</span>}
