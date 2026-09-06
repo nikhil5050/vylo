@@ -10,6 +10,7 @@ import type { Theme } from "@/types/theme";
 import { FilterDrawer } from "./FilterDrawer";
 import { FiltersPanel, type FilterState } from "./FiltersPanel";
 import { SortSelect, type SortOption } from "./SortSelect";
+import { ThemeFilterBar } from "./ThemeFilterBar";
 
 const PAGE_SIZE = 8;
 const EMPTY_FILTERS: FilterState = { categorySlugs: [], themeSlugs: [], inStockOnly: false };
@@ -18,6 +19,10 @@ interface ProductListingProps {
   products: Product[];
   categories?: Category[];
   themes?: Theme[];
+  // /shop shows themes as a visual tile row above the listing instead of a
+  // checkbox section in the sidebar filters — category pages keep the
+  // checkbox version, since there's no theme-tiles design for those yet.
+  themeTiles?: boolean;
 }
 
 function filterProducts(products: Product[], filters: FilterState): Product[] {
@@ -49,7 +54,7 @@ function sortProducts(products: Product[], sort: SortOption): Product[] {
   }
 }
 
-export function ProductListing({ products, categories, themes }: ProductListingProps) {
+export function ProductListing({ products, categories, themes, themeTiles }: ProductListingProps) {
   const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
   const [sort, setSort] = useState<SortOption>("newest");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -57,14 +62,25 @@ export function ProductListing({ products, categories, themes }: ProductListingP
 
   const filtered = useMemo(() => sortProducts(filterProducts(products, filters), sort), [products, filters, sort]);
   const visible = filtered.slice(0, visibleCount);
+  const showThemeTiles = themeTiles && themes && themes.length > 0;
 
   function handleFiltersChange(next: FilterState) {
     setFilters(next);
     setVisibleCount(PAGE_SIZE);
   }
 
+  function selectTile(slug: string | null) {
+    handleFiltersChange({ ...filters, themeSlugs: slug ? [slug] : [] });
+  }
+
   return (
     <div>
+      {showThemeTiles && (
+        <div className="mb-10">
+          <ThemeFilterBar themes={themes} selectedSlug={filters.themeSlugs[0] ?? null} onSelect={selectTile} />
+        </div>
+      )}
+
       <div className="flex items-center justify-between border-b border-silver/30 pb-4">
         <p className="text-sm text-muted">
           {filtered.length} {filtered.length === 1 ? "piece" : "pieces"}
@@ -83,7 +99,7 @@ export function ProductListing({ products, categories, themes }: ProductListingP
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[240px_1fr]">
         <aside className="hidden lg:block">
-          <FiltersPanel categories={categories} themes={themes} filters={filters} onChange={handleFiltersChange} />
+          <FiltersPanel categories={categories} themes={showThemeTiles ? undefined : themes} filters={filters} onChange={handleFiltersChange} />
         </aside>
 
         <div>

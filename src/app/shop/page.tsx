@@ -38,13 +38,11 @@ export default async function ShopPage() {
       {products.length > 0 && <JsonLd data={itemListJsonLd} />}
       <Container>
         <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Shop" }]} />
-        <h1 className="mt-4 font-serif text-4xl text-charcoal sm:text-5xl">Shop All</h1>
-        <p className="mt-3 max-w-xl text-base text-muted">
-          The complete Vylore silver jewellery collection, in one place.
-        </p>
+        <h1 className="mt-4 font-serif text-4xl text-charcoal sm:text-5xl">Define Your Style.</h1>
+        <p className="eyebrow mt-2 text-xs text-muted">Discover Your Vylore.</p>
 
         <div className="mt-10">
-          <ProductListing products={products} categories={categories} themes={themes} />
+          <ProductListing products={products} categories={categories} themes={themes} themeTiles />
         </div>
       </Container>
     </main>
