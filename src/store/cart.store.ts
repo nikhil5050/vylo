@@ -7,12 +7,17 @@ import type { Product } from "@/types/product";
 export interface CartLine {
   product: Product;
   size?: string;
+  // The backend variant this size resolves to — required to sync this line
+  // to the backend cart for any product that has variants (see
+  // checkout.service.ts's syncCartToBackend). Undefined only for genuinely
+  // variant-less products.
+  variantId?: string;
   quantity: number;
 }
 
 interface CartState {
   lines: CartLine[];
-  addItem: (product: Product, options?: { size?: string; quantity?: number }) => void;
+  addItem: (product: Product, options?: { size?: string; variantId?: string; quantity?: number }) => void;
   removeLine: (productId: string, size?: string) => void;
   setQuantity: (productId: string, size: string | undefined, quantity: number) => void;
   clear: () => void;
@@ -28,6 +33,7 @@ export const useCartStore = create<CartState>()(
       lines: [],
       addItem: (product, options) => {
         const size = options?.size;
+        const variantId = options?.variantId;
         const quantity = options?.quantity ?? 1;
         const existing = get().lines.find((line) => matches(line, product.id, size));
 
@@ -40,7 +46,7 @@ export const useCartStore = create<CartState>()(
           return;
         }
 
-        set({ lines: [...get().lines, { product, size, quantity }] });
+        set({ lines: [...get().lines, { product, size, variantId, quantity }] });
       },
       removeLine: (productId, size) => {
         set({ lines: get().lines.filter((line) => !matches(line, productId, size)) });

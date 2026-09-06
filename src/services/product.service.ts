@@ -1,6 +1,6 @@
 import { ApiError, apiFetch } from "@/lib/api";
 import { getCategories, getCategoryById } from "@/services/category.service";
-import type { Product } from "@/types/product";
+import type { Product, ProductVariantOption } from "@/types/product";
 
 interface BackendProductImage {
   id: number;
@@ -49,16 +49,20 @@ async function mapProduct(product: BackendProduct): Promise<Product> {
   const inStock = hasVariants ? product.variants.some((v) => v.is_active && v.stock > 0) : (product.stock ?? 0) > 0;
 
   // Size comes from the variant's `attributes.size` (admin's Variants tab writes
-  // this key) — dedupe in insertion order since attribute values aren't
-  // uniqueness-constrained the way SKUs are.
-  const sizes = Array.from(
-    new Set(
-      product.variants
-        .filter((v) => v.is_active)
-        .map((v) => v.attributes.size)
-        .filter((size): size is string => typeof size === "string" && size.trim().length > 0),
-    ),
-  );
+  // this key) — dedupe in insertion order (first occurrence wins) since
+  // attribute values aren't uniqueness-constrained the way SKUs are. Each
+  // option keeps its variant id so a selected size can resolve to a
+  // variant_id for the backend cart (see ProductVariantOption).
+  const variantOptions: ProductVariantOption[] = [];
+  const seenSizes = new Set<string>();
+  for (const v of product.variants) {
+    if (!v.is_active) continue;
+    const size = v.attributes.size;
+    if (typeof size !== "string" || size.trim().length === 0 || seenSizes.has(size)) continue;
+    seenSizes.add(size);
+    variantOptions.push({ id: String(v.id), size });
+  }
+  const sizes = variantOptions.map((v) => v.size);
 
   return {
     id: String(product.id),
@@ -73,6 +77,7 @@ async function mapProduct(product: BackendProduct): Promise<Product> {
       .sort((a, b) => a.position - b.position)
       .map((image) => ({ url: image.url, altText: image.alt_text ?? undefined })),
     sizes: sizes.length > 0 ? sizes : undefined,
+    variants: variantOptions.length > 0 ? variantOptions : undefined,
     inStock,
     // No backend field yet for these — real product content (story, metal,
     // purity, weight, marketing badges, collection curation) doesn't exist in

@@ -21,15 +21,16 @@ interface PayUCheckoutParams {
 // re-adding rather than diffing, since it's simpler and this only runs once
 // per checkout (and once per "Share Cart" click — see shared-cart.service.ts,
 // which needs the backend cart populated before it can snapshot it).
-// NOTE: variant-based products aren't supported yet — line.size has no
-// backend variant_id to map to, so only plain (non-variant) products sync
-// correctly right now.
 export async function syncCartToBackend(lines: CartLine[]): Promise<void> {
   await apiFetch("/cart", { method: "DELETE" });
   for (const line of lines) {
     await apiFetch("/cart/items", {
       method: "POST",
-      body: { product_id: Number(line.product.id), quantity: line.quantity },
+      body: {
+        product_id: Number(line.product.id),
+        variant_id: line.variantId ? Number(line.variantId) : undefined,
+        quantity: line.quantity,
+      },
     });
   }
 }

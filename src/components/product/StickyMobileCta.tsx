@@ -11,7 +11,7 @@ export function StickyMobileCta({ product }: { product: Product }) {
   const [added, setAdded] = useState(false);
 
   function handleAddToCart() {
-    addItem(product, { size: product.sizes?.[0] });
+    addItem(product, { size: product.sizes?.[0], variantId: product.variants?.[0]?.id });
     setAdded(true);
     window.setTimeout(() => setAdded(false), 2000);
   }

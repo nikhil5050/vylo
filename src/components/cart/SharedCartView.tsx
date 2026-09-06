@@ -29,7 +29,13 @@ export function SharedCartView({ sharedCart }: { sharedCart: SharedCart }) {
         skipped += 1;
         continue;
       }
-      addItem(product, { quantity: item.quantity });
+      // The shared item only carries a backend variant_id — resolve it back
+      // to this product's {id, size} option so the re-added line keeps its
+      // size and can still sync to the backend cart (see cart.store.ts's
+      // CartLine.variantId and checkout.service.ts's syncCartToBackend).
+      const variant =
+        item.variantId != null ? product.variants?.find((v) => v.id === String(item.variantId)) : undefined;
+      addItem(product, { quantity: item.quantity, size: variant?.size, variantId: variant?.id });
     }
 
     setSkippedCount(skipped);

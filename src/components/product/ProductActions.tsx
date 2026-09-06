@@ -19,14 +19,16 @@ export function ProductActions({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
+  const selectedVariantId = product.variants?.find((v) => v.size === selectedSize)?.id;
+
   function handleAddToCart() {
-    addItem(product, { size: selectedSize, quantity });
+    addItem(product, { size: selectedSize, variantId: selectedVariantId, quantity });
     setAdded(true);
     window.setTimeout(() => setAdded(false), 2000);
   }
 
   function handleBuyNow() {
-    addItem(product, { size: selectedSize, quantity });
+    addItem(product, { size: selectedSize, variantId: selectedVariantId, quantity });
     router.push("/cart");
   }
 
