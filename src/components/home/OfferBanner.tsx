@@ -4,9 +4,8 @@ import { FadeIn } from "@/components/ui/FadeIn";
 import { ProductThumbnail } from "@/components/ui/ProductThumbnail";
 import { getBanners } from "@/services/banner.service";
 
-// /banners isn't live on the backend yet, so this fails closed: no banners
-// (or a fetch error) just means the section doesn't render, instead of
-// breaking the homepage.
+// Fails closed: no banners (or a fetch error) just means the section
+// doesn't render, instead of breaking the homepage.
 export async function OfferBanner() {
   const banners = await getBanners().catch(() => []);
   if (banners.length === 0) return null;

@@ -1,10 +1,8 @@
 import { apiFetch } from "@/lib/api";
 import type { Banner } from "@/types/banner";
 
-// NOTE: /banners doesn't exist on the backend yet — see BANNER_API.md for
-// the contract this is written against, and admin/banner.service.ts for the
-// admin-side CRUD counterpart. Expected to return only active banners,
-// already sorted by sort_order.
+// See admin/banner.service.ts for the admin-side CRUD counterpart.
+// Returns only active banners, already sorted by sort_order.
 interface BackendBanner {
   id: number;
   image_url: string;

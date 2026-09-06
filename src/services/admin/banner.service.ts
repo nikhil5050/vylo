@@ -1,9 +1,6 @@
 import { apiFetch } from "@/lib/api";
 import type { AdminBanner } from "@/types/admin";
 
-// NOTE: /admin/banners doesn't exist on the backend yet — this facade is
-// written against the intended contract so the admin UI and homepage
-// section are ready to go live the moment it ships. See BANNER_API.md.
 interface BackendBanner {
   id: number;
   image_url: string;
