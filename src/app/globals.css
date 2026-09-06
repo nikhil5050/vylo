@@ -223,6 +223,15 @@ body {
     }
   }
 
+  /* Pausing on hover only for the offer-banner marquee (OfferBanner.tsx),
+     not the shared .marquee-track used elsewhere (e.g. about/page.tsx) —
+     these banners are clickable links, so giving the pointer a moment to
+     land on one matters here in a way it doesn't for the decorative
+     text ticker. */
+  .offer-banner-marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
   /* Two duplicate, full-width tracks placed side by side (not one track
      with doubled content, like .marquee-track above) — each slides its own
      full width from off-screen left to its natural position, so as one
