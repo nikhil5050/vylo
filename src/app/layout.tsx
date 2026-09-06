@@ -78,27 +78,33 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${display.variable} ${body.variable} h-full antialiased`}
     >
-      <Script id="google-tag-manager" strategy="beforeInteractive">
-        {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-K6SXZHSJ');`}
-      </Script>
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-GX4R2NYDD0"
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-GX4R2NYDD0');`}
-      </Script>
       <body
         className="flex min-h-full flex-col bg-ivory text-charcoal"
         suppressHydrationWarning
       >
+        {/* next/script hoists these into <head> itself regardless of
+            strategy — they need to live inside <body> in the JSX tree (per
+            Next's own root-layout example) for React 19's script-ordering
+            check to have somewhere to hoist them from. Rendering them as
+            siblings of <body> under <html> left React unable to determine
+            load order at all. */}
+        <Script id="google-tag-manager" strategy="beforeInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-K6SXZHSJ');`}
+        </Script>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-GX4R2NYDD0"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-GX4R2NYDD0');`}
+        </Script>
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-K6SXZHSJ"
