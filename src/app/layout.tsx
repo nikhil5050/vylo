@@ -85,6 +85,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-K6SXZHSJ');`}
       </Script>
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-GX4R2NYDD0"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-GX4R2NYDD0');`}
+      </Script>
       <body
         className="flex min-h-full flex-col bg-ivory text-charcoal"
         suppressHydrationWarning
