@@ -17,6 +17,14 @@ export const metadata: Metadata = buildMetadata({
     "Vylore jewellery store Belhe",
     "jewellery boutique Maharashtra",
     "silver jewellery customer service",
+    "customer service Vylore",
+    "customer care Vylore",
+    "Vylore customer care number",
+    "jewellery customer service India",
+    "silver jewellery customer care",
+    "jewellery enquiry",
+    "silver jewellery enquiry",
+    "custom jewellery enquiry",
   ],
 });
 

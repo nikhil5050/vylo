@@ -6,9 +6,9 @@ import { buildMetadata } from "@/utils/metadata";
 // lightbox/carousel interactions) and can't export metadata itself — this
 // layout is the only place in the App Router that can carry it for this route.
 export const metadata: Metadata = buildMetadata({
-  title: "Our Story",
+  title: "About Vylore | Contemporary 925 Sterling Silver Jewellery",
   description:
-    "Vylore is a contemporary sterling silver jewellery brand built on 25+ years of family jewellery expertise. Meet founder Akash Kapile and the craftsmanship behind every piece.",
+    "Discover Vylore, a contemporary 925 sterling silver jewellery brand shaped by 25+ years of family expertise, thoughtful design and craftsmanship.",
   path: "/about",
   keywords: [
     "about Vylore",
@@ -18,6 +18,20 @@ export const metadata: Metadata = buildMetadata({
     "sterling silver jewellery craftsmanship",
     "handcrafted silver jewellery India",
     "jewellery brand heritage",
+    "contemporary silver jewellery design",
+    "Vylore jewellery philosophy",
+    "Vylore design inspiration",
+    "Vylore jewellery collection",
+    "Vylore silver jewellery quality",
+    "Vylore jewellery materials",
+    "Vylore jewellery sustainability",
+    "Vylore jewellery innovation",
+    "Vylore jewellery customer experience",
+    "Vylore jewellery awards",
+    "Vylore jewellery collaborations",
+    "Vylore jewellery press coverage",
+    "Vylore jewellery testimonials",
+    
   ],
 });
 
