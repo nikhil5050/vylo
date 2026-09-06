@@ -41,6 +41,7 @@ export const paymentStatusTone: Record<string, StatusTone> = {
   pending: "warning",
   paid: "success",
   failed: "error",
+  cod_pending: "warning",
 };
 
 export const shippingStatusTone: Record<string, StatusTone> = {

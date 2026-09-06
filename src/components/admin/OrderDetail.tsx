@@ -15,6 +15,7 @@ import { orderStatusTone, paymentStatusTone, shippingStatusTone } from "@/lib/ad
 import { formatAdminDate, formatAdminDateTime } from "@/lib/admin/format";
 import { formatPrice } from "@/utils/formatPrice";
 import { downloadOrderInvoice, updateOrderShipment } from "@/lib/admin/api";
+import { gstBreakdown, otherCharges } from "@/lib/gst";
 import type { AdminOrder, OrderShipment } from "@/types/admin";
 
 interface OrderDetailProps {
@@ -165,10 +166,30 @@ export function OrderDetail({ order, shipment: initialShipment }: OrderDetailPro
                 <span>Shipping</span>
                 <span>{order.summary.shipping === 0 ? "Free" : formatPrice(order.summary.shipping)}</span>
               </div>
-              <div className="flex justify-between text-muted-foreground">
-                <span>Tax</span>
-                <span>{formatPrice(order.summary.tax)}</span>
-              </div>
+              {(() => {
+                // Prices are GST-inclusive — subtotal already contains this,
+                // so it's a breakdown of what's already charged, not an
+                // extra amount (see lib/gst.ts).
+                const { sgst, cgst } = gstBreakdown(order.summary.subtotal);
+                return (
+                  <>
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>SGST (1.5%)</span>
+                      <span>{formatPrice(sgst)}</span>
+                    </div>
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>CGST (1.5%)</span>
+                      <span>{formatPrice(cgst)}</span>
+                    </div>
+                  </>
+                );
+              })()}
+              {otherCharges(order.summary) > 0.01 && (
+                <div className="flex justify-between text-muted-foreground">
+                  <span>COD Handling Fee</span>
+                  <span>{formatPrice(otherCharges(order.summary))}</span>
+                </div>
+              )}
               <div className="mt-2 flex justify-between border-t border-border pt-2 font-medium text-foreground">
                 <span>Total</span>
                 <span>{formatPrice(order.summary.total)}</span>

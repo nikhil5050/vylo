@@ -10,7 +10,7 @@ export type OrderStatus =
   | "refund_pending"
   | "refunded";
 
-export type PaymentStatus = "pending" | "paid" | "failed";
+export type PaymentStatus = "pending" | "paid" | "failed" | "cod_pending";
 
 export type ShippingStatus = "not_shipped" | "shipped" | "out_for_delivery" | "delivered" | "cancelled";
 
