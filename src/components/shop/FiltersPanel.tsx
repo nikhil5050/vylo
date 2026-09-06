@@ -2,9 +2,11 @@
 
 import { useId } from "react";
 import type { Category } from "@/types/category";
+import type { Theme } from "@/types/theme";
 
 export interface FilterState {
   categorySlugs: string[];
+  themeSlugs: string[];
   minPrice?: number;
   maxPrice?: number;
   inStockOnly: boolean;
@@ -24,11 +26,12 @@ const priceBands: PriceBand[] = [
 
 interface FiltersPanelProps {
   categories?: Category[];
+  themes?: Theme[];
   filters: FilterState;
   onChange: (filters: FilterState) => void;
 }
 
-export function FiltersPanel({ categories, filters, onChange }: FiltersPanelProps) {
+export function FiltersPanel({ categories, themes, filters, onChange }: FiltersPanelProps) {
   // Unique per mounted instance: ProductListing renders FiltersPanel twice
   // (desktop aside + mobile drawer), and native <input type="radio"> groups
   // by `name` across the whole document, not per-component — a shared
@@ -40,6 +43,13 @@ export function FiltersPanel({ categories, filters, onChange }: FiltersPanelProp
       ? filters.categorySlugs.filter((s) => s !== slug)
       : [...filters.categorySlugs, slug];
     onChange({ ...filters, categorySlugs: next });
+  }
+
+  function toggleTheme(slug: string) {
+    const next = filters.themeSlugs.includes(slug)
+      ? filters.themeSlugs.filter((s) => s !== slug)
+      : [...filters.themeSlugs, slug];
+    onChange({ ...filters, themeSlugs: next });
   }
 
   function selectPriceBand(band: PriceBand) {
@@ -66,6 +76,25 @@ export function FiltersPanel({ categories, filters, onChange }: FiltersPanelProp
                   className="h-4 w-4 accent-burgundy"
                 />
                 {category.name}
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {themes && themes.length > 0 && (
+        <div>
+          <p className="eyebrow text-xs text-muted">Theme</p>
+          <div className="mt-4 flex flex-col gap-3">
+            {themes.map((theme) => (
+              <label key={theme.slug} className="flex items-center gap-3 py-1 text-sm text-charcoal">
+                <input
+                  type="checkbox"
+                  checked={filters.themeSlugs.includes(theme.slug)}
+                  onChange={() => toggleTheme(theme.slug)}
+                  className="h-4 w-4 accent-burgundy"
+                />
+                {theme.name}
               </label>
             ))}
           </div>

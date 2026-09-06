@@ -4,6 +4,7 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/config/site";
 import { getCategories } from "@/services/category.service";
+import { getThemes } from "@/services/theme.service";
 import { getAllProducts } from "@/services/product.service";
 
 // Without this, the static shop page is cached forever after build (Next's
@@ -15,9 +16,10 @@ export default async function ShopPage() {
   // Fails closed, same as the homepage sections: an unreachable backend
   // (DNS blip, cold start, outage) renders the page shell with an empty
   // listing — ProductListing's own empty state — instead of a 500.
-  const [products, categories] = await Promise.all([
+  const [products, categories, themes] = await Promise.all([
     getAllProducts().catch(() => []),
     getCategories().catch(() => []),
+    getThemes().catch(() => []),
   ]);
 
   const itemListJsonLd = {
@@ -42,7 +44,7 @@ export default async function ShopPage() {
         </p>
 
         <div className="mt-10">
-          <ProductListing products={products} categories={categories} />
+          <ProductListing products={products} categories={categories} themes={themes} />
         </div>
       </Container>
     </main>

@@ -19,6 +19,8 @@ export interface Product {
   name: string;
   category: string;
   categorySlug: string;
+  theme?: string;
+  themeSlug?: string;
   price: number;
   compareAtPrice?: number;
   description: string;

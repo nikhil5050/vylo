@@ -6,20 +6,26 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import type { Category } from "@/types/category";
 import type { Product } from "@/types/product";
+import type { Theme } from "@/types/theme";
 import { FilterDrawer } from "./FilterDrawer";
 import { FiltersPanel, type FilterState } from "./FiltersPanel";
 import { SortSelect, type SortOption } from "./SortSelect";
 
 const PAGE_SIZE = 8;
+const EMPTY_FILTERS: FilterState = { categorySlugs: [], themeSlugs: [], inStockOnly: false };
 
 interface ProductListingProps {
   products: Product[];
   categories?: Category[];
+  themes?: Theme[];
 }
 
 function filterProducts(products: Product[], filters: FilterState): Product[] {
   return products.filter((product) => {
     if (filters.categorySlugs.length > 0 && !filters.categorySlugs.includes(product.categorySlug)) {
+      return false;
+    }
+    if (filters.themeSlugs.length > 0 && (!product.themeSlug || !filters.themeSlugs.includes(product.themeSlug))) {
       return false;
     }
     if (filters.minPrice !== undefined && product.price < filters.minPrice) return false;
@@ -43,8 +49,8 @@ function sortProducts(products: Product[], sort: SortOption): Product[] {
   }
 }
 
-export function ProductListing({ products, categories }: ProductListingProps) {
-  const [filters, setFilters] = useState<FilterState>({ categorySlugs: [], inStockOnly: false });
+export function ProductListing({ products, categories, themes }: ProductListingProps) {
+  const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
   const [sort, setSort] = useState<SortOption>("newest");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -77,7 +83,7 @@ export function ProductListing({ products, categories }: ProductListingProps) {
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[240px_1fr]">
         <aside className="hidden lg:block">
-          <FiltersPanel categories={categories} filters={filters} onChange={handleFiltersChange} />
+          <FiltersPanel categories={categories} themes={themes} filters={filters} onChange={handleFiltersChange} />
         </aside>
 
         <div>
@@ -86,7 +92,7 @@ export function ProductListing({ products, categories }: ProductListingProps) {
               title="No pieces match"
               description="Try adjusting or clearing your filters to see more of the collection."
               action={
-                <Button variant="secondary" size="sm" onClick={() => handleFiltersChange({ categorySlugs: [], inStockOnly: false })}>
+                <Button variant="secondary" size="sm" onClick={() => handleFiltersChange(EMPTY_FILTERS)}>
                   Clear Filters
                 </Button>
               }
@@ -110,7 +116,7 @@ export function ProductListing({ products, categories }: ProductListingProps) {
       </div>
 
       <FilterDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-        <FiltersPanel categories={categories} filters={filters} onChange={handleFiltersChange} />
+        <FiltersPanel categories={categories} themes={themes} filters={filters} onChange={handleFiltersChange} />
       </FilterDrawer>
     </div>
   );

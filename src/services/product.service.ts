@@ -1,5 +1,6 @@
 import { ApiError, apiFetch } from "@/lib/api";
 import { getCategories, getCategoryById } from "@/services/category.service";
+import { getThemeById } from "@/services/theme.service";
 import type { Product, ProductVariantOption } from "@/types/product";
 
 interface BackendProductImage {
@@ -24,6 +25,7 @@ interface BackendProductVariant {
 interface BackendProduct {
   id: number;
   category_id: number;
+  theme_id: number | null;
   name: string;
   slug: string;
   description: string | null;
@@ -45,6 +47,7 @@ interface BackendProductList {
 
 async function mapProduct(product: BackendProduct): Promise<Product> {
   const category = await getCategoryById(product.category_id);
+  const theme = product.theme_id !== null ? await getThemeById(product.theme_id) : undefined;
   const hasVariants = product.variants.length > 0;
   const inStock = hasVariants ? product.variants.some((v) => v.is_active && v.stock > 0) : (product.stock ?? 0) > 0;
 
@@ -70,6 +73,8 @@ async function mapProduct(product: BackendProduct): Promise<Product> {
     name: product.name,
     category: category?.name ?? "",
     categorySlug: category?.slug ?? "",
+    theme: theme?.name,
+    themeSlug: theme?.slug,
     price: product.base_price,
     compareAtPrice: product.compare_at_price ?? undefined,
     description: product.description ?? "",

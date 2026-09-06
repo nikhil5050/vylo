@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { siteConfig } from "@/config/site";
 import { getCategories } from "@/services/category.service";
+import { getThemes } from "@/services/theme.service";
 import { getProductsByCategory } from "@/services/product.service";
 
 // Without this, each static category page is cached forever after build
@@ -44,10 +45,13 @@ export default async function CategoryPage({ params }: PageProps<"/category/[slu
   const category = categories.find((c) => c.slug === slug);
   if (!category) notFound();
 
-  // Categories are known-good above; only the product listing can still fail
-  // (a separate request), so it fails closed into ProductListing's own empty
-  // state rather than taking the page down.
-  const products = await getProductsByCategory(slug).catch(() => []);
+  // Categories are known-good above; only these can still fail (separate
+  // requests), so they fail closed into ProductListing's own empty
+  // state/no-theme-filter rather than taking the page down.
+  const [products, themes] = await Promise.all([
+    getProductsByCategory(slug).catch(() => []),
+    getThemes().catch(() => []),
+  ]);
 
   const itemListJsonLd = {
     "@context": "https://schema.org",
@@ -71,7 +75,7 @@ export default async function CategoryPage({ params }: PageProps<"/category/[slu
         <p className="mt-3 max-w-xl text-base text-muted">{category.description}</p>
 
         <div className="mt-10">
-          <ProductListing products={products} />
+          <ProductListing products={products} themes={themes} />
         </div>
       </Container>
     </main>
