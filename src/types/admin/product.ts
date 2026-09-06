@@ -25,6 +25,8 @@ export interface Product {
   id: string;
   categoryId: string;
   categoryName: string;
+  themeId?: string;
+  themeName?: string;
   name: string;
   slug: string;
   sku: string;

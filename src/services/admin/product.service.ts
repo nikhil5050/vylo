@@ -1,7 +1,16 @@
 import { apiFetch } from "@/lib/api";
 import { getAdminCategories } from "@/services/admin/category.service";
+import { getAdminThemes } from "@/services/admin/theme.service";
 import { LOW_STOCK_THRESHOLD } from "@/lib/admin/constants";
-import type { AdminCategory, Product, ProductImage, ProductListItem, ProductVariant, StockStatus } from "@/types/admin";
+import type {
+  AdminCategory,
+  AdminTheme,
+  Product,
+  ProductImage,
+  ProductListItem,
+  ProductVariant,
+  StockStatus,
+} from "@/types/admin";
 
 interface BackendProductImage {
   id: number;
@@ -25,6 +34,7 @@ interface BackendProductVariant {
 interface BackendProduct {
   id: number;
   category_id: number;
+  theme_id: number | null;
   name: string;
   slug: string;
   description: string | null;
@@ -83,12 +93,15 @@ export function stockStatusFor(stock: number): StockStatus {
   return "in_stock";
 }
 
-function mapProduct(product: BackendProduct, categories: AdminCategory[]): Product {
+function mapProduct(product: BackendProduct, categories: AdminCategory[], themes: AdminTheme[]): Product {
   const category = categories.find((c) => c.id === String(product.category_id));
+  const theme = product.theme_id !== null ? themes.find((t) => t.id === String(product.theme_id)) : undefined;
   return {
     id: String(product.id),
     categoryId: String(product.category_id),
     categoryName: category?.name ?? "",
+    themeId: product.theme_id !== null ? String(product.theme_id) : undefined,
+    themeName: theme?.name,
     name: product.name,
     slug: product.slug,
     sku: product.sku,
@@ -140,17 +153,22 @@ async function fetchAllBackendProducts(): Promise<BackendProduct[]> {
 }
 
 export async function getAdminProducts(): Promise<Product[]> {
-  const [products, categories] = await Promise.all([fetchAllBackendProducts(), getAdminCategories()]);
-  return products.map((p) => mapProduct(p, categories));
+  const [products, categories, themes] = await Promise.all([
+    fetchAllBackendProducts(),
+    getAdminCategories(),
+    getAdminThemes(),
+  ]);
+  return products.map((p) => mapProduct(p, categories, themes));
 }
 
 export async function getAdminProduct(id: string): Promise<Product | undefined> {
   try {
-    const [product, categories] = await Promise.all([
+    const [product, categories, themes] = await Promise.all([
       apiFetch<BackendProduct>(`/admin/products/${id}`),
       getAdminCategories(),
+      getAdminThemes(),
     ]);
-    return mapProduct(product, categories);
+    return mapProduct(product, categories, themes);
   } catch {
     return undefined;
   }
@@ -158,6 +176,7 @@ export async function getAdminProduct(id: string): Promise<Product | undefined> 
 
 export interface ProductInput {
   categoryId: string;
+  themeId?: string;
   name: string;
   slug?: string;
   description?: string;
@@ -172,6 +191,7 @@ export interface ProductInput {
 function toCreatePayload(input: ProductInput) {
   return {
     category_id: Number(input.categoryId),
+    theme_id: input.themeId ? Number(input.themeId) : null,
     name: input.name,
     slug: input.slug || null,
     description: input.description || null,
@@ -189,16 +209,21 @@ function toCreatePayload(input: ProductInput) {
 }
 
 export async function createAdminProduct(input: ProductInput): Promise<Product> {
-  const [product, categories] = await Promise.all([
+  const [product, categories, themes] = await Promise.all([
     apiFetch<BackendProduct>("/admin/products", { method: "POST", body: toCreatePayload(input) }),
     getAdminCategories(),
+    getAdminThemes(),
   ]);
-  return mapProduct(product, categories);
+  return mapProduct(product, categories, themes);
 }
 
 export async function updateAdminProduct(id: string, input: Partial<ProductInput>): Promise<Product> {
   const payload: Record<string, unknown> = {};
   if (input.categoryId !== undefined) payload.category_id = Number(input.categoryId);
+  // "themeId" in input (not !== undefined) — the form sends this key
+  // explicitly to clear a product's theme, so an `undefined` value must
+  // still reach the backend as theme_id: null rather than being skipped.
+  if ("themeId" in input) payload.theme_id = input.themeId ? Number(input.themeId) : null;
   if (input.name !== undefined) payload.name = input.name;
   if (input.slug !== undefined) payload.slug = input.slug || null;
   if (input.description !== undefined) payload.description = input.description || null;
@@ -207,20 +232,21 @@ export async function updateAdminProduct(id: string, input: Partial<ProductInput
   if (input.sku !== undefined) payload.sku = input.sku;
   if (input.isActive !== undefined) payload.is_active = input.isActive;
 
-  const [product, categories] = await Promise.all([
+  const [product, categories, themes] = await Promise.all([
     apiFetch<BackendProduct>(`/admin/products/${id}`, { method: "PATCH", body: payload }),
     getAdminCategories(),
+    getAdminThemes(),
   ]);
-  return mapProduct(product, categories);
+  return mapProduct(product, categories, themes);
 }
 
 export async function deleteAdminProduct(id: string): Promise<void> {
   await apiFetch(`/admin/products/${id}`, { method: "DELETE" });
 }
 
-async function withCategories(product: BackendProduct): Promise<Product> {
-  const categories = await getAdminCategories();
-  return mapProduct(product, categories);
+async function withTaxonomies(product: BackendProduct): Promise<Product> {
+  const [categories, themes] = await Promise.all([getAdminCategories(), getAdminThemes()]);
+  return mapProduct(product, categories, themes);
 }
 
 export async function addProductImage(
@@ -235,7 +261,7 @@ export async function addProductImage(
       is_primary: image.isPrimary ?? false,
     },
   });
-  return withCategories(product);
+  return withTaxonomies(product);
 }
 
 export async function reorderProductImages(productId: string, imageIds: string[]): Promise<Product> {
@@ -243,14 +269,14 @@ export async function reorderProductImages(productId: string, imageIds: string[]
     method: "PATCH",
     body: { image_ids: imageIds.map(Number) },
   });
-  return withCategories(product);
+  return withTaxonomies(product);
 }
 
 export async function deleteProductImage(productId: string, imageId: string): Promise<Product> {
   const product = await apiFetch<BackendProduct>(`/admin/products/${productId}/images/${imageId}`, {
     method: "DELETE",
   });
-  return withCategories(product);
+  return withTaxonomies(product);
 }
 
 export interface VariantInput {
@@ -282,7 +308,7 @@ export async function addProductVariant(productId: string, input: VariantInput):
       initial_stock: input.initialStock ?? 0,
     },
   });
-  return withCategories(product);
+  return withTaxonomies(product);
 }
 
 export async function updateProductVariant(
@@ -302,12 +328,12 @@ export async function updateProductVariant(
     method: "PATCH",
     body: payload,
   });
-  return withCategories(product);
+  return withTaxonomies(product);
 }
 
 export async function deleteProductVariant(productId: string, variantId: string): Promise<Product> {
   const product = await apiFetch<BackendProduct>(`/admin/products/${productId}/variants/${variantId}`, {
     method: "DELETE",
   });
-  return withCategories(product);
+  return withTaxonomies(product);
 }

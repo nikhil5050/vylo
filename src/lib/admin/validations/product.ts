@@ -5,6 +5,7 @@ export const productFormSchema = z
     name: z.string().min(1, "Product name is required."),
     sku: z.string().min(1, "SKU is required."),
     categoryId: z.string().min(1, "Category is required."),
+    themeId: z.string().optional(),
     description: z.string().optional(),
     isActive: z.boolean(),
 

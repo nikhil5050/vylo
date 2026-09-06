@@ -20,13 +20,14 @@ import { ProductVariants } from "@/components/admin/ProductVariants";
 import { ProductPreview } from "@/components/admin/ProductPreview";
 import { productFormSchema, type ProductFormValues } from "@/lib/admin/validations/product";
 import { createProduct, updateProduct } from "@/lib/admin/api";
-import type { AdminCategory, Product, ProductImage, ProductVariant } from "@/types/admin";
+import type { AdminCategory, AdminTheme, Product, ProductImage, ProductVariant } from "@/types/admin";
 
 function toFormValues(product?: Product): ProductFormValues {
   return {
     name: product?.name ?? "",
     sku: product?.sku ?? "",
     categoryId: product?.categoryId ?? "",
+    themeId: product?.themeId ?? "",
     description: product?.description ?? "",
     isActive: product?.isActive ?? true,
     basePrice: product?.basePrice ?? 0,
@@ -39,7 +40,15 @@ function tempSessionId() {
   return typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `tmp-${Date.now()}`;
 }
 
-export function ProductForm({ product, categories }: { product?: Product; categories: AdminCategory[] }) {
+export function ProductForm({
+  product,
+  categories,
+  themes,
+}: {
+  product?: Product;
+  categories: AdminCategory[];
+  themes: AdminTheme[];
+}) {
   const router = useRouter();
   const isEdit = !!product;
   const [submitting, setSubmitting] = useState(false);
@@ -67,6 +76,7 @@ export function ProductForm({ product, categories }: { product?: Product; catego
       if (isEdit && product) {
         await updateProduct(product.id, {
           categoryId: data.categoryId,
+          themeId: data.themeId,
           name: data.name,
           sku: data.sku,
           description: data.description,
@@ -79,6 +89,7 @@ export function ProductForm({ product, categories }: { product?: Product; catego
       } else {
         const created = await createProduct({
           categoryId: data.categoryId,
+          themeId: data.themeId,
           name: data.name,
           sku: data.sku,
           description: data.description,
@@ -160,6 +171,29 @@ export function ProductForm({ product, categories }: { product?: Product; catego
                   )}
                 />
                 {errors.categoryId && <p className="text-xs text-destructive">{errors.categoryId.message}</p>}
+              </div>
+              <div className="space-y-1.5">
+                <Label>Theme</Label>
+                <Controller
+                  control={control}
+                  name="themeId"
+                  render={({ field }) => (
+                    <Select value={field.value || "none"} onValueChange={(value) => field.onChange(value === "none" ? "" : value)}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="No theme" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">No theme</SelectItem>
+                        {themes.map((theme) => (
+                          <SelectItem key={theme.id} value={theme.id}>
+                            {theme.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                <p className="text-xs text-muted-foreground">Merchandising theme (e.g. Bridal) — separate from category.</p>
               </div>
               <div className="flex items-center justify-between rounded-lg border border-border px-3 py-2">
                 <div>

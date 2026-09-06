@@ -4,6 +4,7 @@ import {
   ShoppingBag,
   Package,
   FolderTree,
+  Sparkles,
   Boxes,
   Users,
   CreditCard,
@@ -65,6 +66,15 @@ export const adminNav: AdminNavSection[] = [
         children: [
           { label: "All Categories", href: "/admin/categories" },
           { label: "Add Category", href: "/admin/categories/add" },
+        ],
+      },
+      {
+        label: "Themes",
+        href: "/admin/themes",
+        icon: Sparkles,
+        children: [
+          { label: "All Themes", href: "/admin/themes" },
+          { label: "Add Theme", href: "/admin/themes/add" },
         ],
       },
       {

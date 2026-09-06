@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { ProductForm } from "@/components/admin/ProductForm";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
-import { getCategories, getProduct } from "@/lib/admin/api";
-import type { AdminCategory, Product } from "@/types/admin";
+import { getCategories, getProduct, getThemes } from "@/lib/admin/api";
+import type { AdminCategory, AdminTheme, Product } from "@/types/admin";
 
 export default function EditProductPage() {
   return (
@@ -21,12 +21,14 @@ function EditProductContent() {
   const id = searchParams.get("id");
   const [product, setProduct] = useState<Product | null | undefined>(undefined);
   const [categories, setCategories] = useState<AdminCategory[]>([]);
+  const [themes, setThemes] = useState<AdminTheme[]>([]);
 
   useEffect(() => {
     if (!id) return;
-    Promise.all([getProduct(id), getCategories()]).then(([productResult, categoriesResult]) => {
+    Promise.all([getProduct(id), getCategories(), getThemes()]).then(([productResult, categoriesResult, themesResult]) => {
       setProduct(productResult ?? null);
       setCategories(categoriesResult);
+      setThemes(themesResult);
     });
   }, [id]);
 
@@ -58,7 +60,7 @@ function EditProductContent() {
   return (
     <div className="space-y-6">
       <PageHeader title={product.name} description={`SKU: ${product.sku}`} />
-      <ProductForm product={product} categories={categories} />
+      <ProductForm product={product} categories={categories} themes={themes} />
     </div>
   );
 }

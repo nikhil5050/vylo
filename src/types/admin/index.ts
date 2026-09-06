@@ -3,6 +3,7 @@ export * from "./product";
 export * from "./order";
 export * from "./customer";
 export * from "./category";
+export * from "./theme";
 export * from "./dashboard";
 export * from "./inventory";
 export * from "./banner";

@@ -4,13 +4,8 @@
 // offers, other CMS content, settings, analytics) have no functions here —
 // those pages render an empty state directly instead of pretending to have
 // data.
-//
-// Offer banners are the one exception: /admin/banners doesn't exist on the
-// backend yet either, but the functions below are written against its
-// intended contract (see BANNER_API.md) so the admin UI and homepage
-// section are ready to go live the moment it ships — until then they'll
-// fail with a 404, which the pages that call them handle gracefully.
 import * as categoryService from "@/services/admin/category.service";
+import * as themeService from "@/services/admin/theme.service";
 import * as productService from "@/services/admin/product.service";
 import * as inventoryService from "@/services/admin/inventory.service";
 import * as orderService from "@/services/admin/order.service";
@@ -45,6 +40,12 @@ export const createCategory = categoryService.createAdminCategory;
 export const updateCategory = categoryService.updateAdminCategory;
 export const deleteCategory = categoryService.deleteAdminCategory;
 
+// GET/POST /api/v1/admin/themes, PATCH/DELETE /api/v1/admin/themes/:id
+export const getThemes = themeService.getAdminThemes;
+export const createTheme = themeService.createAdminTheme;
+export const updateTheme = themeService.updateAdminTheme;
+export const deleteTheme = themeService.deleteAdminTheme;
+
 // GET /api/v1/admin/inventory, PATCH /api/v1/admin/inventory/:id
 export const getInventory = inventoryService.getAdminInventory;
 export const updateInventory = inventoryService.updateAdminInventory;
@@ -62,7 +63,6 @@ export const getCustomers = customerService.getAdminCustomers;
 export const getCustomer = customerService.getAdminCustomer;
 
 // GET/POST /api/v1/admin/banners, PATCH/DELETE /api/v1/admin/banners/:id
-// (not implemented on the backend yet — see note above)
 export const getBanners = bannerService.getAdminBanners;
 export const createBanner = bannerService.createAdminBanner;
 export const updateBanner = bannerService.updateAdminBanner;
