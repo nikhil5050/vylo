@@ -156,12 +156,12 @@ function ShopFaq() {
       <Container>
         <FadeIn className="mx-auto max-w-xl text-center">
           <p className="eyebrow text-xs text-burgundy">Got Questions?</p>
-          <h2
+          <h1
             id="shop-faq-heading"
             className="mt-4 font-serif text-4xl leading-none text-[#680307] sm:text-5xl"
           >
             Answers Before You Buy.
-          </h2>
+          </h1>
           <p className="mt-5 text-sm leading-6 text-muted">
             Purity, payments, shipping and returns — tap a question to expand it.
           </p>
