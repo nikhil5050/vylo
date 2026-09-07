@@ -273,7 +273,7 @@ export function AboutHero() {
         role="region"
         aria-roledescription="carousel"
         aria-label="Vylore jewellery highlights"
-        className="relative mx-auto mt-12 h-[118vw] max-h-[500px] min-h-[360px] w-full max-w-5xl touch-pan-y select-none sm:mt-16 sm:h-[46vw] sm:max-h-[440px] sm:min-h-[280px] lg:h-[26vw]"
+        className="relative mx-auto mt-12 h-[135vw] max-h-[560px] min-h-[390px] w-full max-w-5xl touch-pan-y select-none sm:mt-16 sm:h-[60vw] sm:max-h-[500px] sm:min-h-[320px] lg:h-[34vw]"
         style={{ perspective: "1400px" }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => {
@@ -290,7 +290,7 @@ export function AboutHero() {
             ref={(el) => {
               cardRefs.current[i] = el;
             }}
-            className="absolute left-1/2 top-1/2 aspect-[13/20] w-[74vw] max-w-[300px] overflow-hidden  shadow-[0_18px_40px_-26px_rgba(20,20,20,0.4)] will-change-transform sm:w-[42vw] sm:max-w-[280px] lg:w-[19vw] "
+            className="absolute left-1/2 top-1/2 aspect-[13/20] w-[84vw] max-w-[340px] overflow-hidden shadow-[0_18px_40px_-26px_rgba(20,20,20,0.4)] will-change-transform sm:w-[48vw] sm:max-w-[320px] lg:w-[22vw] lg:max-w-[340px]"
           >
             <div className="relative h-full w-full">
               <Image
@@ -298,7 +298,7 @@ export function AboutHero() {
                 alt={image.alt}
                 fill
                 priority={i === 2}
-                sizes="(max-width: 640px) 74vw, (max-width: 1024px) 42vw, 19vw"
+                sizes="(max-width: 640px) 84vw, (max-width: 1024px) 48vw, 22vw"
                 className="object-cover"
               />
             </div>

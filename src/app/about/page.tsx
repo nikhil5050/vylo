@@ -393,7 +393,7 @@ Vylore builds on it instead of starting from zero. Every piece carries that same
           <FadeIn className="lg:order-2" direction="right">
             <div className="relative group aspect-[4/5] sm:aspect-[4/3] lg:aspect-[3/4] w-full overflow-hidden  shadow-lg sm:shadow-xl border border-charcoal/10">
               <Image
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop"
+                src="https://ik.imagekit.io/vyloreimgs/vylore/founder%20img.webp"
                 alt="Akash Kapile - Founder of Vylore"
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
@@ -402,7 +402,7 @@ Vylore builds on it instead of starting from zero. Every piece carries that same
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-transparent to-transparent opacity-95" />
               <div className="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6 text-white">
                 <p className="font-serif text-xl sm:text-3xl">Akash Kapile</p>
-                <p className="text-[10px] sm:text-xs uppercase tracking-widest text-champagne mt-1">
+                <p className="text-[10px] sm:text-xs uppercase tracking-widest text-white mt-1">
                   Founder &amp; Director
                 </p>
               </div>
@@ -428,7 +428,7 @@ Vylore builds on it instead of starting from zero. Every piece carries that same
 
 He founded Vylore to close that gap building custom jewelry design around individuality, quality, and craftsmanship rather than competing on price. Akash's focus on purity transparency, uncompromising quality standards, and one-to-one customisation is shaping Vylore's early identity as a design-led alternative in a market that has, until now, rewarded volume over distinction.
             </p>
-            <blockquote className="mt-6 sm:mt-8 border-l-2 border-burgundy pl-4 sm:pl-6 italic font-serif text-sm sm:text-lg text-charcoal">
+            <blockquote className="mt-6 sm:mt-8 border-l-2 border-burgundy pl-4 sm:pl-6 italic font-serif text-sm sm:text-lg text-champagne">
               &ldquo;We don&apos;t just make accessories; we refine heritage
               techniques into everyday modern heirlooms.&rdquo;
             </blockquote>
