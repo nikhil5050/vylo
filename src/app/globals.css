@@ -297,12 +297,23 @@ body {
 
 /* ---------------------------------------------------------------------
    Admin dashboard theme
-   Scoped to .admin-shell (wraps the whole /admin route tree) so these
-   shadcn/ui tokens never leak onto the storefront. Palette per the
-   Vylore Admin Dashboard brand spec: burgundy primary, warm-white
-   surface, soft-gray secondary, fine neutral borders.
+   Scoped via :root:has(.admin-shell) rather than plain .admin-shell.
+   Base UI portals (Select/Dropdown/Popover/Dialog/AlertDialog/Sheet/
+   Tooltip popups) mount under document.body — a DOM sibling of
+   .admin-shell, not a descendant — so a .admin-shell-only declaration
+   never reaches them and every popup using bg-popover/bg-card/bg-muted/
+   etc. fell back to a transparent background (the reported "white bg"
+   issue on the product-add category/theme dropdowns, and the same bug
+   in every other admin dropdown, popover, and dialog).
+   :root is an ancestor of both the shell and the portalled nodes, so
+   both inherit the same tokens; :has(.admin-shell) keeps the whole
+   thing scoped to admin routes only, so these names (several — like
+   --background/--foreground/--muted — reuse storefront brand token
+   names with different values) never leak onto the storefront.
+   Palette per the Vylore Admin Dashboard brand spec: burgundy primary,
+   warm-white surface, soft-gray secondary, fine neutral borders.
 --------------------------------------------------------------------- */
-.admin-shell {
+:root:has(.admin-shell) {
   --background: #faf9f6;
   --foreground: #171717;
   --card: #ffffff;
@@ -340,7 +351,9 @@ body {
   --sidebar-accent-foreground: #810201;
   --sidebar-border: #e5e5e5;
   --sidebar-ring: #810201;
+}
 
+.admin-shell {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
