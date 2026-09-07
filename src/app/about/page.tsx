@@ -552,7 +552,7 @@ He founded Vylore to close that gap building custom jewelry design around indivi
           <FadeIn direction="left">
             <div className="relative group aspect-[4/3] sm:aspect-[16/10] lg:aspect-[3/4] w-full overflow-hidden shadow-lg sm:shadow-xl border border-charcoal/10">
               <Image
-                src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1000&auto=format&fit=crop"
+                src="https://ik.imagekit.io/vyloreimgs/vylore/banners/DSC03802.JPG.webp"
                 alt="Minimalist Fine Silver Design"
                 fill
                 sizes="(max-width: 768px) 500vw, (max-width: 1200px) 50vw, 600px"

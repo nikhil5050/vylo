@@ -341,7 +341,7 @@ export default function ContactPage() {
           <div className="relative overflow-hidden rounded-3xl border border-charcoal/10 bg-charcoal p-8 sm:p-12 text-white">
             <div className="relative z-10 flex min-w-0 flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
               <div className="min-w-0">
-                <p className="eyebrow text-xs text-burgundy">Store Location</p>
+                <p className="eyebrow text-xs text-white">Store Location</p>
                 <h3 className="mt-2 font-serif text-2xl sm:text-3xl text-white">
                   Come See Us in Belhe
                 </h3>

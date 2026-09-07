@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FacebookIcon, InstagramIcon, PinterestIcon } from "@/components/icons/Icons";
+import { FacebookIcon, InstagramIcon } from "@/components/icons/Icons";
 import { Container } from "@/components/ui/Container";
 import { footerNav, type NavItem } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
@@ -29,14 +29,21 @@ export function Footer() {
           <Logo1 className="text-ivory" />
           <p className="max-w-xs text-sm text-ivory/70">{siteConfig.description}</p>
           <div className="mt-2 flex items-center gap-4">
-            <a href="#" aria-label="Instagram" className="text-ivory/70 transition-colors hover:text-champagne">
+            <a href="https://www.instagram.com/vylore.in?stkn=MXB4MDd1Z211bDBpMQ==" aria-label="Instagram" className="text-ivory/70 transition-colors hover:text-champagne">
               <InstagramIcon />
             </a>
-            <a href="#" aria-label="Facebook" className="text-ivory/70 transition-colors hover:text-champagne">
+            <a href="https://www.facebook.com/share/1BumDiprJ1/" aria-label="Facebook" className="text-ivory/70 transition-colors hover:text-champagne">
               <FacebookIcon />
             </a>
-            <a href="#" aria-label="Pinterest" className="text-ivory/70 transition-colors hover:text-champagne">
-              <PinterestIcon />
+            <a href="https://m.youtube.com/@business.vylore?fbclid=PAT01DUAUKVyJwZG9mAmV4dG4DYWVtAjEwAHNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABpz7qh61VhXDpYbapCs-L3MVtQQWSvxMq6_1dp74q7ORpanODuxzC0BePPvo4_aem_UYSlM8LV_zagZjxBKNP_Sg" aria-label="YouTube" className="text-ivory/70 transition-colors hover:text-champagne">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-5 w-5"
+              >
+                <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z" />
+              </svg>
             </a>
           </div>
         </div>

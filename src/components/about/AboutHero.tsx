@@ -14,11 +14,11 @@ interface CarouselImage {
 // Local product photography — see /public/images/about/. Exactly five: the
 // wrap-around math in rotate() below is written for a 5-image, 5-slot ring.
 const CAROUSEL_IMAGES: CarouselImage[] = [
-  { src: "/images/about/jewellery-1.jpg", alt: "Delicate layered silver necklace" },
-  { src: "/images/about/jewellery-2.jpg", alt: "Silver bracelet with brilliant-cut stones" },
-  { src: "/images/about/jewellery-3.jpg", alt: "Rings and bracelet detail on the hand" },
-  { src: "/images/about/jewellery-4.jpg", alt: "Pearl pendant necklace" },
-  { src: "/images/about/jewellery-5.jpg", alt: "Layered necklace detail" },
+  { src: "https://ik.imagekit.io/vyloreimgs/vylore/banners/generated_20260901162050_d3a50024_download_1788279678.webp", alt: "Delicate layered silver necklace" },
+  { src: "https://ik.imagekit.io/vyloreimgs/vylore/banners/DSC03611.webp", alt: "Silver bracelet with brilliant-cut stones" },
+  { src: "https://ik.imagekit.io/vyloreimgs/vylore/banners/DSC03802.JPG.webp?updatedAt=1788760631752", alt: "Rings and bracelet detail on the hand" },
+  { src: "https://ik.imagekit.io/vyloreimgs/vylore/banners/DSC03542.webp", alt: "Pearl pendant necklace" },
+  { src: "https://ik.imagekit.io/vyloreimgs/vylore/banners/DSC02946.JPG?updatedAt=1788759518033", alt: "Layered necklace detail" },
 ];
 
 const AUTO_ROTATE_MS = 4200;
@@ -256,7 +256,7 @@ export function AboutHero() {
   }
 
   return (
-    <section className="relative w-full overflow-hidden bg-white py-14 sm:py-20 lg:py-28">
+    <section className="relative w-full overflow-hidden bg-white py-14 sm:py-20 lg:py-20">
       <Container>
         <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "About" }]} />
 
@@ -290,7 +290,7 @@ export function AboutHero() {
             ref={(el) => {
               cardRefs.current[i] = el;
             }}
-            className="absolute left-1/2 top-1/2 aspect-[13/20] w-[74vw] max-w-[300px] overflow-hidden rounded-[18px] shadow-[0_18px_40px_-26px_rgba(20,20,20,0.4)] will-change-transform sm:w-[42vw] sm:max-w-[280px] lg:w-[19vw] lg:rounded-[20px]"
+            className="absolute left-1/2 top-1/2 aspect-[13/20] w-[74vw] max-w-[300px] overflow-hidden  shadow-[0_18px_40px_-26px_rgba(20,20,20,0.4)] will-change-transform sm:w-[42vw] sm:max-w-[280px] lg:w-[19vw] "
           >
             <div className="relative h-full w-full">
               <Image
