@@ -651,7 +651,7 @@ A minimalist necklace from Vylore isn't undecorated because decoration was skipp
             >
               <Image
                 src="/logo/logo.png"
-                alt=""
+                alt="vylore logo"
                 aria-hidden="true"
                 width={480}
                 height={480}

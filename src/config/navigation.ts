@@ -22,7 +22,7 @@ export const footerNav: Record<"shop" | "about" | "help", NavItem[]> = {
   ],
   about: [
     { label: "Our Story", href: "/about" },
-    { label: "Custom Jewellery", href: "/custom-jewellery" },
+    // { label: "Custom Jewellery", href: "/custom-jewellery" },
     { label: "Contact", href: "/contact" },
   ],
   help: [

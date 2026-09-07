@@ -150,3 +150,33 @@ export function PinterestIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function LinkedinIcon(props: IconProps) {
+  return (
+    <svg {...baseProps(props)}>
+      <path d="M6 9v9" />
+      <path d="M6 6.5v.01" />
+      <path d="M10 18v-5a3 3 0 0 1 6 0v5" />
+      <path d="M10 9v9" />
+      <path d="M16 18v-5" />
+    </svg>
+  );
+}
+
+export function MailIcon(props: IconProps) {
+  return (
+    <svg {...baseProps(props)}>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m4 7 8 6 8-6" />
+    </svg>
+  );
+}
+
+export function XIcon(props: IconProps) {
+  return (
+    <svg {...baseProps(props)}>
+      <path d="M5 4 19 20" />
+      <path d="M19 4 5 20" />
+    </svg>
+  );
+}

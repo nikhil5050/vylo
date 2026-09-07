@@ -1,6 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FacebookIcon, InstagramIcon } from "@/components/icons/Icons";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  LinkedinIcon,
+  PinterestIcon,
+  XIcon,
+} from "@/components/icons/Icons";
 import { Container } from "@/components/ui/Container";
 import { footerNav, type NavItem } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
@@ -34,6 +40,33 @@ export function Footer() {
             </a>
             <a href="https://www.facebook.com/share/1BumDiprJ1/" aria-label="Facebook" className="text-ivory/70 transition-colors hover:text-champagne">
               <FacebookIcon />
+            </a>
+            <a
+              href="https://www.linkedin.com/company/vylore/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="text-ivory/70 transition-colors hover:text-champagne"
+            >
+              <LinkedinIcon />
+            </a>
+            <a
+              href="https://in.pinterest.com/businessvylore/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Pinterest"
+              className="text-ivory/70 transition-colors hover:text-champagne"
+            >
+              <PinterestIcon />
+            </a>
+            <a
+              href="https://x.com/BusinessVylore"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="X"
+              className="text-ivory/70 transition-colors hover:text-champagne"
+            >
+              <XIcon />
             </a>
             <a href="https://m.youtube.com/@business.vylore?fbclid=PAT01DUAUKVyJwZG9mAmV4dG4DYWVtAjEwAHNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABpz7qh61VhXDpYbapCs-L3MVtQQWSvxMq6_1dp74q7ORpanODuxzC0BePPvo4_aem_UYSlM8LV_zagZjxBKNP_Sg" aria-label="YouTube" className="text-ivory/70 transition-colors hover:text-champagne">
               <svg
