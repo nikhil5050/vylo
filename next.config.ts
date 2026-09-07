@@ -7,6 +7,18 @@ const nextConfig: NextConfig = {
   // on Vercel (not Hostinger — that plan has no Node.js runtime support),
   // so a real Next.js server handles this normally.
   trailingSlash: true,
+  // Dev-only: the dev server resolves dynamic route params (any [slug]-style
+  // segment) in a separate `static-paths-worker` process. In this
+  // environment that child process fails to start at all, surfacing as
+  // "Jest worker encountered 2 child process exceptions, exceeding retry
+  // limit" on every dynamic route (reproduced even on routes with no
+  // custom logic, e.g. /cart/shared/[token]) — a process-spawn problem
+  // (antivirus, exec inheritance), not an app bug. Forcing worker_threads
+  // runs that worker in-process instead of forking a new node.exe, which
+  // sidesteps it.
+  experimental: {
+    workerThreads: true,
+  },
   // Tried enabling Next's built-in image optimizer here (removing this and
   // allowlisting the two remote hosts via remotePatterns) as a "faster,
   // no UI change" win, but in this environment the optimizer's server-side

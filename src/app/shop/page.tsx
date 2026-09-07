@@ -132,7 +132,13 @@ function ShopPoster({ position, className = "" }: { position: "top" | "bottom"; 
       <Link href={position === "top" ? "#shop-products" : "/contact"}>
         <div
           className={`relative w-full overflow-hidden bg-charcoal ${
-            position === "bottom" ? "h-[360px] sm:h-[420px]" : "h-48 sm:h-64"
+            // posterbottom.png is a wide 2048x768 banner — a fixed height on
+            // mobile (the old "h-[360px]") forced object-cover to crop most
+            // of it away. Sizing by its own aspect ratio below `sm` shows the
+            // full banner instead; the fixed height takes back over from
+            // `sm` up, where the viewport is wide enough for it to look
+            // right without becoming absurdly tall.
+            position === "bottom" ? "aspect-[2048/768] sm:aspect-auto sm:h-[420px]" : "h-48 sm:h-64"
           }`}
         >
           <Image
