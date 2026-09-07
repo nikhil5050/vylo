@@ -40,7 +40,7 @@ export default async function ShopPage() {
   };
 
   return (
-    <main className="flex flex-1 flex-col py-16 lg:py-24">
+    <main className="flex flex-1 flex-col pb-0 pt-16 lg:pt-24">
       {products.length > 0 && <JsonLd data={itemListJsonLd} />}
      
       <Container>
@@ -49,7 +49,7 @@ export default async function ShopPage() {
         {/* <h1 className="mt-4 font-serif text-4xl text-charcoal sm:text-5xl">Define Your Style.</h1>
         <p className="eyebrow mt-2 text-xs text-muted">Discover Your Vylore.</p> */}
 
-        <div className="mt-10">
+        <div className="mt-10 mb-0">
           <ProductListing products={products} categories={categories} themes={themes} themeTiles />
         </div>
       </Container>
