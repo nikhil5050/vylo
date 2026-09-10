@@ -486,23 +486,49 @@ export function NecklaceCanvas({ sceneState, reducedMotion }: NecklaceCanvasProp
     const wrapper = wrapperRef.current;
     if (!canvas || !sparkleCanvas || !wrapper) return;
 
+    let sawFirstResize = false;
+    let debounceId: ReturnType<typeof setTimeout> | undefined;
+
+    function applyResize(width: number, height: number) {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas!.width = width * dpr;
+      canvas!.height = height * dpr;
+      sparkleCanvas!.width = width * dpr;
+      sparkleCanvas!.height = height * dpr;
+      // Redraw at current frame after resize.
+      if (lastFrameRef.current >= 0) {
+        drawFrame(lastFrameRef.current);
+      }
+    }
+
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        canvas.width = width * dpr;
-        canvas.height = height * dpr;
-        sparkleCanvas.width = width * dpr;
-        sparkleCanvas.height = height * dpr;
-        // Redraw at current frame after resize.
-        if (lastFrameRef.current >= 0) {
-          drawFrame(lastFrameRef.current);
+
+        // The first measurement (on mount) applies immediately so the canvas
+        // is correctly sized for first paint. Every resize after that is
+        // debounced — mobile browsers resize this sticky, dvh-sized wrapper
+        // mid-scroll as their address bar shows/hides, and applying every
+        // intermediate size mid-gesture (which computeMobileContentFit then
+        // reacts to) is exactly what read as a "jump" a few frames into a
+        // scroll on mobile. Coalescing to the settled size once the resize
+        // burst stops keeps the mobile fit stable while the toolbar animates.
+        if (!sawFirstResize) {
+          sawFirstResize = true;
+          applyResize(width, height);
+          continue;
         }
+
+        if (debounceId) clearTimeout(debounceId);
+        debounceId = setTimeout(() => applyResize(width, height), 180);
       }
     });
 
     observer.observe(wrapper);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (debounceId) clearTimeout(debounceId);
+    };
   }, [drawFrame]);
 
   // Draws the twinkling glints on the sparkle canvas. Runs every tick
