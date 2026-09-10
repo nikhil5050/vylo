@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
-import { ChevronLeft, ChevronRight, Play, X } from "lucide-react";
+import { Play, X } from "lucide-react";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Container } from "@/components/ui/Container";
 import { AboutHero } from "@/components/about/AboutHero";
@@ -12,32 +12,25 @@ import { AboutHero } from "@/components/about/AboutHero";
 // "Behind the craft" video gallery
 const craftVideos = [
   {
-    id: 49163,
-    title: "Made By Hand",
-    caption: "Every link and clasp shaped by artisans, not machines.",
-    src: "https://assets.mixkit.co/videos/49163/49163-720.mp4",
-    poster: "https://assets.mixkit.co/videos/49163/49163-thumb-720-0.jpg",
+    id: "brand-film-03",
+    title: "The Vylore Story",
+    caption: "A brand built on craftsmanship, restraint, and detail.",
+    src: "https://ik.imagekit.io/vyloreimgs/vylore/Making%20Video/Brand%20Film%2003.mp4",
+    span: "wide" as const,
   },
   {
-    id: 34611,
-    title: "Detail Obsessed",
-    caption: "We zoom in on the millimetres others skip.",
-    src: "https://assets.mixkit.co/videos/34611/34611-720.mp4",
-    poster: "https://assets.mixkit.co/videos/34611/34611-thumb-720-0.jpg",
+    id: "making-ring",
+    title: "The Making of a Ring",
+    caption: "From raw silver to a finished, wearable form.",
+    src: "https://ik.imagekit.io/vyloreimgs/vylore/Making%20Video/Making%20ring.mp4",
+    span: "tall" as const,
   },
   {
-    id: 15743,
-    title: "Worn With Confidence",
-    caption: "Designed to be lived in, not just looked at.",
-    src: "https://assets.mixkit.co/videos/15743/15743-720.mp4",
-    poster: "https://assets.mixkit.co/videos/15743/15743-thumb-720-0.jpg",
-  },
-  {
-    id: 34213,
-    title: "Ready For The World",
-    caption: "From the bench to the display case.",
-    src: "https://assets.mixkit.co/videos/34213/34213-720.mp4",
-    poster: "https://assets.mixkit.co/videos/34213/34213-thumb-720-0.jpg",
+    id: "brand-film-01",
+    title: "Crafted With Purpose",
+    caption: "Every piece carries the discipline behind the design.",
+    src: "https://ik.imagekit.io/vyloreimgs/vylore/Making%20Video/Brand%20Film%2001.mp4",
+    span: "wide" as const,
   },
 ];
 
@@ -76,6 +69,7 @@ function AutoplayVideo({
       muted
       loop
       playsInline
+      preload="metadata"
       className={className}
     />
   );
@@ -157,16 +151,6 @@ export default function AboutPage() {
   const [lightboxVideo, setLightboxVideo] = useState<LightboxVideo | null>(
     null,
   );
-  const craftTrackRef = useRef<HTMLDivElement>(null);
-
-  function scrollCraftTrack(direction: 1 | -1) {
-    const el = craftTrackRef.current;
-    if (!el) return;
-    const card = el.firstElementChild as HTMLElement | null;
-    const amount = (card?.offsetWidth ?? 280) + 16;
-    el.scrollBy({ left: amount * direction, behavior: "smooth" });
-  }
-
   return (
     <main className="flex min-h-screen flex-1 flex-col overflow-x-hidden bg-[#FAF9F6]/50">
       <VideoLightbox
@@ -277,7 +261,7 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      {/* Behind The Craft — Video Slider */}
+      {/* Behind The Craft — Video Grid */}
       <section className="bg-[#FAF9F6] py-12 sm:py-20 lg:py-28">
         <Container>
           <FadeIn className="max-w-2xl">
@@ -294,69 +278,47 @@ export default function AboutPage() {
             </p>
           </FadeIn>
 
-          <div className="relative mt-8 sm:mt-14">
-            <div
-              ref={craftTrackRef}
-              className="no-scrollbar flex snap-x snap-mandatory gap-4 sm:gap-6 overflow-x-auto pb-4 touch-pan-x -mx-4 px-4 sm:mx-0 sm:px-0"
-            >
-              {craftVideos.map((clip, index) => (
-                <FadeIn
-                  key={clip.id}
-                  delay={index * 0.08}
-                  direction="scale"
-                  className="w-[82%] shrink-0 snap-start sm:w-[45%] lg:w-[27%]"
+          <div className="mt-8 sm:mt-14 grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-2 gap-4 sm:gap-6 lg:h-[560px]">
+            {craftVideos.map((clip, index) => (
+              <FadeIn
+                key={clip.id}
+                delay={index * 0.08}
+                direction="scale"
+                className={
+                  clip.span === "wide"
+                    ? "lg:col-span-2"
+                    : "lg:row-span-2 lg:h-full"
+                }
+              >
+                <button
+                  type="button"
+                  onClick={() => setLightboxVideo(clip)}
+                  className="group relative block aspect-video w-full overflow-hidden   border border-charcoal/10 shadow-md sm:shadow-lg text-left focus:outline-none lg:aspect-auto lg:h-full"
                 >
-                  <button
-                    type="button"
-                    onClick={() => setLightboxVideo(clip)}
-                    className="group relative block aspect-[3/4] w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-charcoal/10 shadow-md sm:shadow-lg text-left focus:outline-none"
-                  >
-                    <AutoplayVideo
-                      src={clip.src}
-                      poster={clip.poster}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-white/90 text-burgundy shadow-xl transition-transform duration-300 group-hover:scale-110 active:scale-95">
-                        <Play
-                          className="h-4 w-4 sm:h-5 sm:w-5 translate-x-0.5"
-                          fill="currentColor"
-                        />
-                      </span>
-                    </div>
-                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 text-white">
-                      <p className="font-serif text-base sm:text-xl font-medium leading-tight">
-                        {clip.title}
-                      </p>
-                      <p className="mt-1 text-xs text-ivory/80 font-light line-clamp-2">
-                        {clip.caption}
-                      </p>
-                    </div>
-                  </button>
-                </FadeIn>
-              ))}
-            </div>
-
-            {/* Pagination Controls */}
-            <div className="mt-4 sm:mt-6 flex justify-end gap-2 pr-1">
-              <button
-                type="button"
-                onClick={() => scrollCraftTrack(-1)}
-                aria-label="Scroll to previous videos"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-charcoal/20 text-charcoal transition-colors hover:border-burgundy hover:text-burgundy active:scale-95"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollCraftTrack(1)}
-                aria-label="Scroll to next videos"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-charcoal/20 text-charcoal transition-colors hover:border-burgundy hover:text-burgundy active:scale-95"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </div>
+                  <AutoplayVideo
+                    src={clip.src}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-white/90 text-burgundy shadow-xl transition-transform duration-300 group-hover:scale-110 active:scale-95">
+                      <Play
+                        className="h-4 w-4 sm:h-5 sm:w-5 translate-x-0.5"
+                        fill="currentColor"
+                      />
+                    </span>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 text-white">
+                    <p className="font-serif text-base sm:text-xl font-medium leading-tight">
+                      {clip.title}
+                    </p>
+                    <p className="mt-1 text-xs text-ivory/80 font-light line-clamp-2">
+                      {clip.caption}
+                    </p>
+                  </div>
+                </button>
+              </FadeIn>
+            ))}
           </div>
         </Container>
       </section>
@@ -379,7 +341,7 @@ export default function AboutPage() {
             </h2>
             <p className="mt-4 sm:mt-6 text-sm sm:text-base lg:text-lg leading-relaxed text-ivory/80 font-light">
               A Quarter-Century of Getting It Right
-Twenty-five years of working metal teaches you things no manual can: how silver behaves under heat, where a setting holds and where it fails. That knowledge isn't written down — it's inherited.
+Twenty-five years of working metal teaches you things no manual can: how silver behaves under heat, where a setting holds and where it fails. That knowledge isn't written down it's inherited.
 <br/><br/>
 Vylore builds on it instead of starting from zero. Every piece carries that same discipline in structural integrity and material selection, because heirloom jewelry isn't a description we put on a page — it's a decision made before the piece ever reaches you.
             </p>
