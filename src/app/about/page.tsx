@@ -193,14 +193,10 @@ export default function AboutPage() {
         <Container className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-20">
           <FadeIn direction="left">
             <div className="relative group aspect-[4/3] sm:aspect-[16/10] lg:aspect-[3/4] w-full overflow-hidden  shadow-lg sm:shadow-xl border border-charcoal/10">
-              <Image
-                src="https://i.pinimg.com/1200x/18/da/e0/18dae01fedf40609284c25c89768425a.jpg"
-                alt="Jewellery Craftsmanship Atelier"
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-                className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+              <AutoplayVideo
+                src="https://ik.imagekit.io/vyloreimgs/vylore/About%20Page/about%20section%20video.mp4"
+                className="absolute inset-0 h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-charcoal/10 group-hover:bg-transparent transition-colors duration-500" />
             </div>
           </FadeIn>
 
