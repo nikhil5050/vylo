@@ -5,6 +5,7 @@ import { ComingSoon } from "@/components/home/ComingSoon";
 import { FinalCta } from "@/components/home/FinalCta";
 import { MaterialStory } from "@/components/home/MaterialStory";
 import { OfferBanner } from "@/components/home/OfferBanner";
+import { OurPackaging } from "@/components/home/OurPackaging";
 import { Testimonials } from "@/components/home/Testimonials";
 import { TrustSection } from "@/components/home/TrustSection";
 import { isComingSoon } from "@/config/launch";
@@ -59,6 +60,7 @@ export default function Home() {
       {/* <HeroGrid /> */}
       <OfferBanner />
       <Bestsellers />
+      <OurPackaging />
       <TrustSection />
       <MaterialStory /> 
       <Testimonials />
