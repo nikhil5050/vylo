@@ -35,11 +35,11 @@ const craftVideos = [
 ];
 
 const marqueeItems = [
-  "925 Sterling Silver",
+  "925 Sterling Silver ",
+  "Contemporary Design ",
   "Handcrafted Detail",
-  "Timeless Design",
-  "No Compromise",
-  "Family Legacy",
+  "Timeless Jewellery",
+  "Minimalist Jewellery",
 ];
 
 function AutoplayVideo({
