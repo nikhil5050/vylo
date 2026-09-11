@@ -1,9 +1,11 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 
 // The /admin section renders its own sidebar/header chrome (see
 // app/admin/layout.tsx) and must not be wrapped in the storefront's
@@ -29,10 +31,21 @@ export function SiteChrome({ children, comingSoon }: { children: ReactNode; comi
       >
         Skip to main content
       </a>
+      <CustomCursor />
       <Header />
-      <div id="main-content" className="flex flex-1 flex-col">
-        {children}
-      </div>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={pathname}
+          id="main-content"
+          className="flex flex-1 flex-col"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+        >
+          {children}
+        </motion.div>
+      </AnimatePresence>
       <Footer />
     </>
   );

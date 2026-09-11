@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { Home as HomeIcon, Store } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -9,6 +10,7 @@ import { BagIcon, HeartIcon, MenuIcon, SearchIcon, UserIcon } from "@/components
 import { Container } from "@/components/ui/Container";
 import { CountBadge } from "@/components/ui/CountBadge";
 import { mainNav } from "@/config/navigation";
+import { useBumpOnIncrease } from "@/hooks/useBumpOnIncrease";
 import { useScrolled } from "@/hooks/useScrolled";
 import { useCartStore } from "@/store/cart.store";
 import { useWishlistStore } from "@/store/wishlist.store";
@@ -25,6 +27,8 @@ export function Header() {
     state.lines.reduce((sum, line) => sum + line.quantity, 0)
   );
   const wishlistCount = useWishlistStore((state) => state.items.length);
+  // Bounces the bag icon whenever an add-to-cart pushes the count up.
+  const cartBumped = useBumpOnIncrease(cartCount);
 
   return (
     <header className="sticky top-0 z-50 w-full transition-all duration-300">
@@ -100,7 +104,13 @@ export function Header() {
                 onClick={() => setCartOpen(true)}
                 className="group relative rounded-full p-2 text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy focus:outline-none focus:ring-2 focus:ring-burgundy/20"
               >
-                <BagIcon className="h-5 w-5 transition-transform duration-200 group-hover:scale-110" />
+                <motion.span
+                  className="block"
+                  animate={cartBumped ? { scale: [1, 1.35, 0.9, 1.05, 1], rotate: [0, -10, 10, 0] } : {}}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                >
+                  <BagIcon className="h-5 w-5 transition-transform duration-200 group-hover:scale-110" />
+                </motion.span>
                 {cartCount > 0 && (
                   <CountBadge
                     count={cartCount}
@@ -135,7 +145,13 @@ export function Header() {
                 onClick={() => setCartOpen(true)}
                 className="relative rounded-lg p-2 text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy"
               >
-                <BagIcon className="h-5 w-5" />
+                <motion.span
+                  className="block"
+                  animate={cartBumped ? { scale: [1, 1.35, 0.9, 1.05, 1], rotate: [0, -10, 10, 0] } : {}}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                >
+                  <BagIcon className="h-5 w-5" />
+                </motion.span>
                 {cartCount > 0 && (
                   <CountBadge
                     count={cartCount}

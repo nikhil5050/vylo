@@ -1,7 +1,8 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { HeartIcon } from "@/components/icons/Icons";
 import { Button } from "@/components/ui/Button";
 import { useCartStore } from "@/store/cart.store";
@@ -11,6 +12,10 @@ import { cn } from "@/utils/cn";
 
 export function ProductActions({ product }: { product: Product }) {
   const router = useRouter();
+  // Scopes the shared-layout pill to this instance, so two ProductActions
+  // mounted at once (e.g. a future quick-view modal) don't animate a pill
+  // shared across unrelated size selectors.
+  const pillLayoutId = `size-pill-${useId()}`;
   const addItem = useCartStore((state) => state.addItem);
   const saved = useWishlistStore((state) => state.items.some((item) => item.id === product.id));
   const toggleWishlist = useWishlistStore((state) => state.toggle);
@@ -38,22 +43,30 @@ export function ProductActions({ product }: { product: Product }) {
         <div>
           <p className="eyebrow text-xs text-muted">Size</p>
           <div className="mt-3 flex flex-wrap gap-2">
-            {product.sizes.map((size) => (
-              <button
-                key={size}
-                type="button"
-                onClick={() => setSelectedSize(size)}
-                aria-pressed={selectedSize === size}
-                className={cn(
-                  "flex h-10 min-w-10 items-center justify-center border px-3 text-sm transition-colors",
-                  selectedSize === size
-                    ? "border-burgundy text-burgundy"
-                    : "border-silver/50 text-charcoal hover:border-charcoal",
-                )}
-              >
-                {size}
-              </button>
-            ))}
+            {product.sizes.map((size) => {
+              const isSelected = selectedSize === size;
+              return (
+                <button
+                  key={size}
+                  type="button"
+                  onClick={() => setSelectedSize(size)}
+                  aria-pressed={isSelected}
+                  className={cn(
+                    "relative flex h-10 min-w-10 items-center justify-center overflow-hidden border px-3 text-sm transition-colors",
+                    isSelected ? "border-burgundy text-white" : "border-silver/50 text-charcoal hover:border-charcoal",
+                  )}
+                >
+                  {isSelected && (
+                    <motion.span
+                      layoutId={pillLayoutId}
+                      className="absolute inset-0 bg-burgundy"
+                      transition={{ type: "spring", stiffness: 500, damping: 34 }}
+                    />
+                  )}
+                  <span className="relative">{size}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       )}

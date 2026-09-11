@@ -5,16 +5,27 @@ import { formatPrice } from "@/utils/formatPrice";
 import { WishlistButton } from "./WishlistButton";
 
 export function ProductCard({ product }: { product: Product }) {
+  const secondImage = product.images?.[1];
+
   return (
     <div className="group">
-      <div className="relative aspect-[4/5] overflow-hidden">
+      <div className="relative aspect-[4/5] overflow-hidden" data-cursor="image">
         <Link href={`/product/${product.slug}`} className="block h-full w-full">
           <ProductThumbnail
             src={product.images?.[0]?.url}
             alt={product.images?.[0]?.altText ?? product.name}
             transform="w-500"
-            className="transition-transform duration-500 group-hover:scale-[1.03]"
+            className={`transition-opacity duration-500 ${secondImage ? "group-hover:opacity-0" : "group-hover:scale-[1.03] transition-transform"}`}
           />
+
+          {secondImage && (
+            <ProductThumbnail
+              src={secondImage.url}
+              alt={secondImage.altText ?? product.name}
+              transform="w-500"
+              className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            />
+          )}
         </Link>
 
         {product.badge && (

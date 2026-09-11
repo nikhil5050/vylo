@@ -1,10 +1,12 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { SearchIcon } from "@/components/icons/Icons";
 import { ProductThumbnail } from "@/components/ui/ProductThumbnail";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
+import { useCanHover } from "@/hooks/useCanHover";
 import type { ProductImage } from "@/types/product";
 import { cn } from "@/utils/cn";
 
@@ -15,6 +17,10 @@ const ProductImageZoom = dynamic(
   { ssr: false }
 );
 
+// How far the cursor-hover lens magnifies the main image.
+const LENS_ZOOM = 2.2;
+const SWIPE_THRESHOLD_PX = 40;
+
 interface ProductGalleryProps {
   productName: string;
   images: ProductImage[];
@@ -23,61 +29,102 @@ interface ProductGalleryProps {
 export function ProductGallery({ productName, images }: ProductGalleryProps) {
   const [active, setActive] = useState(0);
   const [zoomIndex, setZoomIndex] = useState<number | null>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [lensActive, setLensActive] = useState(false);
+  const [lensPos, setLensPos] = useState({ x: 50, y: 50 });
+  const stageRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
+
+  // Coarse/touch pointers don't get the hover lens — there's no cursor to
+  // track, and the listeners would otherwise fire from stray touch events.
+  const canHover = useCanHover();
 
   const views = images.length > 0 ? images : [undefined];
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.find((entry) => entry.isIntersecting);
-        if (!visible) return;
-        const index = panelRefs.current.findIndex((panel) => panel === visible.target);
-        if (index !== -1) setActive(index);
-      },
-      { root: track, threshold: 0.6 },
-    );
-
-    panelRefs.current.forEach((panel) => panel && observer.observe(panel));
-    return () => observer.disconnect();
-  }, [views.length]);
+  const activeImage = views[active];
 
   function goTo(index: number) {
-    panelRefs.current[index]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    setActive(Math.min(views.length - 1, Math.max(0, index)));
+  }
+
+  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+    const rect = stageRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setLensPos({
+      x: Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100)),
+      y: Math.min(100, Math.max(0, ((event.clientY - rect.top) / rect.height) * 100)),
+    });
+  }
+
+  function handleTouchStart(event: React.TouchEvent) {
+    touchStartX.current = event.touches[0]?.clientX ?? null;
+  }
+
+  function handleTouchEnd(event: React.TouchEvent) {
+    const startX = touchStartX.current;
+    touchStartX.current = null;
+    if (startX === null) return;
+    const deltaX = (event.changedTouches[0]?.clientX ?? startX) - startX;
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX) return;
+    goTo(active + (deltaX < 0 ? 1 : -1));
   }
 
   return (
     <div>
-      <div ref={trackRef} className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto">
-        {views.map((image, index) => (
-          <div
-            key={index}
-            ref={(el) => {
-              panelRefs.current[index] = el;
-            }}
-            className="relative aspect-[4/5] w-full shrink-0 snap-center overflow-hidden"
+      <div
+        ref={stageRef}
+        className="relative aspect-[4/5] w-full overflow-hidden"
+        onMouseEnter={() => canHover && setLensActive(true)}
+        onMouseLeave={() => setLensActive(false)}
+        onMouseMove={canHover ? handleMouseMove : undefined}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={active}
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
           >
-            {image ? (
+            {activeImage ? (
               <button
                 type="button"
-                onClick={() => setZoomIndex(index)}
-                aria-label={`${productName} — zoom image ${index + 1}`}
-                className="group block h-full w-full cursor-zoom-in"
+                onClick={() => setZoomIndex(active)}
+                aria-label={`${productName} — zoom image ${active + 1}`}
+                className="block h-full w-full cursor-zoom-in"
               >
-                <ProductThumbnail src={image.url} alt={image.altText ?? productName} transform="w-1200" />
-                <span className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/85 text-charcoal shadow-md backdrop-blur-sm transition-transform group-hover:scale-110">
-                  <SearchIcon className="h-4 w-4" aria-hidden />
-                </span>
+                <ProductThumbnail src={activeImage.url} alt={activeImage.altText ?? productName} transform="w-1200" />
               </button>
             ) : (
               <PlaceholderImage />
             )}
-          </div>
-        ))}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Cursor-follow magnifier: a same-image layer scaled up and panned
+            via background-position, faded in only on hover so the base
+            <ProductThumbnail> above still handles loading/error states. */}
+        {canHover && activeImage?.url && (
+          <div
+            aria-hidden
+            className={cn(
+              "pointer-events-none absolute inset-0 bg-no-repeat opacity-0 transition-opacity duration-200",
+              lensActive && "opacity-100",
+            )}
+            style={{
+              backgroundImage: `url(${activeImage.url}?tr=w-1800)`,
+              backgroundSize: `${LENS_ZOOM * 100}%`,
+              backgroundPosition: `${lensPos.x}% ${lensPos.y}%`,
+            }}
+          />
+        )}
+
+        {activeImage && (
+          <span className="pointer-events-none absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/85 text-charcoal shadow-md backdrop-blur-sm">
+            <SearchIcon className="h-4 w-4" aria-hidden />
+          </span>
+        )}
       </div>
 
       {zoomIndex !== null && (

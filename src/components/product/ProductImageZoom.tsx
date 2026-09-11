@@ -262,7 +262,8 @@ export function ProductImageZoom({ productName, images, initialIndex, onClose }:
               src={activeImage.url}
               alt={activeImage.altText ?? productName}
               transform="w-1600"
-              className="pointer-events-none h-full w-full object-contain"
+              fit="contain"
+              className="pointer-events-none"
             />
           ) : (
             <PlaceholderImage className="h-full w-full" />
