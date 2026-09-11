@@ -5,7 +5,7 @@ import { ComingSoon } from "@/components/home/ComingSoon";
 import { FinalCta } from "@/components/home/FinalCta";
 import { MaterialStory } from "@/components/home/MaterialStory";
 import { OfferBanner } from "@/components/home/OfferBanner";
-import { OurPackaging } from "@/components/home/OurPackaging";
+// import { OurPackaging } from "@/components/home/OurPackaging";
 import { Testimonials } from "@/components/home/Testimonials";
 import { TrustSection } from "@/components/home/TrustSection";
 import { isComingSoon } from "@/config/launch";
@@ -20,9 +20,9 @@ import { buildMetadata } from "@/utils/metadata";
 export const revalidate = 60;
 
 export const metadata: Metadata = buildMetadata({
-  title: "Sterling Silver Jewellery Online | Rings, Necklaces & More | Vylore",
+  title: "Sterling Silver Jewellery Online | Rings,Necklaces,Earrings, Bracelets, Anklets",
   description:
-    "Explore modern silver rings, necklaces, earrings, bracelets, anklets and more, designed with intention and crafted  with attention to detail. ",
+    "Explore modern silver rings, necklaces, earrings, bracelets, chain and more, designed with intention and crafted  with attention to detail. ",
   path: "/",
   keywords: [
     "silver jewellery",
@@ -46,6 +46,8 @@ export const metadata: Metadata = buildMetadata({
     "custom silver jewellery",
     " modern silver jewellery",
     "pune best silver jewellery",
+    "silver jewellery for gifting",
+
 
   ],
 });
@@ -60,7 +62,7 @@ export default function Home() {
       {/* <HeroGrid /> */}
       <OfferBanner />
       <Bestsellers />
-      <OurPackaging />
+      {/* <OurPackaging /> */}
       <TrustSection />
       <MaterialStory /> 
       <Testimonials />
