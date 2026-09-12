@@ -1,5 +1,6 @@
 "use client";
 
+import emailjs from "@emailjs/browser";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, type FormEvent } from "react";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
@@ -7,22 +8,44 @@ import { Button } from "@/components/ui/Button";
 
 const reasons = ["General Enquiry", "Order Support", "Custom Jewellery", "Other"];
 
+const SERVICE_ID = "service_8b6r9gi";
+const TEMPLATE_ID = "template_q5qvcao";
+const PUBLIC_KEY = "L9jN46rbrFyL3OLfd";
+
 const inputClasses =
   "h-12 w-full rounded-xl border border-charcoal/12 bg-white px-4 text-sm text-charcoal shadow-sm transition-colors placeholder:text-muted/60 focus:border-burgundy focus:outline-none focus:ring-2 focus:ring-burgundy/15";
 
-// No backend/email service is wired up yet — this only acknowledges
-// submission locally, it never actually sends the message anywhere.
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setError("");
     setSubmitting(true);
-    window.setTimeout(() => {
-      setSubmitting(false);
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    try {
+      emailjs.init({ publicKey: PUBLIC_KEY });
+
+      await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+        name: formData.get("name"),
+        email: formData.get("email"),
+        reason: formData.get("reason"),
+        message: formData.get("message"),
+      });
+
       setSubmitted(true);
-    }, 500);
+      form.reset();
+    } catch (err) {
+      console.error("EmailJS send failed:", err);
+      setError("Something went wrong while sending your message. Please try again or contact us directly.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -90,8 +113,10 @@ export function ContactForm() {
             Send Message
           </Button>
 
+          {error && <p className="text-xs text-red-600">{error}</p>}
+
           <p className="text-xs text-muted">
-            This form is not yet connected to a live inbox. For urgent enquiries, reach us on WhatsApp or email directly.
+            For urgent enquiries, reach us on WhatsApp or email directly.
           </p>
         </motion.form>
       )}

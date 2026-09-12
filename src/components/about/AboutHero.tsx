@@ -14,11 +14,11 @@ interface CarouselImage {
 // Local product photography — see /public/images/about/. Exactly five: the
 // wrap-around math in rotate() below is written for a 5-image, 5-slot ring.
 const CAROUSEL_IMAGES: CarouselImage[] = [
-  { src: "https://ik.imagekit.io/vyloreimgs/vylore/banners/generated_20260901162050_d3a50024_download_1788279678.webp", alt: "Delicate layered silver necklace" },
-  { src: "https://ik.imagekit.io/vyloreimgs/vylore/banners/DSC03611.webp", alt: "Silver bracelet with brilliant-cut stones" },
-  { src: "https://ik.imagekit.io/vyloreimgs/vylore/banners/DSC03802.JPG.webp?updatedAt=1788760631752", alt: "Rings and bracelet detail on the hand" },
-  { src: "https://ik.imagekit.io/vyloreimgs/vylore/banners/DSC03542.webp", alt: "Pearl pendant necklace" },
-  { src: "https://ik.imagekit.io/vyloreimgs/vylore/banners/DSC02946.JPG?updatedAt=1788759518033", alt: "Layered necklace detail" },
+  { src: "https://i.pinimg.com/1200x/49/63/a6/4963a664ed7df66a79c75979b8bba6f4.jpg", alt: "Delicate layered silver necklace" },
+  { src: "https://i.pinimg.com/736x/48/2e/7d/482e7d0ac0a9c70e26f2b81dc857e932.jpg", alt: "Silver bracelet with brilliant-cut stones" },
+  { src: "https://i.pinimg.com/736x/21/01/b6/2101b676b0a49d8d6d643bea8720da7c.jpg", alt: "Rings and bracelet detail on the hand" },
+  { src: "https://i.pinimg.com/736x/87/b9/9f/87b99f422abbbd8eeb9839f5efe2d4f7.jpg", alt: "Pearl pendant necklace" },
+  { src: "https://i.pinimg.com/736x/6e/31/14/6e3114972831253ece2ef68069d96abf.jpg", alt: "Layered necklace detail" },
 ];
 
 const AUTO_ROTATE_MS = 4200;
