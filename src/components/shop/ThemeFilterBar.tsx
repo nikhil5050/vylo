@@ -13,6 +13,8 @@ interface ThemeFilterBarProps {
 // Hardcoded per theme slug (not admin-uploaded) since themes aren't backed by
 // a media asset on the backend. "statement" reuses the "Hero Piece" shot —
 // there's no themed asset named "Statement".
+const ALL_THEME_IMAGE = "https://i.pinimg.com/736x/d4/10/09/d410099d2f69c5c2dc95e77ada70bf2b.jpg";
+
 const THEME_IMAGES: Record<string, string> = {
   bridal: "https://ik.imagekit.io/vyloreimgs/vylore/theme%20imges/Bridal.webp?updatedAt=1788783144989",
   party: "https://ik.imagekit.io/vyloreimgs/vylore/theme%20imges/Party%20Wear.webp?updatedAt=1788783145582",
@@ -24,7 +26,7 @@ const THEME_IMAGES: Record<string, string> = {
 // Visual theme picker replacing the plain checkbox list on /shop — "All" plus
 // one tile per theme, image-first with a label bar underneath. Horizontal
 // scroll on mobile (more tiles than fit a phone width), an even row on
-// desktop. "All" has no themed asset, so it keeps the decorative placeholder.
+// desktop. The "All" tile uses a dedicated hero image instead of the empty placeholder.
 export function ThemeFilterBar({ themes, selectedSlug, onSelect }: ThemeFilterBarProps) {
   const tiles: { slug: string | null; name: string }[] = [
     { slug: null, name: "All" },
@@ -50,7 +52,11 @@ export function ThemeFilterBar({ themes, selectedSlug, onSelect }: ThemeFilterBa
               )}
             >
               <div className="aspect-square w-full ">
-                <ProductThumbnail src={tile.slug ? THEME_IMAGES[tile.slug] : undefined} alt={tile.name} transform="w-200" />
+                <ProductThumbnail
+                  src={tile.slug ? THEME_IMAGES[tile.slug] : ALL_THEME_IMAGE}
+                  alt={tile.name}
+                  transform="w-200"
+                />
               </div>
               <div
                 className={cn(

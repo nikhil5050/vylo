@@ -18,9 +18,9 @@ export function WishlistButton({ product }: { product: Product }) {
         event.preventDefault();
         toggle(product);
       }}
-      className="flex h-9 w-9 items-center justify-center bg-white/90 text-charcoal transition-colors hover:text-burgundy"
+      className="flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-charcoal shadow-sm transition-colors hover:text-burgundy"
     >
-      <HeartIcon className={cn(saved && "fill-burgundy text-burgundy")} />
+      <HeartIcon className={cn("h-3.5 w-3.5 stroke-[1.8]", saved && "fill-burgundy text-burgundy")} />
     </button>
   );
 }
