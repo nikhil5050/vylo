@@ -172,6 +172,26 @@ export function MailIcon(props: IconProps) {
   );
 }
 
+export function LockIcon(props: IconProps) {
+  return (
+    <svg {...baseProps(props)}>
+      <rect x="5" y="11" width="14" height="9" rx="2" />
+      <path d="M8 11V7.5a4 4 0 0 1 8 0V11" />
+      <line x1="12" y1="15" x2="12" y2="17" />
+    </svg>
+  );
+}
+
+export function BadgeCheckIcon(props: IconProps) {
+  return (
+    <svg {...baseProps(props)}>
+      <circle cx="12" cy="9" r="6" />
+      <polyline points="9.5 9 11 10.5 14.5 7" />
+      <path d="M9 14.5 7 21l5-2.5 5 2.5-2-6.5" />
+    </svg>
+  );
+}
+
 export function XIcon(props: IconProps) {
   return (
     <svg {...baseProps(props)}>

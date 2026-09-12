@@ -1,9 +1,15 @@
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
+import { BadgeCheckIcon, GemIcon, LockIcon } from "@/components/icons/Icons";
 import type { Product } from "@/types/product";
 import { formatPrice } from "@/utils/formatPrice";
 import { ProductActions } from "./ProductActions";
+import { ProductDescription } from "./ProductDescription";
 
-const trustPoints = ["Secure Checkout", "Crafted With Care", "The Vylore Promise: No Compromise"];
+const trustPoints = [
+  { icon: LockIcon, label: "Secure Checkout" },
+  { icon: GemIcon, label: "Crafted With Care" },
+  { icon: BadgeCheckIcon, label: "No Compromise Promise" },
+];
 
 export function ProductInfo({ product }: { product: Product }) {
   const discountPercent = product.compareAtPrice
@@ -34,7 +40,7 @@ export function ProductInfo({ product }: { product: Product }) {
         )}
       </div>
 
-      <p className="mt-5 max-w-md text-base text-muted">{product.description}</p>
+      <ProductDescription description={product.description} />
 
       <dl className="mt-6 flex flex-col gap-2 text-sm">
         {product.metal && (
@@ -70,9 +76,14 @@ export function ProductInfo({ product }: { product: Product }) {
         <p>Exact delivery timelines are confirmed at checkout.</p>
       </div>
 
-      <ul className="mt-6 flex flex-col gap-2 border-t border-silver/30 pt-6 text-sm text-muted">
-        {trustPoints.map((point) => (
-          <li key={point}>{point}</li>
+      <ul className="mt-6 grid grid-cols-3 divide-x divide-silver/20 border-t border-silver/30 pt-6">
+        {trustPoints.map(({ icon: Icon, label }) => (
+          <li key={label} className="flex flex-col items-center gap-2 px-2 text-center">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-burgundy/10 text-burgundy">
+              <Icon className="h-[18px] w-[18px]" />
+            </span>
+            <span className="text-[11px] font-medium leading-tight text-charcoal sm:text-xs">{label}</span>
+          </li>
         ))}
       </ul>
     </div>
