@@ -28,7 +28,7 @@ export const footerNav: Record<"shop" | "about" | "help", NavItem[]> = {
   help: [
     { label: "FAQ", href: "/faq" },
     { label: "Shipping", href: "/shipping" },
-    { label: "Returns", href: "/returns" },
+    { label: "Replacement Policy", href: "/returns" },
     { label: "Track Order", href: "/track-order" },
     { label: "Privacy Policy", href: "/privacy-policy" },
     { label: "Terms", href: "/terms" },

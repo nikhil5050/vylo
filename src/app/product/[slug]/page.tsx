@@ -100,16 +100,16 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
     },
     {
       id: "shipping-returns",
-      title: "Shipping & Returns",
+      title: "Shipping & Replacement",
       content: (
         <p>
-          Full shipping and return details are available on our{" "}
+          Full shipping and replacement details are available on our{" "}
           <Link href="/shipping" className="text-burgundy underline underline-offset-2">
             Shipping
           </Link>{" "}
           and{" "}
           <Link href="/returns" className="text-burgundy underline underline-offset-2">
-            Returns
+            Replacement Policy
           </Link>{" "}
           pages.
         </p>
