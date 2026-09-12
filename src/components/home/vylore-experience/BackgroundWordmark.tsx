@@ -9,7 +9,7 @@ export function BackgroundWordmark({ innerRef }: BackgroundWordmarkProps) {
   return (
     <div
       ref={innerRef}
-      className="pointer-events-none absolute inset-0 z-[15] flex select-none flex-col items-center justify-start overflow-hidden px-6 pt-[15%] sm:items-start sm:justify-center sm:px-10 sm:pt-0 md:px-16"
+      className="pointer-events-none absolute inset-0 z-[15] flex select-none flex-col items-center justify-start overflow-hidden px-6 pt-[22%] sm:items-start sm:justify-center sm:px-10 sm:pt-0 md:px-16"
     >
       {/* Decorative wordmark, subhead, and tagline — grouped and hidden from
           assistive tech as a unit. `contents` keeps them as direct flex

@@ -17,7 +17,7 @@ export function AboutOverlay({ innerRef }: AboutOverlayProps) {
       // matches the fixed mobile bottom nav's real footprint (~4.75rem plus
       // safe-area-inset-bottom — see HeroOverlay's identical bottom-24), so
       // the CTA button below never renders behind it.
-      className="pointer-events-none absolute inset-x-0 top-[44%] bottom-0 z-20 flex flex-col justify-end pb-24 opacity-0 lg:inset-0 lg:flex-row lg:items-center lg:pb-0"
+      className="pointer-events-none absolute inset-x-0 top-[44%] bottom-0 z-20 flex flex-col justify-end pb-12 opacity-0 lg:inset-0 lg:flex-row lg:items-center lg:pb-0"
     >
       {/* max-h-full resolves against the wrapper's now-definite height
           (top-[45%] to bottom-0 above) — the safety-valve scroll only
@@ -65,7 +65,7 @@ export function AboutOverlay({ innerRef }: AboutOverlayProps) {
             href="/about"
             variant="primary"
             size="lg"
-            className="about-stagger-item about-cta group mt-3 rounded-full px-8 shadow-md transition-shadow duration-300 hover:shadow-lg hover:shadow-burgundy/25 sm:mt-9"
+            className="about-stagger-item about-cta group mt-8 rounded-full px-8 shadow-md transition-shadow duration-300 hover:shadow-lg hover:shadow-burgundy/25 sm:mt-9"
           >
             <span className="relative z-10">Discover Vylore</span>
             <svg
