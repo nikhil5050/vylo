@@ -65,11 +65,11 @@ export function AboutOverlay({ innerRef }: AboutOverlayProps) {
             href="/about"
             variant="primary"
             size="lg"
-            className="about-stagger-item group mt-3 rounded-full px-8 shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-burgundy/25 hover:-translate-y-0.5 active:translate-y-0 sm:mt-9"
+            className="about-stagger-item about-cta group mt-3 rounded-full px-8 shadow-md transition-shadow duration-300 hover:shadow-lg hover:shadow-burgundy/25 sm:mt-9"
           >
-            Discover Vylore
+            <span className="relative z-10">Discover Vylore</span>
             <svg
-              className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+              className="relative z-10 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
