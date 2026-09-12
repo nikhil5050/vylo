@@ -34,7 +34,8 @@ export function ContactForm() {
       await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
         name: formData.get("name"),
         email: formData.get("email"),
-        reason: formData.get("reason"),
+        phone: formData.get("phone"),
+        enquiry: formData.get("reason"),
         message: formData.get("message"),
       });
 
@@ -83,6 +84,11 @@ export function ContactForm() {
               <input name="email" type="email" required autoComplete="email" className={inputClasses} />
             </label>
           </div>
+
+          <label className="flex flex-col gap-1.5">
+            <span className="eyebrow text-[11px] text-muted">Phone *</span>
+            <input name="phone" type="tel" required autoComplete="tel" className={inputClasses} />
+          </label>
 
           <label className="flex flex-col gap-1.5">
             <span className="eyebrow text-[11px] text-muted">Reason for Contact</span>
