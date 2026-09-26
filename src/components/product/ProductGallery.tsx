@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 import { SearchIcon } from "@/components/icons/Icons";
-import { ProductThumbnail } from "@/components/ui/ProductThumbnail";
+import { imageKitUrl, ProductThumbnail } from "@/components/ui/ProductThumbnail";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { useCanHover } from "@/hooks/useCanHover";
 import type { ProductImage } from "@/types/product";
@@ -113,7 +113,7 @@ export function ProductGallery({ productName, images }: ProductGalleryProps) {
               lensActive && "opacity-100",
             )}
             style={{
-              backgroundImage: `url(${activeImage.url}?tr=w-1800)`,
+              backgroundImage: `url(${imageKitUrl(activeImage.url, "w-1800")})`,
               backgroundSize: `${LENS_ZOOM * 100}%`,
               backgroundPosition: `${lensPos.x}% ${lensPos.y}%`,
             }}

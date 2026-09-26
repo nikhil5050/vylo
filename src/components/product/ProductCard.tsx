@@ -23,6 +23,8 @@ export function ProductCard({ product }: { product: Product }) {
               src={secondImage.url}
               alt={secondImage.altText ?? product.name}
               transform="w-500"
+              // Only seen on hover — no reason to compete with visible images.
+              loading="lazy"
               className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
             />
           )}

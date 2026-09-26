@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { ImagePlaceholder } from "@/components/admin/ImagePlaceholder";
+import { imageKitUrl } from "@/components/ui/ProductThumbnail";
 
 interface SafeImageProps {
   src?: string;
   alt?: string;
   className?: string;
-  // ImageKit URL transformation, e.g. "w-400" — appended as `?tr=`.
+  // ImageKit URL transformation, e.g. "w-400" — appended as `tr=` (see imageKitUrl).
   transform?: string;
 }
 
@@ -22,7 +23,7 @@ export function SafeImage({ src, alt = "", className, transform }: SafeImageProp
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={transform ? `${src}?tr=${transform}` : src}
+      src={transform ? imageKitUrl(src, transform) : src}
       alt={alt}
       className={className}
       onError={() => setFailed(true)}

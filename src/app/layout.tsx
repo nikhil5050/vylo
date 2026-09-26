@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { preconnect } from "react-dom";
 import { Bricolage_Grotesque, Open_Sans } from "next/font/google";
 import "./globals.css";
 import { SiteChrome } from "@/components/layout/SiteChrome";
@@ -73,6 +74,10 @@ const websiteJsonLd = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  // Every product/category/banner image is served from ImageKit — opening
+  // the connection (DNS + TLS) up front saves a round-trip on the first one.
+  preconnect("https://ik.imagekit.io");
+
   return (
     <html
       lang="en"

@@ -1,5 +1,4 @@
 import { Container } from "@/components/ui/Container";
-import { FadeIn } from "@/components/ui/FadeIn";
 import { OfferBannerCarousel } from "@/components/home/OfferBannerCarousel";
 import { getBanners } from "@/services/banner.service";
 
@@ -14,9 +13,7 @@ export async function OfferBanner() {
   return (
     <section className="py-6 lg:py-10">
       <Container>
-        <FadeIn>
-          <OfferBannerCarousel banners={banners} />
-        </FadeIn>
+        <OfferBannerCarousel banners={banners} />
       </Container>
     </section>
   );

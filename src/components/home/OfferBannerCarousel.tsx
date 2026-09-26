@@ -3,11 +3,15 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ProductThumbnail } from "@/components/ui/ProductThumbnail";
+import { imageKitUrl, ProductThumbnail } from "@/components/ui/ProductThumbnail";
 import type { Banner } from "@/types/banner";
 import { cn } from "@/utils/cn";
 
 const AUTO_ADVANCE_MS = 4500;
+const BANNER_WIDTHS = [640, 1024, 1600];
+// Container caps at 1440px minus 40px side padding; below that the banner
+// is effectively full-width.
+const BANNER_SIZES = "(min-width: 1440px) 1360px, 100vw";
 
 const slideVariants = {
   enter: (direction: number) => ({ x: direction > 0 ? 48 : -48, opacity: 0 }),
@@ -46,10 +50,36 @@ export function OfferBannerCarousel({ banners }: { banners: Banner[] }) {
     return () => clearInterval(id);
   }, [banners.length, goTo, index]);
 
+  // Warm the cache for the remaining banners once the first one is showing,
+  // so each auto-advance swaps in an already-downloaded image instead of
+  // sliding in an empty shimmer box. Same srcset/sizes as the visible <img>
+  // so the browser picks (and caches) the same width it will render.
+  useEffect(() => {
+    const preload = () => {
+      banners.slice(1).forEach((b) => {
+        const img = new Image();
+        img.sizes = BANNER_SIZES;
+        img.srcset = BANNER_WIDTHS.map((w) => `${imageKitUrl(b.imageUrl, `w-${w}`)} ${w}w`).join(", ");
+        img.src = imageKitUrl(b.imageUrl, "w-1600");
+      });
+    };
+    if (document.readyState === "complete") preload();
+    else window.addEventListener("load", preload, { once: true });
+    return () => window.removeEventListener("load", preload);
+  }, [banners]);
+
   const banner = banners[index];
   const image = (
     <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
-      <ProductThumbnail src={banner.imageUrl} alt={banner.title ?? "Offer"} fit="contain" transform="w-1600" />
+      <ProductThumbnail
+        src={banner.imageUrl}
+        alt={banner.title ?? "Offer"}
+        fit="contain"
+        transform="w-1600"
+        widths={BANNER_WIDTHS}
+        sizes={BANNER_SIZES}
+        priority={index === 0}
+      />
     </div>
   );
 

@@ -163,7 +163,10 @@ export async function getNewArrivals(): Promise<Product[]> {
   return all.slice(0, 4);
 }
 
+// Same first-4 as getAllProducts().slice(0, 4), but asks the backend for
+// just that page instead of paging through the entire catalog (and mapping
+// every product) only to throw all but four away.
 export async function getBestsellers(): Promise<Product[]> {
-  const all = await getAllProducts();
-  return all.slice(0, 4);
+  const result = await apiFetch<BackendProductList>("/products?page=1&page_size=4", { auth: false });
+  return Promise.all(result.items.map(mapProduct));
 }
