@@ -2,16 +2,17 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Home as HomeIcon, Store } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { ChevronDown, Heart, Home as HomeIcon, LayoutDashboard, LogIn, LogOut, MapPin, Package, Store, UserRound } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useId, useRef, useState } from "react";
 import { CartDrawer } from "@/components/cart/CartDrawer";
-import { BagIcon, HeartIcon, MenuIcon, SearchIcon, UserIcon } from "@/components/icons/Icons";
+import { BagIcon, HeartIcon, MenuIcon, UserIcon } from "@/components/icons/Icons";
 import { Container } from "@/components/ui/Container";
 import { CountBadge } from "@/components/ui/CountBadge";
 import { mainNav } from "@/config/navigation";
 import { useBumpOnIncrease } from "@/hooks/useBumpOnIncrease";
 import { useScrolled } from "@/hooks/useScrolled";
+import { useAuthStore } from "@/store/auth.store";
 import { useCartStore } from "@/store/cart.store";
 import { useWishlistStore } from "@/store/wishlist.store";
 import { cn } from "@/utils/cn";
@@ -21,14 +22,22 @@ import { MobileMenu } from "./MobileMenu";
 export function Header() {
   const scrolled = useScrolled(24);
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
   const cartCount = useCartStore((state) =>
     state.lines.reduce((sum, line) => sum + line.quantity, 0)
   );
   const wishlistCount = useWishlistStore((state) => state.items.length);
   // Bounces the bag icon whenever an add-to-cart pushes the count up.
   const cartBumped = useBumpOnIncrease(cartCount);
+
+  function handleLogout() {
+    logout();
+    router.replace("/");
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full transition-all duration-300">
@@ -76,13 +85,7 @@ export function Header() {
             {/* Right Action Icons */}
             <div className="flex items-center justify-end gap-5">
 
-              <Link
-                href="/account"
-                aria-label="Account"
-                className="group rounded-full p-2 text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy focus:outline-none focus:ring-2 focus:ring-burgundy/20"
-              >
-                <UserIcon className="h-5 w-5 transition-transform duration-200 group-hover:scale-110" />
-              </Link>
+              <AccountMenu user={user} onLogout={handleLogout} />
 
               <Link
                 href="/wishlist"
@@ -212,18 +215,12 @@ export function Header() {
             {wishlistCount > 0 && <CountBadge count={wishlistCount} className="right-3 top-2" />}
             <span>Wishlist</span>
           </Link>
-          <Link
-            href="/account"
-            className={cn(
-              "relative flex h-full flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-medium transition-all duration-200 active:scale-95",
-              pathname.startsWith("/account") || pathname.startsWith("/login")
-                ? "text-burgundy"
-                : "text-muted hover:text-burgundy"
-            )}
-          >
-            <UserIcon className="h-5 w-5" />
-            <span>Account</span>
-          </Link>
+          <AccountMenu
+            user={user}
+            onLogout={handleLogout}
+            mobile
+            active={pathname.startsWith("/account") || pathname.startsWith("/login")}
+          />
         </div>
       </nav>
 
@@ -231,5 +228,118 @@ export function Header() {
       <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </header>
+  );
+}
+
+function AccountMenu({
+  user,
+  onLogout,
+  mobile = false,
+  active = false,
+}: {
+  user: { first_name: string; last_name: string } | null;
+  onLogout: () => void;
+  mobile?: boolean;
+  active?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const menuId = useId();
+  const displayName = user ? `${user.first_name} ${user.last_name}`.trim() : "";
+
+  useEffect(() => {
+    if (!open) return;
+
+    function closeOnOutsideClick(event: PointerEvent) {
+      if (event.target instanceof Node && !containerRef.current?.contains(event.target)) {
+        setOpen(false);
+      }
+    }
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setOpen(false);
+    }
+
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsideClick);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [open]);
+
+  const linkClassName = "flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm text-charcoal transition-colors hover:bg-moonlight hover:text-burgundy focus-visible:bg-moonlight focus-visible:text-burgundy focus-visible:outline-none";
+
+  return (
+    <div ref={containerRef} className={cn("relative", mobile && "flex h-full items-center justify-center")}>
+      <button
+        type="button"
+        aria-label={user ? `Account menu for ${displayName}` : "Login menu"}
+        aria-expanded={open}
+        aria-controls={menuId}
+        onClick={() => setOpen((isOpen) => !isOpen)}
+        className={mobile
+          ? cn("flex h-full w-full flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-medium transition-colors", active ? "text-burgundy" : "text-muted hover:text-burgundy")
+          : "group flex min-h-10 items-center gap-2 rounded-sm px-2 text-sm text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-burgundy/30"}
+      >
+        <UserIcon className={mobile ? "h-5 w-5" : "h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-110"} />
+        <span className={mobile ? "max-w-16 truncate" : "max-w-32 truncate"}>{user ? (mobile ? user.first_name : displayName) : "Login"}</span>
+        {!mobile && <ChevronDown className={cn("size-4 shrink-0 transition-transform", open && "rotate-180")} aria-hidden="true" />}
+      </button>
+
+      {open && (
+        <div
+          id={menuId}
+          className={cn(
+            "absolute z-[60] w-72 rounded-sm border border-silver/60 bg-white p-2 text-charcoal shadow-[0_18px_48px_rgba(24,25,22,0.16)]",
+            mobile ? "bottom-full right-0 mb-2" : "right-0 top-full mt-2",
+          )}
+        >
+          <p className="px-3 py-2 text-sm font-semibold text-charcoal">
+            {user ? "Your Account" : "Welcome to Vylore"}
+          </p>
+          <div className="my-1 h-px bg-silver/40" />
+          {user ? (
+            <>
+              <Link href="/account" onClick={() => setOpen(false)} className={linkClassName}>
+                <LayoutDashboard className="size-4" aria-hidden="true" /> Dashboard
+              </Link>
+              <Link href="/account/orders" onClick={() => setOpen(false)} className={linkClassName}>
+                <Package className="size-4" aria-hidden="true" /> Orders
+              </Link>
+              <Link href="/account/profile" onClick={() => setOpen(false)} className={linkClassName}>
+                <UserRound className="size-4" aria-hidden="true" /> Profile
+              </Link>
+              <Link href="/account/addresses" onClick={() => setOpen(false)} className={linkClassName}>
+                <MapPin className="size-4" aria-hidden="true" /> Addresses
+              </Link>
+              <Link href="/account/wishlist" onClick={() => setOpen(false)} className={linkClassName}>
+                <Heart className="size-4" aria-hidden="true" /> Wishlist
+              </Link>
+              <div className="my-1 h-px bg-silver/40" />
+              <button
+                type="button"
+                onClick={() => {
+                  onLogout();
+                  setOpen(false);
+                }}
+                className="flex min-h-11 w-full items-center gap-3 rounded-sm px-3 text-left text-sm text-burgundy transition-colors hover:bg-burgundy/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-burgundy/30"
+              >
+                <LogOut className="size-4" aria-hidden="true" /> Log Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/login" onClick={() => setOpen(false)} className={linkClassName}>
+                <LogIn className="size-4" aria-hidden="true" /> Login
+              </Link>
+              <Link href="/register" onClick={() => setOpen(false)} className={linkClassName}>
+                <UserRound className="size-4" aria-hidden="true" /> Create an Account
+              </Link>
+            </>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
