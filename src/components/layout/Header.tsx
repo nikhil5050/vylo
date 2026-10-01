@@ -2,11 +2,27 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ChevronDown, Heart, Home as HomeIcon, LayoutDashboard, LogIn, LogOut, MapPin, Package, Store, UserRound } from "lucide-react";
+import {
+  ChevronDown,
+  Heart,
+  Home as HomeIcon,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+  MapPin,
+  Package,
+  Store,
+  UserRound,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { CartDrawer } from "@/components/cart/CartDrawer";
-import { BagIcon, HeartIcon, MenuIcon, UserIcon } from "@/components/icons/Icons";
+import {
+  BagIcon,
+  HeartIcon,
+  MenuIcon,
+  UserIcon,
+} from "@/components/icons/Icons";
 import { Container } from "@/components/ui/Container";
 import { CountBadge } from "@/components/ui/CountBadge";
 import { mainNav } from "@/config/navigation";
@@ -28,7 +44,7 @@ export function Header() {
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const cartCount = useCartStore((state) =>
-    state.lines.reduce((sum, line) => sum + line.quantity, 0)
+    state.lines.reduce((sum, line) => sum + line.quantity, 0),
   );
   const wishlistCount = useWishlistStore((state) => state.items.length);
   // Bounces the bag icon whenever an add-to-cart pushes the count up.
@@ -47,7 +63,7 @@ export function Header() {
           "border-b transition-all duration-500 ease-in-out",
           scrolled
             ? "border-transparent bg-transparent shadow-none"
-            : "border-transparent bg-transparent"
+            : "border-transparent bg-transparent",
         )}
       >
         <Container>
@@ -55,7 +71,7 @@ export function Header() {
           <div
             className={cn(
               "hidden grid-cols-[auto_1fr_auto] items-center gap-8 transition-all duration-500 lg:grid",
-              scrolled ? "h-16" : "h-20"
+              scrolled ? "h-16" : "h-20",
             )}
           >
             {/* Left Logo */}
@@ -70,21 +86,20 @@ export function Header() {
             {/* Center Nav */}
             <nav className="justify-self-center rounded-full bg-white px-3 py-2 shadow-lg shadow-charcoal/10 ring-1 ring-charcoal/5">
               <div className="flex items-center gap-2">
-              {mainNav.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-full px-5 py-3 text-sm font-medium text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy"
-                >
-                  {item.label}
-                </Link>
-              ))}
+                {mainNav.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="rounded-full px-5 py-3 text-sm font-medium text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </div>
             </nav>
 
             {/* Right Action Icons */}
             <div className="flex items-center justify-end gap-5">
-
               <AccountMenu user={user} onLogout={handleLogout} />
 
               <Link
@@ -109,7 +124,14 @@ export function Header() {
               >
                 <motion.span
                   className="block"
-                  animate={cartBumped ? { scale: [1, 1.35, 0.9, 1.05, 1], rotate: [0, -10, 10, 0] } : {}}
+                  animate={
+                    cartBumped
+                      ? {
+                          scale: [1, 1.35, 0.9, 1.05, 1],
+                          rotate: [0, -10, 10, 0],
+                        }
+                      : {}
+                  }
                   transition={{ duration: 0.5, ease: "easeInOut" }}
                 >
                   <BagIcon className="h-5 w-5 transition-transform duration-200 group-hover:scale-110" />
@@ -137,11 +159,9 @@ export function Header() {
 
             <Link href="/" aria-label="Vylore home">
               <Logo size="sm" />
-              
             </Link>
 
             <div className="flex items-center gap-1">
-              
               <button
                 type="button"
                 aria-label="Open cart"
@@ -150,7 +170,14 @@ export function Header() {
               >
                 <motion.span
                   className="block"
-                  animate={cartBumped ? { scale: [1, 1.35, 0.9, 1.05, 1], rotate: [0, -10, 10, 0] } : {}}
+                  animate={
+                    cartBumped
+                      ? {
+                          scale: [1, 1.35, 0.9, 1.05, 1],
+                          rotate: [0, -10, 10, 0],
+                        }
+                      : {}
+                  }
                   transition={{ duration: 0.5, ease: "easeInOut" }}
                 >
                   <BagIcon className="h-5 w-5" />
@@ -174,10 +201,15 @@ export function Header() {
             href="/"
             className={cn(
               "flex h-full flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-medium transition-all duration-200 active:scale-95",
-              pathname === "/" ? "text-burgundy" : "text-muted hover:text-burgundy"
+              pathname === "/"
+                ? "text-burgundy"
+                : "text-muted hover:text-burgundy",
             )}
           >
-            <HomeIcon className="h-5 w-5" strokeWidth={pathname === "/" ? 2.5 : 1.8} />
+            <HomeIcon
+              className="h-5 w-5"
+              strokeWidth={pathname === "/" ? 2.5 : 1.8}
+            />
             <span>Home</span>
           </Link>
           <Link
@@ -186,17 +218,22 @@ export function Header() {
               "flex h-full flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-medium transition-all duration-200 active:scale-95",
               pathname.startsWith("/shop") || pathname.startsWith("/category")
                 ? "text-burgundy"
-                : "text-muted hover:text-burgundy"
+                : "text-muted hover:text-burgundy",
             )}
           >
-            <Store className="h-5 w-5" strokeWidth={pathname.startsWith("/shop") ? 2.5 : 1.8} />
+            <Store
+              className="h-5 w-5"
+              strokeWidth={pathname.startsWith("/shop") ? 2.5 : 1.8}
+            />
             <span>Shop</span>
           </Link>
           <Link
             href="/about"
             className={cn(
               "relative flex h-full flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-medium transition-all duration-300 active:scale-95",
-              pathname.startsWith("/about") ? "text-burgundy" : "text-muted hover:text-burgundy"
+              pathname.startsWith("/about")
+                ? "text-burgundy"
+                : "text-muted hover:text-burgundy",
             )}
           >
             <span className="-mt-5 flex h-14 w-20 items-center justify-center rounded-full bg-burgundy shadow-lg shadow-burgundy/25 ring-4 ring-white transition-transform duration-300">
@@ -208,18 +245,24 @@ export function Header() {
             href="/wishlist"
             className={cn(
               "relative flex h-full flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-medium transition-all duration-200 active:scale-95",
-              pathname.startsWith("/wishlist") ? "text-burgundy" : "text-muted hover:text-burgundy"
+              pathname.startsWith("/wishlist")
+                ? "text-burgundy"
+                : "text-muted hover:text-burgundy",
             )}
           >
             <HeartIcon className="h-5 w-5" />
-            {wishlistCount > 0 && <CountBadge count={wishlistCount} className="right-3 top-2" />}
+            {wishlistCount > 0 && (
+              <CountBadge count={wishlistCount} className="right-3 top-2" />
+            )}
             <span>Wishlist</span>
           </Link>
           <AccountMenu
             user={user}
             onLogout={handleLogout}
             mobile
-            active={pathname.startsWith("/account") || pathname.startsWith("/login")}
+            active={
+              pathname.startsWith("/account") || pathname.startsWith("/login")
+            }
           />
         </div>
       </nav>
@@ -251,7 +294,10 @@ function AccountMenu({
     if (!open) return;
 
     function closeOnOutsideClick(event: PointerEvent) {
-      if (event.target instanceof Node && !containerRef.current?.contains(event.target)) {
+      if (
+        event.target instanceof Node &&
+        !containerRef.current?.contains(event.target)
+      ) {
         setOpen(false);
       }
     }
@@ -268,23 +314,51 @@ function AccountMenu({
     };
   }, [open]);
 
-  const linkClassName = "flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm text-charcoal transition-colors hover:bg-moonlight hover:text-burgundy focus-visible:bg-moonlight focus-visible:text-burgundy focus-visible:outline-none";
+  const linkClassName =
+    "flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm text-charcoal transition-colors hover:bg-moonlight hover:text-burgundy focus-visible:bg-moonlight focus-visible:text-burgundy focus-visible:outline-none";
 
   return (
-    <div ref={containerRef} className={cn("relative", mobile && "flex h-full items-center justify-center")}>
+    <div
+      ref={containerRef}
+      className={cn(
+        "relative",
+        mobile && "flex h-full items-center justify-center",
+      )}
+    >
       <button
         type="button"
         aria-label={user ? `Account menu for ${displayName}` : "Login menu"}
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((isOpen) => !isOpen)}
-        className={mobile
-          ? cn("flex h-full w-full flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-medium transition-colors", active ? "text-burgundy" : "text-muted hover:text-burgundy")
-          : "group flex min-h-10 items-center gap-2 rounded-sm px-2 text-sm text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-burgundy/30"}
+        className={
+          mobile
+            ? cn(
+                "flex h-full w-full flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-medium transition-colors",
+                active ? "text-burgundy" : "text-muted hover:text-burgundy",
+              )
+            : "group flex min-h-10 items-center gap-2 rounded-sm px-2 text-sm text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-burgundy/30"
+        }
       >
-        <UserIcon className={mobile ? "h-5 w-5" : "h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-110"} />
-        <span className={mobile ? "max-w-16 truncate" : "max-w-32 truncate"}>{user ? (mobile ? user.first_name : displayName) : "Login"}</span>
-        {!mobile && <ChevronDown className={cn("size-4 shrink-0 transition-transform", open && "rotate-180")} aria-hidden="true" />}
+        <UserIcon
+          className={
+            mobile
+              ? "h-5 w-5"
+              : "h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-110"
+          }
+        />
+        <span className={mobile ? "max-w-16 truncate" : "max-w-32 truncate"}>
+          {user ? (mobile ? user.first_name : displayName) : "Login"}
+        </span>
+        {!mobile && (
+          <ChevronDown
+            className={cn(
+              "size-4 shrink-0 transition-transform",
+              open && "rotate-180",
+            )}
+            aria-hidden="true"
+          />
+        )}
       </button>
 
       {open && (
@@ -301,21 +375,44 @@ function AccountMenu({
           <div className="my-1 h-px bg-silver/40" />
           {user ? (
             <>
-              <Link href="/account" onClick={() => setOpen(false)} className={linkClassName}>
-                <LayoutDashboard className="size-4" aria-hidden="true" /> Dashboard
-              </Link>
-              <Link href="/account/orders" onClick={() => setOpen(false)} className={linkClassName}>
-                <Package className="size-4" aria-hidden="true" /> Orders
-              </Link>
-              <Link href="/account/profile" onClick={() => setOpen(false)} className={linkClassName}>
-                <UserRound className="size-4" aria-hidden="true" /> Profile
-              </Link>
-              <Link href="/account/addresses" onClick={() => setOpen(false)} className={linkClassName}>
-                <MapPin className="size-4" aria-hidden="true" /> Addresses
-              </Link>
-              <Link href="/account/wishlist" onClick={() => setOpen(false)} className={linkClassName}>
+              <Link
+                href="/account/wishlist"
+                onClick={() => setOpen(false)}
+                className={linkClassName}
+              >
                 <Heart className="size-4" aria-hidden="true" /> Wishlist
               </Link>
+              <Link
+                href="/account/orders"
+                onClick={() => setOpen(false)}
+                className={linkClassName}
+              >
+                <Package className="size-4" aria-hidden="true" /> Orders
+              </Link>
+              <Link
+                href="/account/addresses"
+                onClick={() => setOpen(false)}
+                className={linkClassName}
+              >
+                <MapPin className="size-4" aria-hidden="true" /> Addresses
+              </Link>
+              <Link
+                href="/account"
+                onClick={() => setOpen(false)}
+                className={linkClassName}
+              >
+                <LayoutDashboard className="size-4" aria-hidden="true" />{" "}
+                Dashboard
+              </Link>
+
+              <Link
+                href="/account/profile"
+                onClick={() => setOpen(false)}
+                className={linkClassName}
+              >
+                <UserRound className="size-4" aria-hidden="true" /> Profile
+              </Link>
+
               <div className="my-1 h-px bg-silver/40" />
               <button
                 type="button"
@@ -330,11 +427,20 @@ function AccountMenu({
             </>
           ) : (
             <>
-              <Link href="/login" onClick={() => setOpen(false)} className={linkClassName}>
+              <Link
+                href="/login"
+                onClick={() => setOpen(false)}
+                className={linkClassName}
+              >
                 <LogIn className="size-4" aria-hidden="true" /> Login
               </Link>
-              <Link href="/register" onClick={() => setOpen(false)} className={linkClassName}>
-                <UserRound className="size-4" aria-hidden="true" /> Create an Account
+              <Link
+                href="/register"
+                onClick={() => setOpen(false)}
+                className={linkClassName}
+              >
+                <UserRound className="size-4" aria-hidden="true" /> Create an
+                Account
               </Link>
             </>
           )}

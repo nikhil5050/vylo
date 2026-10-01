@@ -1,5 +1,5 @@
 import { Container } from "@/components/ui/Container";
-import { CategoryAutoScroller } from "@/components/home/CategoryAutoScroller";
+import { CategoryShowcase } from "@/components/home/CategoryShowcase";
 import { getCategories } from "@/services/category.service";
 import type { Category } from "@/types/category";
 
@@ -34,7 +34,7 @@ export async function CategoryGrid() {
   return (
     <section className="py-0 sm:py-10 lg:py-10">
       <Container>
-        <CategoryAutoScroller categories={sortForHomepage(categories)} />
+        <CategoryShowcase categories={sortForHomepage(categories)} />
       </Container>
     </section>
   );

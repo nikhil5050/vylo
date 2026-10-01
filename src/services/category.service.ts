@@ -10,11 +10,16 @@ interface BackendCategory {
   is_active: boolean;
 }
 
+interface BackendCategoryResponse {
+  value: BackendCategory[];
+  Count: number;
+}
+
 function mapCategory(category: BackendCategory): Category {
   return {
     id: String(category.id),
-    slug: category.slug,
-    name: category.name,
+    slug: category.slug.trim(),
+    name: category.name.trim(),
     description: category.description ?? "",
     imageUrl: category.image_url ?? undefined,
   };
@@ -27,8 +32,8 @@ let categoriesPromise: Promise<Category[]> | null = null;
 
 export async function getCategories(): Promise<Category[]> {
   if (!categoriesPromise) {
-    categoriesPromise = apiFetch<BackendCategory[]>("/categories", { auth: false })
-      .then((rows) => rows.map(mapCategory))
+    categoriesPromise = apiFetch<BackendCategory[] | BackendCategoryResponse>("/categories", { auth: false })
+      .then((response) => (Array.isArray(response) ? response : response.value).map(mapCategory))
       .catch((error) => {
         // Don't let a transient failure (network blip, backend cold start) poison
         // every future request for the life of the server process — clear the
