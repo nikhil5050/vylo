@@ -3,7 +3,7 @@ import { Bestsellers } from "@/components/home/Bestsellers";
 import { CategoryGrid } from "@/components/home/CategoryGrid";
 import { ComingSoon } from "@/components/home/ComingSoon";
 import { FinalCta } from "@/components/home/FinalCta";
-import { MaterialStory } from "@/components/home/MaterialStory";
+// import { MaterialStory } from "@/components/home/MaterialStory";
 import { OfferBanner } from "@/components/home/OfferBanner";
 // import { OurPackaging } from "@/components/home/OurPackaging";
 import { Testimonials } from "@/components/home/Testimonials";
@@ -64,7 +64,7 @@ export default function Home() {
       <Bestsellers />
       {/* <OurPackaging /> */}
       <TrustSection />
-      <MaterialStory /> 
+      {/* <MaterialStory />  */}
       <Testimonials />
       <FinalCta />
       <Faq />
