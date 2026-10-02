@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/Container";
+import { FadeIn } from "@/components/ui/FadeIn";
 import { CategoryShowcase } from "@/components/home/CategoryShowcase";
 import { getCategories } from "@/services/category.service";
 import type { Category } from "@/types/category";
@@ -32,8 +33,18 @@ export async function CategoryGrid() {
   if (categories.length === 0) return null;
 
   return (
-    <section className="py-0 sm:py-10 lg:py-10">
+    <section className="pt-10 pb-0 sm:py-10 lg:py-10">
       <Container>
+        <FadeIn className="mb-8 text-center sm:mb-10">
+          <p className="eyebrow text-xs text-muted">Shop by Category</p>
+          <h2 className="mt-4 font-serif text-4xl text-[#680307] sm:text-5xl">
+            Find Your Signature Piece.
+          </h2>
+          {/* <p className="mx-auto mt-4 max-w-xl text-base text-muted">
+            Explore silver necklaces, chains, earrings, rings, bracelets and anklets,
+            each designed to be worn and loved every day.
+          </p> */}
+        </FadeIn>
         <CategoryShowcase categories={sortForHomepage(categories)} />
       </Container>
     </section>
