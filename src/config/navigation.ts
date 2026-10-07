@@ -17,7 +17,7 @@ export const footerNav: Record<"shop" | "about" | "help", NavItem[]> = {
     { label: "Necklaces", href: "/category/necklace" },
     { label: "Earrings", href: "/category/earrings" },
     { label: "Anklets", href: "/category/anklets" },
-    { label: "Bracelets", href: "/category/bracelets" },
+    { label: "Bracelets", href: "/category/bracelet" },
     
   ],
   about: [
