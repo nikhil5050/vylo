@@ -3,7 +3,16 @@
 import type { FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
+import { INDIAN_STATES } from "@/config/india-states";
 import type { ShippingAddress } from "@/types/order";
+
+// a saved address can hold a free-text state from before this was a dropdown
+// ("maharashtra", or a misspelling) — preselect only an exact case-insensitive
+// match, otherwise leave it unselected so the customer has to pick one
+function matchState(state?: string): string {
+  if (!state) return "";
+  return INDIAN_STATES.find((s) => s.toLowerCase() === state.trim().toLowerCase()) ?? "";
+}
 
 interface AddressFormProps {
   defaultValue?: ShippingAddress;
@@ -46,7 +55,25 @@ export function AddressForm({ defaultValue, submitLabel = "Continue to Delivery"
       />
       <div className="grid grid-cols-2 gap-4">
         <Field label="City" name="city" required autoComplete="address-level2" defaultValue={defaultValue?.city} />
-        <Field label="State" name="state" required autoComplete="address-level1" defaultValue={defaultValue?.state} />
+        <label className="flex flex-col gap-1.5">
+          <span className="eyebrow text-[11px] text-muted">State *</span>
+          <select
+            name="state"
+            required
+            autoComplete="address-level1"
+            defaultValue={matchState(defaultValue?.state)}
+            className="h-11 w-full rounded-[2px] border border-silver/50 bg-white px-3 text-sm text-charcoal transition-all duration-200 hover:border-silver focus:border-burgundy focus:outline-none focus:ring-4 focus:ring-burgundy/10"
+          >
+            <option value="" disabled>
+              Select state
+            </option>
+            {INDIAN_STATES.map((state) => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <Field
