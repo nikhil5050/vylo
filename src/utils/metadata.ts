@@ -8,7 +8,7 @@ interface BuildMetadataOptions {
   noIndex?: boolean;
   keywords?: string[];
   // Absolute or site-relative URL. Without an explicit og:image, Google (incl.
-  // AI Overviews) picks a thumbnail itself — often from another site.
+  // AI Overviews) picks a thumbnail itself â€” often from another site.
   image?: string;
 }
 
