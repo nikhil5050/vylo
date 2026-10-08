@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductGallery } from "@/components/product/ProductGallery";
@@ -177,8 +178,22 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
           <ProductInfo product={product} />
         </div>
 
-        <div className="mt-16 max-w-3xl lg:mt-24">
-          <Accordion items={accordionItems} defaultOpenId="description" headingLevel={2} />
+        <div className="relative mt-16 lg:mt-24">
+          <div className="max-w-3xl">
+            <Accordion items={accordionItems} defaultOpenId="description" headingLevel={2} />
+          </div>
+          {/* Decorative olive-and-tulip line art filling the space beside the
+              max-w-3xl accordion. Pinned to the top (not centred) so it
+              doesn't shift as panels open and close; only shown from xl,
+              where that space is at least ~430px wide. */}
+          <Image
+            src="/images/decor/olive-tulip-line-art.svg"
+            alt=""
+            aria-hidden
+            width={320}
+            height={440}
+            className="pointer-events-none absolute right-[4%] top-4 hidden h-auto w-[clamp(240px,22vw,320px)] select-none opacity-[0.65] xl:block"
+          />
         </div>
 
         <section className="mt-16 lg:mt-24" aria-labelledby="product-highlights-heading">
