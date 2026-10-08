@@ -199,6 +199,22 @@ export async function updateOrderShipment(orderId: string, input: ShipmentUpdate
   };
 }
 
+// Retries the iCarry booking for a confirmed order whose automatic booking failed
+// (shipment left "pending_manual" — e.g. iCarry wallet below its reserve balance).
+// Errors carry iCarry's own reason, surfaced via the backend's 502 detail.
+export async function bookOrderShipment(orderId: string): Promise<OrderShipment> {
+  const shipment = await apiFetch<BackendShipment>(`/admin/orders/${orderId}/shipment/book`, { method: "POST" });
+  return {
+    provider: shipment.provider,
+    status: shipment.status,
+    awbNumber: shipment.awb_number ?? undefined,
+    trackingNumber: shipment.tracking_number ?? undefined,
+    trackingUrl: shipment.tracking_url ?? undefined,
+    shippedAt: shipment.shipped_at ?? undefined,
+    deliveredAt: shipment.delivered_at ?? undefined,
+  };
+}
+
 export async function downloadAdminOrderInvoice(id: string, orderNumber: string): Promise<void> {
   const blob = await apiFetchBlob(`/admin/orders/${id}/invoice`);
   downloadBlob(blob, `invoice-${orderNumber}.pdf`);

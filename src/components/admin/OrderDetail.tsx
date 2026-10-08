@@ -14,7 +14,7 @@ import { ImagePlaceholder } from "@/components/admin/ImagePlaceholder";
 import { orderStatusTone, paymentStatusTone, shippingStatusTone } from "@/lib/admin/status";
 import { formatAdminDate, formatAdminDateTime } from "@/lib/admin/format";
 import { formatPrice } from "@/utils/formatPrice";
-import { downloadOrderInvoice, updateOrderShipment } from "@/lib/admin/api";
+import { bookOrderShipment, downloadOrderInvoice, updateOrderShipment } from "@/lib/admin/api";
 import { gstBreakdown, otherCharges } from "@/lib/gst";
 import type { AdminOrder, OrderShipment } from "@/types/admin";
 
@@ -32,6 +32,7 @@ export function OrderDetail({ order, shipment: initialShipment }: OrderDetailPro
     trackingUrl: initialShipment?.trackingUrl ?? "",
   });
   const [saving, setSaving] = useState(false);
+  const [booking, setBooking] = useState(false);
   const [downloading, setDownloading] = useState(false);
 
   async function handleDownloadInvoice() {
@@ -42,6 +43,25 @@ export function OrderDetail({ order, shipment: initialShipment }: OrderDetailPro
       toast.error(error instanceof Error ? error.message : "Couldn't download the invoice.");
     } finally {
       setDownloading(false);
+    }
+  }
+
+  async function bookShipment() {
+    setBooking(true);
+    try {
+      const updated = await bookOrderShipment(order.id);
+      setShipment(updated);
+      setForm({
+        status: updated.status,
+        awbNumber: updated.awbNumber ?? "",
+        trackingNumber: updated.trackingNumber ?? "",
+        trackingUrl: updated.trackingUrl ?? "",
+      });
+      toast.success("Shipment booked with iCarry.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Couldn't book shipment with iCarry.");
+    } finally {
+      setBooking(false);
     }
   }
 
@@ -221,6 +241,17 @@ export function OrderDetail({ order, shipment: initialShipment }: OrderDetailPro
                   <p>Provider: <span className="text-foreground">{shipment.provider}</span></p>
                   {shipment.shippedAt && <p>Shipped: {formatAdminDateTime(shipment.shippedAt)}</p>}
                   {shipment.deliveredAt && <p>Delivered: {formatAdminDateTime(shipment.deliveredAt)}</p>}
+                </div>
+              )}
+              {shipment?.status === "pending_manual" && (
+                <div className="space-y-2 rounded-md border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900">
+                  <p>
+                    Automatic iCarry booking failed for this order (e.g. low iCarry wallet balance). Fix the cause,
+                    then retry.
+                  </p>
+                  <Button size="sm" variant="outline" className="w-full" onClick={bookShipment} disabled={booking}>
+                    {booking ? "Booking…" : "Book with iCarry"}
+                  </Button>
                 </div>
               )}
               <div className="space-y-1.5">
