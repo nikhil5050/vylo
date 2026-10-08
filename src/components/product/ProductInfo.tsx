@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { BadgeCheckIcon, GemIcon, LockIcon } from "@/components/icons/Icons";
 import type { Product } from "@/types/product";
@@ -40,31 +41,48 @@ export function ProductInfo({ product }: { product: Product }) {
         )}
       </div>
 
-      <ProductDescription description={product.description} />
+      {/* Decorative botanical ornament in the free strip to the right of the
+          description/actions. Anchored below the title + price so it can
+          never reach them, sized to the space left beside ProductDescription's
+          max-w-md (28rem + a gap), and only shown from 1360px — below that,
+          the info column is too narrow for that strip to exist. */}
+      <div className="relative">
+        <Image
+          src="/images/decor/floral-line-art.svg"
+          alt=""
+          aria-hidden
+          width={240}
+          height={440}
+          className="pointer-events-none absolute right-0 top-2 hidden h-auto w-[calc(100%-29rem)] max-w-[210px] select-none opacity-[0.65] min-[1360px]:block"
+        />
+        <div className="relative">
+          <ProductDescription description={product.description} />
 
-      <dl className="mt-6 flex flex-col gap-2 text-sm">
-        {product.metal && (
-          <div className="flex gap-2">
-            <dt className="w-24 shrink-0 text-muted">Metal</dt>
-            <dd className="text-charcoal">{product.metal}</dd>
-          </div>
-        )}
-        {product.purity && (
-          <div className="flex gap-2">
-            <dt className="w-24 shrink-0 text-muted">Purity</dt>
-            <dd className="text-charcoal">{product.purity}</dd>
-          </div>
-        )}
-        {product.weight && (
-          <div className="flex gap-2">
-            <dt className="w-24 shrink-0 text-muted">Weight</dt>
-            <dd className="text-charcoal">{product.weight}g</dd>
-          </div>
-        )}
-      </dl>
+          <dl className="mt-6 flex flex-col gap-2 text-sm">
+            {product.metal && (
+              <div className="flex gap-2">
+                <dt className="w-24 shrink-0 text-muted">Metal</dt>
+                <dd className="text-charcoal">{product.metal}</dd>
+              </div>
+            )}
+            {product.purity && (
+              <div className="flex gap-2">
+                <dt className="w-24 shrink-0 text-muted">Purity</dt>
+                <dd className="text-charcoal">{product.purity}</dd>
+              </div>
+            )}
+            {product.weight && (
+              <div className="flex gap-2">
+                <dt className="w-24 shrink-0 text-muted">Weight</dt>
+                <dd className="text-charcoal">{product.weight}g</dd>
+              </div>
+            )}
+          </dl>
 
-      <div className="mt-8">
-        <ProductActions product={product} />
+          <div className="mt-8">
+            <ProductActions product={product} />
+          </div>
+        </div>
       </div>
 
       <p className="mt-6 text-sm text-charcoal">
