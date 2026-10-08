@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { ChevronDownIcon } from "@/components/icons/Icons";
 import { cn } from "@/utils/cn";
@@ -52,23 +51,26 @@ function ShopFaqCard({ item, index }: { item: FaqItem; index: number }) {
         </span>
       </button>
 
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            id={panelId}
-            role="region"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden"
-          >
-            <p className="mt-4 border-t border-silver/30 pt-4 text-sm leading-relaxed text-muted">
-              {item.answer}
-            </p>
-          </motion.div>
+      {/* Answer stays in the server-rendered HTML even while collapsed (so
+          search engines read it as page content, matching the FAQPage
+          JSON-LD), collapsed via a 0fr→1fr grid-row transition instead of
+          being unmounted. `inert` keeps the hidden text out of tab order
+          and the accessibility tree until it's opened. */}
+      <div
+        id={panelId}
+        role="region"
+        inert={!isOpen}
+        className={cn(
+          "grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
         )}
-      </AnimatePresence>
+      >
+        <div className="overflow-hidden">
+          <p className="mt-4 border-t border-silver/30 pt-4 text-sm leading-relaxed text-muted">
+            {item.answer}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

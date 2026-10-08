@@ -5,10 +5,12 @@ import { ProductInfo } from "@/components/product/ProductInfo";
 import { ProductReviews } from "@/components/product/ProductReviews";
 import { RelatedProducts } from "@/components/product/RelatedProducts";
 import { StickyMobileCta } from "@/components/product/StickyMobileCta";
+import { ShopFaqGrid } from "@/components/shop/ShopFaqGrid";
 import { Accordion, type AccordionItem } from "@/components/ui/Accordion";
 import { Container } from "@/components/ui/Container";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { careTips, getProductFaqs, getProductHighlights, getStylingTips } from "@/config/productContent";
 import { siteConfig } from "@/config/site";
 import { getAllProducts, getProductBySlug, getRelatedProducts } from "@/services/product.service";
 
@@ -70,6 +72,31 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
     },
   };
 
+  const productFaqs = getProductFaqs(product);
+  const highlights = getProductHighlights(product);
+  const stylingTips = getStylingTips(product);
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: productFaqs.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
+      { "@type": "ListItem", position: 2, name: "Shop", item: `${siteConfig.url}/shop` },
+      { "@type": "ListItem", position: 3, name: product.category, item: `${siteConfig.url}/category/${product.categorySlug}` },
+      { "@type": "ListItem", position: 4, name: product.name, item: `${siteConfig.url}/product/${product.slug}` },
+    ],
+  };
+
   const specRows: string[] = [`Category: ${product.category}`];
   if (product.metal) specRows.push(`Metal: ${product.metal}`);
   if (product.purity) specRows.push(`Purity: ${product.purity}`);
@@ -99,11 +126,35 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
       ),
     },
     {
+      id: "styling",
+      title: "How to Style It",
+      content: (
+        <ul className="flex list-disc flex-col gap-1 pl-5">
+          {stylingTips.map((tip) => (
+            <li key={tip}>{tip}</li>
+          ))}
+        </ul>
+      ),
+    },
+    {
+      id: "care",
+      title: "Care Instructions",
+      content: (
+        <ul className="flex list-disc flex-col gap-1 pl-5">
+          {careTips.map((tip) => (
+            <li key={tip}>{tip}</li>
+          ))}
+        </ul>
+      ),
+    },
+    {
       id: "shipping-returns",
       title: "Shipping & Replacement",
       content: (
         <p>
-          Full shipping and replacement details are available on our{" "}
+          Orders are dispatched within 2–4 business days and shipped across India. A replacement may be
+          requested within 7 days of delivery for eligible reasons such as a damaged, defective or wrong
+          product, or a genuine sizing issue. Full shipping and replacement details are available on our{" "}
           <Link href="/shipping" className="text-burgundy underline underline-offset-2">
             Shipping
           </Link>{" "}
@@ -119,7 +170,7 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
 
   return (
     <main className="flex flex-1 flex-col pb-24 pt-16 lg:pb-0 lg:pt-24">
-      <JsonLd data={productJsonLd} />
+      <JsonLd data={[productJsonLd, faqJsonLd, breadcrumbJsonLd]} />
       <Container>
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           <ProductGallery productName={product.name} images={product.images} />
@@ -129,6 +180,46 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
         <div className="mt-16 max-w-3xl lg:mt-24">
           <Accordion items={accordionItems} defaultOpenId="description" headingLevel={2} />
         </div>
+
+        <section className="mt-16 lg:mt-24" aria-labelledby="product-highlights-heading">
+          <p className="eyebrow text-xs text-burgundy">Why You&apos;ll Love It</p>
+          <h2 id="product-highlights-heading" className="mt-4 font-serif text-3xl text-charcoal sm:text-4xl">
+            The Details That Matter
+          </h2>
+          <div className="mt-8 grid gap-px overflow-hidden border border-silver/40 bg-silver/40 sm:grid-cols-2 lg:grid-cols-4">
+            {highlights.map((highlight, index) => (
+              <div key={highlight.title} className="bg-white p-6">
+                <span className="font-serif text-2xl text-burgundy/30">0{index + 1}</span>
+                <h3 className="mt-2 font-serif text-lg text-charcoal">{highlight.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{highlight.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-16 lg:mt-24" aria-labelledby="product-faq-heading">
+          <p className="eyebrow text-xs text-burgundy">Questions</p>
+          <h2 id="product-faq-heading" className="mt-4 font-serif text-3xl text-charcoal sm:text-4xl">
+            About the {product.name}
+          </h2>
+          <div className="mt-8">
+            <ShopFaqGrid faqs={productFaqs} />
+          </div>
+          <p className="mt-6 text-sm text-muted">
+            Looking for something similar?{" "}
+            <Link
+              href={`/category/${product.categorySlug}`}
+              className="text-burgundy underline underline-offset-2"
+            >
+              Explore all silver {product.category.toLowerCase()}
+            </Link>{" "}
+            or{" "}
+            <Link href="/faq" className="text-burgundy underline underline-offset-2">
+              read our full FAQ
+            </Link>
+            .
+          </p>
+        </section>
 
         <ProductReviews />
         <RelatedProducts products={related} />

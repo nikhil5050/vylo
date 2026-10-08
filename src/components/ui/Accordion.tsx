@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { useId, useState, type ReactNode } from "react";
 import { ChevronDownIcon } from "@/components/icons/Icons";
 import { cn } from "@/utils/cn";
@@ -46,22 +45,24 @@ export function Accordion({ items, defaultOpenId, headingLevel = 3 }: AccordionP
                 />
               </button>
             </Heading>
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div
-                  id={panelId}
-                  role="region"
-                  aria-labelledby={buttonId}
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                  className="overflow-hidden"
-                >
-                  <div className="pb-5 text-sm leading-relaxed text-muted">{item.content}</div>
-                </motion.div>
+            {/* Collapsed panels stay in the server-rendered HTML (0fr→1fr
+                grid-row transition rather than unmounting) so their text is
+                indexable page content; `inert` keeps it out of tab order and
+                the accessibility tree until opened. */}
+            <div
+              id={panelId}
+              role="region"
+              aria-labelledby={buttonId}
+              inert={!isOpen}
+              className={cn(
+                "grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
               )}
-            </AnimatePresence>
+            >
+              <div className="overflow-hidden">
+                <div className="pb-5 text-sm leading-relaxed text-muted">{item.content}</div>
+              </div>
+            </div>
           </div>
         );
       })}

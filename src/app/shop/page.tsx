@@ -5,12 +5,16 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
+import { ProductThumbnail } from "@/components/ui/ProductThumbnail";
+import { ArrowRightIcon } from "@/components/icons/Icons";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { faqCategories } from "@/config/faq";
+import { shopBuyingGuide, shopCategoryGuides, shopFaqIds, shopIntro, shopStory } from "@/config/shop";
 import { siteConfig } from "@/config/site";
 import { getCategories } from "@/services/category.service";
 import { getThemes } from "@/services/theme.service";
 import { getAllProducts } from "@/services/product.service";
+import type { Category } from "@/types/category";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -19,20 +23,8 @@ const shopPosters = {
   bottom: "https://ik.imagekit.io/vyloreimgs/vylore/banners/posterbottom.png",
 };
 
-// A shopping-focused slice of the same source used on the homepage/FAQ page —
-// purity, payments, shipping and returns are the questions most likely to be
-// on a buyer's mind on this exact page, so they double as good AEO/GEO bait.
-const shopFaqIds = [
-  "purity-1",
-  "orders-1",
-  "shipping-1",
-  "shipping-2",
-  "payments-1",
-  "payments-2",
-  "returns-1",
-  "care-2",
-];
-
+// Shopping-focused slice of the shared FAQ source; the ids and their order
+// live in config/shop.ts alongside the rest of the shop copy.
 const shopFaqs = faqCategories
   .flatMap((category) => category.items)
   .filter((item) => shopFaqIds.includes(item.id))
@@ -107,17 +99,18 @@ export default async function ShopPage() {
 
       <Container>
         <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Shop" }]} />
-         <ShopPoster position="top" className="mt-6" />
-        {/* <h1 className="mt-4 font-serif text-4xl text-charcoal sm:text-5xl">Define Your Style.</h1>
-        <p className="eyebrow mt-2 text-xs text-muted">Discover Your Vylore.</p> */}
+        <ShopPoster position="top" className="mt-6" />
+        <ShopIntro categories={categories} />
 
         <div id="shop-products" className="mt-10 mb-0">
           <ProductListing products={products} categories={categories} themes={themes} themeTiles />
         </div>
       </Container>
       <ShopPoster position="bottom" />
-      <ShopFaq />
+      <ShopCategoryGuide categories={categories} />
       <ShopSeoContent />
+      <ShopBuyingGuide />
+      <ShopFaq />
       <ShopFinalCta />
     </main>
   );
@@ -126,7 +119,7 @@ export default async function ShopPage() {
 function ShopPoster({ position, className = "" }: { position: "top" | "bottom"; className?: string }) {
   return (
     <section
-      className={`${position === "top" ? "mb-12" : "mt-16"} ${className}`}
+      className={`${position === "top" ? "mb-10" : "mt-16"} ${className}`}
       aria-label={`Vylore jewellery collection ${position} poster`}
     >
       <Link href={position === "top" ? "#shop-products" : "/contact"}>
@@ -156,20 +149,158 @@ function ShopPoster({ position, className = "" }: { position: "top" | "bottom"; 
   );
 }
 
+function ShopIntro({ categories }: { categories: Category[] }) {
+  // Only link categories that actually exist in the catalogue, so a chip
+  // never points at an empty /category page.
+  const live = shopCategoryGuides.filter((guide) => categories.some((c) => c.slug === guide.slug));
+
+  return (
+    <header className="mx-auto max-w-3xl text-center">
+      <p className="eyebrow text-xs text-burgundy">The Vylore Collection</p>
+      <h1 className="mt-3 font-serif text-3xl leading-tight text-[#680307] sm:text-4xl lg:text-5xl">
+        {shopIntro.heading}
+      </h1>
+      <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">{shopIntro.body}</p>
+      {live.length > 0 && (
+        <nav aria-label="Shop by category" className="mt-6 flex flex-wrap justify-center gap-2">
+          {live.map((guide) => (
+            <Link
+              key={guide.slug}
+              href={`/category/${guide.slug}`}
+              className="rounded-full border border-silver/50 px-4 py-1.5 text-xs tracking-wide text-charcoal transition-colors hover:border-burgundy hover:text-burgundy"
+            >
+              Silver {guide.name}
+            </Link>
+          ))}
+        </nav>
+      )}
+    </header>
+  );
+}
+
+function ShopCategoryGuide({ categories }: { categories: Category[] }) {
+  return (
+    <section className="bg-white py-16 sm:py-20 lg:py-24" aria-labelledby="shop-category-guide-heading">
+      <Container>
+        <FadeIn className="mx-auto max-w-2xl text-center">
+          <p className="eyebrow text-xs text-burgundy">Shop by Category</p>
+          <h2
+            id="shop-category-guide-heading"
+            className="mt-4 font-serif text-4xl leading-tight text-[#680307] sm:text-5xl"
+          >
+            Find Your Kind of Silver.
+          </h2>
+          <p className="mt-5 text-sm leading-6 text-muted sm:text-base">
+            Every category in the collection is designed in 925 sterling silver — here&apos;s what
+            you&apos;ll find in each, and how to wear it.
+          </p>
+        </FadeIn>
+
+        <div className="mt-12 flex flex-col gap-6 lg:gap-8">
+          {shopCategoryGuides.map((guide, index) => {
+            const category = categories.find((c) => c.slug === guide.slug);
+            const reversed = index % 2 === 1;
+            return (
+              <FadeIn key={guide.slug} delay={0.05}>
+                <article className="grid overflow-hidden border border-silver/40 bg-white md:grid-cols-5">
+                  <div
+                    className={`relative aspect-[16/9] bg-charcoal md:col-span-2 md:aspect-auto md:min-h-72 ${
+                      reversed ? "md:order-2" : ""
+                    }`}
+                  >
+                    <ProductThumbnail
+                      src={category?.imageUrl}
+                      alt={guide.heading}
+                      transform="w-800"
+                      loading="lazy"
+                      className="absolute inset-0"
+                    />
+                  </div>
+                  <div className="flex flex-col justify-center p-6 sm:p-8 md:col-span-3 lg:p-10">
+                    <p className="eyebrow text-xs text-burgundy">
+                      0{index + 1} · {guide.name}
+                    </p>
+                    <h3 className="mt-3 font-serif text-2xl text-charcoal sm:text-3xl">{guide.heading}</h3>
+                    {guide.paragraphs.map((paragraph, i) => (
+                      <p key={i} className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
+                        {paragraph}
+                      </p>
+                    ))}
+                    <ul className="mt-5 flex flex-wrap gap-2">
+                      {guide.tags.map((tag) => (
+                        <li key={tag} className="bg-burgundy/5 px-3 py-1 text-[11px] tracking-wide text-burgundy">
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
+                    {category && (
+                      <Link
+                        href={`/category/${guide.slug}`}
+                        className="mt-6 inline-flex w-fit items-center gap-2 text-sm font-medium text-charcoal underline decoration-silver/60 underline-offset-4 transition-colors hover:text-burgundy"
+                      >
+                        Shop Silver {guide.name}
+                        <ArrowRightIcon className="h-4 w-4" aria-hidden />
+                      </Link>
+                    )}
+                  </div>
+                </article>
+              </FadeIn>
+            );
+          })}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function ShopBuyingGuide() {
+  return (
+    <section className="bg-white py-16 sm:py-20 lg:py-24" aria-labelledby="shop-buying-guide-heading">
+      <Container>
+        <div className="grid gap-10 lg:grid-cols-3 lg:gap-16">
+          <FadeIn className="lg:sticky lg:top-28 lg:self-start">
+            <p className="eyebrow text-xs text-burgundy">Silver Jewellery Guide</p>
+            <h2
+              id="shop-buying-guide-heading"
+              className="mt-4 font-serif text-4xl leading-tight text-[#680307] sm:text-5xl"
+            >
+              Buying Silver, Simplified.
+            </h2>
+            <p className="mt-5 text-sm leading-6 text-muted sm:text-base">
+              A few essentials to help you choose with confidence and keep every piece looking its
+              best for years.
+            </p>
+          </FadeIn>
+
+          <div className="grid gap-px overflow-hidden border border-silver/40 bg-silver/40 sm:grid-cols-2 lg:col-span-2">
+            {shopBuyingGuide.map((topic, index) => (
+              <FadeIn key={topic.title} delay={index * 0.05} className="bg-white p-6 sm:p-8">
+                <span className="font-serif text-3xl text-burgundy/30">0{index + 1}</span>
+                <h3 className="mt-3 font-serif text-xl text-charcoal">{topic.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted">{topic.body}</p>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
 function ShopFaq() {
   return (
-    <section className="bg-white py-16 sm:py-20 lg:py-24" aria-labelledby="shop-faq-heading">
+    <section className="py-16 sm:py-20 lg:py-24" aria-labelledby="shop-faq-heading">
       <Container>
         <FadeIn className="mx-auto max-w-xl text-center">
           <p className="eyebrow text-xs text-burgundy">Got Questions?</p>
-          <h1
+          <h2
             id="shop-faq-heading"
             className="mt-4 font-serif text-4xl leading-none text-[#680307] sm:text-5xl"
           >
             Answers Before You Buy.
-          </h1>
+          </h2>
           <p className="mt-5 text-sm leading-6 text-muted">
-            Purity, payments, shipping and returns — tap a question to expand it.
+            Purity, payments, shipping, care and returns — tap a question to expand it.
           </p>
         </FadeIn>
 
@@ -189,27 +320,19 @@ function ShopFaq() {
 
 function ShopSeoContent() {
   return (
-    <section className="py-16 lg:py-10" aria-labelledby="shop-content-heading">
+    <section className="py-16 sm:py-20 lg:py-24" aria-labelledby="shop-content-heading">
       <Container>
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <FadeIn>
-            <p className="eyebrow text-xs text-muted">The Vylore Shop</p>
+            <p className="eyebrow text-xs text-muted">Why Shop Vylore</p>
             <h2 id="shop-content-heading" className="mt-4 font-serif text-4xl text-[#680307] sm:text-5xl">
               Contemporary Silver Jewellery, Made to Last.
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-muted">
-              Vylore&apos;s online jewellery shop brings together rings, earrings, pendants,
-              bracelets and more in genuine 925 sterling silver, designed for everyday wear
-              and finished with the same attention to detail as fine jewellery. Every product
-              listing states its material, purity, weight and care instructions clearly, so
-              you always know exactly what you&apos;re buying.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-muted">
-              Whether you&apos;re after a minimal everyday piece, a statement design for a
-              special occasion, or a custom piece of your own, the collection is organised by
-              category and theme to help you find it faster — backed by secure payments,
-              nationwide shipping across India and dedicated support at every step.
-            </p>
+            {shopStory.map((paragraph, index) => (
+              <p key={index} className={`${index === 0 ? "mt-6" : "mt-4"} text-base leading-relaxed text-muted`}>
+                {paragraph}
+              </p>
+            ))}
           </FadeIn>
 
           <FadeIn direction="right" delay={0.1}>
