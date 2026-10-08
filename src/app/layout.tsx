@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { contactInfo } from "@/config/contact";
 import { siteConfig } from "@/config/site";
 import { isComingSoon } from "@/config/launch";
+import { defaultOgImage } from "@/utils/metadata";
 
 // TEMPORARY stand-in for "Black Mango" (a paid/personal-use display font,
 // not on Google Fonts — see AGENTS.md note or ask about licensing). Swap this
@@ -44,9 +45,11 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     type: "website",
     locale: "en_IN",
+    images: [defaultOgImage],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
+    images: [defaultOgImage.url],
   },
 };
 
@@ -56,6 +59,7 @@ const organizationJsonLd = {
   name: siteConfig.name,
   url: siteConfig.url,
   description: siteConfig.description,
+  image: `${siteConfig.url}${defaultOgImage.url}`,
   logo: `${siteConfig.url}/logo/logo.png`,
   contactPoint: {
     "@type": "ContactPoint",

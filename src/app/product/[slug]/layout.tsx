@@ -17,6 +17,7 @@ export async function generateMetadata({
     title: product.name,
     description: product.description,
     path: `/product/${product.slug}`,
+    image: product.images[0]?.url,
     keywords: [
       product.name,
       `${product.category} silver jewellery`,
