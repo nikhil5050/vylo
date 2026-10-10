@@ -192,9 +192,12 @@ export default function AboutPage() {
       <section className="py-12 sm:py-20 lg:py-28 bg-white border-b border-charcoal/5">
         <Container className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-20">
           <FadeIn direction="left">
-            <div className="relative group aspect-[4/3] sm:aspect-[16/10] lg:aspect-[3/4] w-full overflow-hidden  shadow-lg sm:shadow-xl border border-charcoal/10">
-              <AutoplayVideo
-                src="https://ik.imagekit.io/vyloreimgs/vylore/About%20Page/about%20section%20video.mp4"
+            <div className="relative group aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/5] w-full overflow-hidden  shadow-lg sm:shadow-xl border border-charcoal/10">
+              <Image
+                src="/about-img.png"
+                alt="Vylore jewellery craftsmanship"
+                fill
+                sizes="(max-width: 1023px) 100vw, 50vw"
                 className="absolute inset-0 h-full w-full object-cover"
               />
             </div>
