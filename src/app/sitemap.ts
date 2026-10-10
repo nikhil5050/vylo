@@ -5,7 +5,7 @@ import { getAllProducts } from "@/services/product.service";
 
 export const dynamic = "force-static";
 
-const staticPaths = ["", "/shop", "/about", "/contact", "/faq", "/track-order"];
+const staticPaths = ["", "/shop", "/about", "/contact", "/faq", "/track-order", "/ring-size-checker"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [products, categories] = await Promise.all([

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
 import { HeartIcon } from "@/components/icons/Icons";
@@ -41,7 +42,17 @@ export function ProductActions({ product }: { product: Product }) {
     <div className="flex flex-col gap-6">
       {product.sizes && product.sizes.length > 0 && (
         <div>
-          <p className="eyebrow text-xs text-muted">Size</p>
+          <div className="flex items-center gap-[10px]">
+            <p className="eyebrow text-xs text-muted">Size</p>
+            {product.categorySlug === "rings" && (
+              <Link
+                href={`/ring-size-checker${selectedSize ? `?size=${encodeURIComponent(selectedSize)}` : ""}`}
+                className="text-xs text-burgundy underline underline-offset-4 transition-colors hover:text-cherry"
+              >
+                Size Guide
+              </Link>
+            )}
+          </div>
           <div className="mt-3 flex flex-wrap gap-2">
             {product.sizes.map((size) => {
               const isSelected = selectedSize === size;
