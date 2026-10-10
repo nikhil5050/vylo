@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
-import { MotionConfig, motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useEffect, useSyncExternalStore } from "react";
+import { AnimatePresence, MotionConfig, motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { siteConfig } from "@/config/site";
 import { contactInfo } from "@/config/contact";
+import { launchDate } from "@/config/launch";
 
 // Stands in for the real homepage at "/" while COMING_SOON is active — see
 // src/proxy.ts for the gate that keeps every other route redirected here.
@@ -69,6 +70,75 @@ function GoldMask({ src, className }: { src: string; className?: string }) {
       animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
       transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
     />
+  );
+}
+
+const LAUNCH_AT = new Date(launchDate).getTime();
+const COUNTDOWN_UNITS = [
+  { label: "Days", ms: 86_400_000, mod: Infinity },
+  { label: "Hours", ms: 3_600_000, mod: 24 },
+  { label: "Minutes", ms: 60_000, mod: 60 },
+  { label: "Seconds", ms: 1_000, mod: 60 },
+];
+
+// A once-a-second clock; snapshots are whole seconds so they stay stable
+// between ticks, and the server snapshot is null.
+function subscribeClock(onTick: () => void) {
+  const id = setInterval(onTick, 1000);
+  return () => clearInterval(id);
+}
+const getClockSecond = () => Math.floor(Date.now() / 1000);
+const getServerClock = () => null;
+
+// Ticks down to launchDate and holds at zero once it passes. Renders "--"
+// until mounted so the server HTML never disagrees with the client clock.
+function Countdown() {
+  const nowSec = useSyncExternalStore(subscribeClock, getClockSecond, getServerClock);
+  const remaining = nowSec === null ? null : Math.max(0, LAUNCH_AT - nowSec * 1000);
+
+  return (
+    <div className="flex items-start justify-center gap-2 sm:gap-4">
+      {COUNTDOWN_UNITS.map((unit, i) => {
+        const value =
+          remaining === null
+            ? "--"
+            : String(Math.floor(remaining / unit.ms) % unit.mod).padStart(2, "0");
+        return (
+          <div key={unit.label} className="flex items-start gap-2 sm:gap-4">
+            {i > 0 && (
+              <motion.span
+                className="mt-3 font-serif text-2xl text-[#d9b877]/60 sm:mt-4 sm:text-3xl"
+                animate={{ opacity: [1, 0.2, 1] }}
+                transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+              >
+                :
+              </motion.span>
+            )}
+            <div className="flex flex-col items-center">
+              <div className="relative flex h-16 w-14 items-center justify-center overflow-hidden rounded-xl border border-[#d9b877]/25 bg-gradient-to-b from-white/[0.07] to-white/[0.01] shadow-[0_0_30px_rgba(176,141,87,0.12),inset_0_1px_0_rgba(255,243,214,0.15)] backdrop-blur-sm sm:h-20 sm:w-20">
+                <span className="pointer-events-none absolute inset-x-0 top-1/2 h-px bg-black/30" />
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.span
+                    key={value}
+                    className="font-serif text-3xl tabular-nums text-transparent sm:text-4xl"
+                    style={{ backgroundImage: GOLD, backgroundSize: "250% 100%", WebkitBackgroundClip: "text", backgroundClip: "text" }}
+                    initial={{ y: "-100%", opacity: 0, filter: "blur(4px)" }}
+                    animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
+                    exit={{ y: "100%", opacity: 0, filter: "blur(4px)" }}
+                    transition={{ duration: 0.45, ease: EASE }}
+                  >
+                    {value}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+              <span className="mt-2 text-[9px] font-semibold uppercase tracking-[0.3em] text-moonlight/50 sm:text-[10px]">
+                {unit.label}
+              </span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
@@ -294,13 +364,23 @@ export function ComingSoon() {
             ready to be unveiled.
           </motion.p>
 
+          {/* Countdown */}
+          <motion.div
+            className="mt-10"
+            initial={{ opacity: 0, y: 24, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1, delay: 3.4, ease: EASE }}
+          >
+            <Countdown />
+          </motion.div>
+
           {/* CTA */}
           <motion.a
             href={`mailto:${contactInfo.email}`}
             className="group relative mt-10 inline-flex items-center gap-3 overflow-hidden rounded-full border border-[#d9b877]/50 bg-white/[0.03] px-7 py-3.5 text-[11px] font-semibold uppercase tracking-[0.3em] text-[#f4dca6] backdrop-blur-sm transition-colors hover:border-[#f4dca6] hover:bg-[#d9b877]/10 sm:text-xs"
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.9, delay: 3.5, ease: EASE }}
+            transition={{ duration: 0.9, delay: 3.9, ease: EASE }}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
           >
@@ -318,7 +398,7 @@ export function ComingSoon() {
           className="relative z-10 mt-16 text-[11px] tracking-wider text-moonlight/40"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 4 }}
+          transition={{ duration: 1, delay: 4.4 }}
         >
           © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
         </motion.p>

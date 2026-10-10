@@ -6,3 +6,7 @@
 // a missing env var fails toward "still gated."
 export const isComingSoon =
   process.env.NODE_ENV === "production" || process.env.COMING_SOON !== "false";
+
+// Target for the countdown on the ComingSoon page (IST, UTC+05:30). Once
+// it passes, the timer simply holds at 00:00:00:00.
+export const launchDate = "2026-10-11T00:00:00+05:30";
