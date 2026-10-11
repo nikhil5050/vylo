@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/config/site";
+import { absoluteUrl, siteConfig } from "@/config/site";
 
 interface BuildMetadataOptions {
   title: string;
@@ -20,7 +20,7 @@ export const defaultOgImage = {
 };
 
 export function buildMetadata({ title, description, path, noIndex, keywords, image }: BuildMetadataOptions): Metadata {
-  const url = `${siteConfig.url}${path}`;
+  const url = absoluteUrl(path);
   // The root layout applies a "%s | Vylore" title template to `title`, but that
   // template doesn't cascade into nested openGraph/twitter fields, so build the
   // full title explicitly for those.

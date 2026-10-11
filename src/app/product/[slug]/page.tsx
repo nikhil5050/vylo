@@ -12,7 +12,7 @@ import { Container } from "@/components/ui/Container";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { careTips, getProductFaqs, getProductHighlights, getStylingTips } from "@/config/productContent";
-import { siteConfig } from "@/config/site";
+import { absoluteUrl, siteConfig } from "@/config/site";
 import { getAllProducts, getProductBySlug, getRelatedProducts } from "@/services/product.service";
 
 // Without this, each static product page is cached forever after build
@@ -66,7 +66,7 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
     brand: { "@type": "Brand", name: siteConfig.name },
     offers: {
       "@type": "Offer",
-      url: `${siteConfig.url}/product/${product.slug}`,
+      url: absoluteUrl(`/product/${product.slug}`),
       priceCurrency: "INR",
       price: product.price,
       availability: product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
@@ -92,9 +92,9 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
-      { "@type": "ListItem", position: 2, name: "Shop", item: `${siteConfig.url}/shop` },
-      { "@type": "ListItem", position: 3, name: product.category, item: `${siteConfig.url}/category/${product.categorySlug}` },
-      { "@type": "ListItem", position: 4, name: product.name, item: `${siteConfig.url}/product/${product.slug}` },
+      { "@type": "ListItem", position: 2, name: "Shop", item: absoluteUrl("/shop") },
+      { "@type": "ListItem", position: 3, name: product.category, item: absoluteUrl(`/category/${product.categorySlug}`) },
+      { "@type": "ListItem", position: 4, name: product.name, item: absoluteUrl(`/product/${product.slug}`) },
     ],
   };
 

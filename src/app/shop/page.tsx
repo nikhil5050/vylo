@@ -10,7 +10,7 @@ import { ArrowRightIcon } from "@/components/icons/Icons";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { faqCategories } from "@/config/faq";
 import { shopBuyingGuide, shopCategoryGuides, shopFaqIds, shopIntro, shopStory } from "@/config/shop";
-import { siteConfig } from "@/config/site";
+import { absoluteUrl } from "@/config/site";
 import { getCategories } from "@/services/category.service";
 import { getThemes } from "@/services/theme.service";
 import { getAllProducts } from "@/services/product.service";
@@ -74,7 +74,7 @@ export default async function ShopPage() {
     itemListElement: products.map((product, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      url: `${siteConfig.url}/product/${product.slug}`,
+      url: absoluteUrl(`/product/${product.slug}`),
       name: product.name,
     })),
   };

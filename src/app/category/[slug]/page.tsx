@@ -4,7 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { siteConfig } from "@/config/site";
+import { absoluteUrl } from "@/config/site";
 import { getCategories } from "@/services/category.service";
 import { getThemes } from "@/services/theme.service";
 import { getProductsByCategory } from "@/services/product.service";
@@ -59,7 +59,7 @@ export default async function CategoryPage({ params }: PageProps<"/category/[slu
     itemListElement: products.map((product, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      url: `${siteConfig.url}/product/${product.slug}`,
+      url: absoluteUrl(`/product/${product.slug}`),
       name: product.name,
     })),
   };

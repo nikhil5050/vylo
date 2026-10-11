@@ -7,7 +7,7 @@ import { FinalCta } from "@/components/home/FinalCta";
 import { OfferBanner } from "@/components/home/OfferBanner";
 // import { OurPackaging } from "@/components/home/OurPackaging";
 import { Testimonials } from "@/components/home/Testimonials";
-import { TrustSection } from "@/components/home/TrustSection";
+// import { TrustSection } from "@/components/home/TrustSection";
 import { isComingSoon } from "@/config/launch";
 // import { HeroGrid } from "@/components/home/HeroGrid";
 import { Faq } from "@/components/home/Faq";
@@ -63,7 +63,7 @@ export default function Home() {
       <OfferBanner />
       <Bestsellers />
       {/* <OurPackaging /> */}
-      <TrustSection />
+      {/* <TrustSection /> */}
       {/* <MaterialStory />  */}
       <Testimonials />
       <FinalCta />

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Fragment } from "react";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { siteConfig } from "@/config/site";
+import { absoluteUrl } from "@/config/site";
 
 interface BreadcrumbItem {
   label: string;
@@ -16,7 +16,7 @@ export function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
       "@type": "ListItem",
       position: index + 1,
       name: item.label,
-      ...(item.href ? { item: `${siteConfig.url}${item.href}` } : {}),
+      ...(item.href ? { item: absoluteUrl(item.href) } : {}),
     })),
   };
 

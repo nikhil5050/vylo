@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { siteConfig } from "@/config/site";
+import { absoluteUrl } from "@/config/site";
 import { getCategories } from "@/services/category.service";
 import { getAllProducts } from "@/services/product.service";
 
@@ -16,17 +16,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
 
   const staticRoutes = staticPaths.map((path) => ({
-    url: `${siteConfig.url}${path}`,
+    url: absoluteUrl(path),
     lastModified,
   }));
 
   const productRoutes = products.map((product) => ({
-    url: `${siteConfig.url}/product/${product.slug}`,
+    url: absoluteUrl(`/product/${product.slug}`),
     lastModified,
   }));
 
   const categoryRoutes = categories.map((category) => ({
-    url: `${siteConfig.url}/category/${category.slug}`,
+    url: absoluteUrl(`/category/${category.slug}`),
     lastModified,
   }));
 

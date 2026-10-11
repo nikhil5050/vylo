@@ -15,7 +15,7 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { contactInfo } from "@/config/contact";
-import { siteConfig } from "@/config/site";
+import { absoluteUrl, siteConfig } from "@/config/site";
 
 const quickContacts = [
   {
@@ -84,7 +84,7 @@ const localBusinessJsonLd = {
   "@context": "https://schema.org",
   "@type": "JewelryStore",
   name: siteConfig.name,
-  url: `${siteConfig.url}/contact`,
+  url: absoluteUrl("/contact"),
   image: `${siteConfig.url}/logo/logo.png`,
   telephone: contactInfo.phone,
   email: contactInfo.email,
