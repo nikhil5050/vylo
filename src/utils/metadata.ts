@@ -10,6 +10,17 @@ interface BuildMetadataOptions {
   // Absolute or site-relative URL. Without an explicit og:image, Google (incl.
   // AI Overviews) picks a thumbnail itself — often from another site.
   image?: string;
+  // Skip the root layout's "%s | Vylore Jewellery" template — for titles that
+  // already name the brand and would otherwise repeat it.
+  absoluteTitle?: boolean;
+  // Marks the page as an article (og:type "article" + publish/modified times)
+  // instead of the default "website".
+  article?: {
+    publishedTime: string;
+    modifiedTime?: string;
+    section?: string;
+    tags?: string[];
+  };
 }
 
 export const defaultOgImage = {
@@ -19,16 +30,16 @@ export const defaultOgImage = {
   alt: siteConfig.name,
 };
 
-export function buildMetadata({ title, description, path, noIndex, keywords, image }: BuildMetadataOptions): Metadata {
+export function buildMetadata({ title, description, path, noIndex, keywords, image, absoluteTitle, article }: BuildMetadataOptions): Metadata {
   const url = absoluteUrl(path);
   // The root layout applies a "%s | Vylore" title template to `title`, but that
   // template doesn't cascade into nested openGraph/twitter fields, so build the
   // full title explicitly for those.
-  const fullTitle = `${title} | ${siteConfig.name}`;
+  const fullTitle = absoluteTitle ? title : `${title} | ${siteConfig.name}`;
   const ogImage = image ? { url: image, alt: title } : defaultOgImage;
 
   return {
-    title,
+    title: absoluteTitle ? { absolute: title } : title,
     description,
     ...(keywords ? { keywords } : {}),
     alternates: { canonical: url },
@@ -37,8 +48,17 @@ export function buildMetadata({ title, description, path, noIndex, keywords, ima
       description,
       url,
       siteName: siteConfig.name,
-      type: "website",
       images: [ogImage],
+      ...(article
+        ? {
+            type: "article" as const,
+            publishedTime: article.publishedTime,
+            modifiedTime: article.modifiedTime ?? article.publishedTime,
+            section: article.section,
+            tags: article.tags,
+            authors: [siteConfig.name],
+          }
+        : { type: "website" as const }),
     },
     twitter: {
       card: "summary_large_image",

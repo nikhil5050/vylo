@@ -30,6 +30,8 @@ const nextConfig: NextConfig = {
     unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "ik.imagekit.io" },
+      // Blog editorial photography (src/content/blog/images.ts).
+      { protocol: "https", hostname: "images.pexels.com" },
     ],
   },
   // Everything under public/ (necklace frames, logos, icons) is a static file
