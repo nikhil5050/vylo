@@ -85,6 +85,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      // globals.css sets scroll-behavior: smooth; this tells Next 16 to
+      // switch it off during route changes so a new page jumps straight to
+      // the top instead of animating (and stopping partway down).
+      data-scroll-behavior="smooth"
       className={`${display.variable} ${body.variable} h-full antialiased`}
     >
       <body

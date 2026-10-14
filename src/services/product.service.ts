@@ -65,6 +65,12 @@ async function mapProduct(product: BackendProduct): Promise<Product> {
     seenSizes.add(size);
     variantOptions.push({ id: String(v.id), size });
   }
+  // Variants come back in creation order (e.g. 10, 12, 9, 13) — show numeric
+  // sizes like ring sizes smallest-first. Non-numeric sizes (S/M/L) keep the
+  // admin's order, since sorting those alphabetically would scramble them.
+  if (variantOptions.every((v) => Number.isFinite(Number(v.size)))) {
+    variantOptions.sort((a, b) => Number(a.size) - Number(b.size));
+  }
   const sizes = variantOptions.map((v) => v.size);
 
   return {

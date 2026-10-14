@@ -5,6 +5,7 @@ import { ProductGallery } from "@/components/product/ProductGallery";
 import { ProductInfo } from "@/components/product/ProductInfo";
 import { ProductReviews } from "@/components/product/ProductReviews";
 import { RelatedProducts } from "@/components/product/RelatedProducts";
+import { ScrollToTopOnOpen } from "@/components/product/ScrollToTopOnOpen";
 import { StickyMobileCta } from "@/components/product/StickyMobileCta";
 import { ShopFaqGrid } from "@/components/shop/ShopFaqGrid";
 import { Accordion, type AccordionItem } from "@/components/ui/Accordion";
@@ -171,6 +172,7 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
 
   return (
     <main className="flex flex-1 flex-col pb-24 pt-16 lg:pb-0 lg:pt-24">
+      <ScrollToTopOnOpen />
       <JsonLd data={[productJsonLd, faqJsonLd, breadcrumbJsonLd]} />
       <Container>
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">

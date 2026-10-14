@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState, type MouseEvent } from "react";
+import { usePathname } from "next/navigation";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -11,9 +12,26 @@ import { FilterDrawer } from "./FilterDrawer";
 import { FiltersPanel, type FilterState } from "./FiltersPanel";
 import { SortSelect, type SortOption } from "./SortSelect";
 import { ThemeFilterBar } from "./ThemeFilterBar";
+import { isHistoryNavigation, restoreScrollPosition } from "@/utils/historyNavigation";
 
 const PAGE_SIZE = 8;
 const EMPTY_FILTERS: FilterState = { categorySlugs: [], themeSlugs: [], inStockOnly: false };
+
+// Snapshot taken when a product is opened, so Back can rebuild the grid as
+// it was (filters, sort, how many "Load More" pages were open) and return to
+// the same scroll position — without it the grid resets to the first 8
+// pieces and a product further down no longer exists to scroll back to.
+interface ListingSnapshot {
+  filters: FilterState;
+  sort: SortOption;
+  visibleCount: number;
+  scrollY: number;
+  // The opened product and where its card sat in the viewport — restoring
+  // relative to the card keeps it in place even if content above it ends up
+  // a slightly different height than before.
+  productHref: string;
+  productTop: number;
+}
 
 interface ProductListingProps {
   products: Product[];
@@ -59,6 +77,50 @@ export function ProductListing({ products, categories, themes, themeTiles }: Pro
   const [sort, setSort] = useState<SortOption>("newest");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const pathname = usePathname();
+  const storageKey = `listing:${pathname}`;
+  const listingRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    // A fresh visit starts clean. On Back/Forward the snapshot is kept (not
+    // consumed) because Next can mount the listing more than once while it
+    // refreshes the page data — each mount needs to restore the same state.
+    if (!isHistoryNavigation()) {
+      sessionStorage.removeItem(storageKey);
+      return;
+    }
+    const raw = sessionStorage.getItem(storageKey);
+    if (!raw) return;
+    try {
+      const snapshot = JSON.parse(raw) as ListingSnapshot;
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-off restore from sessionStorage, which isn't readable during SSR
+      setFilters(snapshot.filters);
+      setSort(snapshot.sort);
+      setVisibleCount(snapshot.visibleCount);
+      restoreScrollPosition(() => {
+        const card = listingRef.current?.querySelector(`a[href="${snapshot.productHref}"]`);
+        return card
+          ? window.scrollY + card.getBoundingClientRect().top - snapshot.productTop
+          : snapshot.scrollY;
+      });
+    } catch {
+      // Malformed snapshot — just show the default listing.
+    }
+  }, [storageKey]);
+
+  function saveSnapshotOnProductOpen(event: MouseEvent<HTMLDivElement>) {
+    const link = (event.target as HTMLElement).closest('a[href^="/product/"]');
+    if (!link) return;
+    const snapshot: ListingSnapshot = {
+      filters,
+      sort,
+      visibleCount,
+      scrollY: window.scrollY,
+      productHref: link.getAttribute("href") ?? "",
+      productTop: link.getBoundingClientRect().top,
+    };
+    sessionStorage.setItem(storageKey, JSON.stringify(snapshot));
+  }
 
   const filtered = useMemo(() => sortProducts(filterProducts(products, filters), sort), [products, filters, sort]);
   const visible = filtered.slice(0, visibleCount);
@@ -74,7 +136,7 @@ export function ProductListing({ products, categories, themes, themeTiles }: Pro
   }
 
   return (
-    <div>
+    <div ref={listingRef} onClickCapture={saveSnapshotOnProductOpen}>
       {showThemeTiles && (
         <div className="mb-10">
           <ThemeFilterBar themes={themes} selectedSlug={filters.themeSlugs[0] ?? null} onSelect={selectTile} />
