@@ -88,17 +88,6 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
     })),
   };
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
-      { "@type": "ListItem", position: 2, name: "Shop", item: absoluteUrl("/shop") },
-      { "@type": "ListItem", position: 3, name: product.category, item: absoluteUrl(`/category/${product.categorySlug}`) },
-      { "@type": "ListItem", position: 4, name: product.name, item: absoluteUrl(`/product/${product.slug}`) },
-    ],
-  };
-
   const specRows: string[] = [`Category: ${product.category}`];
   if (product.metal) specRows.push(`Metal: ${product.metal}`);
   if (product.purity) specRows.push(`Purity: ${product.purity}`);
@@ -173,7 +162,9 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
   return (
     <main className="flex flex-1 flex-col pb-24 pt-16 lg:pb-0 lg:pt-24">
       <ScrollToTopOnOpen />
-      <JsonLd data={[productJsonLd, faqJsonLd, breadcrumbJsonLd]} />
+      {/* BreadcrumbList comes from the visible <Breadcrumb> in ProductInfo; a
+          second copy here was emitting duplicate breadcrumb markup. */}
+      <JsonLd data={[productJsonLd, faqJsonLd]} />
       <Container>
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           <ProductGallery productName={product.name} images={product.images} />

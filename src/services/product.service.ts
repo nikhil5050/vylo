@@ -76,7 +76,9 @@ async function mapProduct(product: BackendProduct): Promise<Product> {
   return {
     id: String(product.id),
     slug: product.slug,
-    name: product.name,
+    // Some catalog names carry stray leading/trailing spaces from the admin,
+    // which leak into <title>, og:title and Product JSON-LD.
+    name: product.name.trim(),
     category: category?.name ?? "",
     categorySlug: category?.slug ?? "",
     theme: theme?.name,

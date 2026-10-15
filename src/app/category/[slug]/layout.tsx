@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
-import { getCategoryBySlug } from "@/services/category.service";
+import { notFound } from "next/navigation";
+import { getCategories, getCategoryBySlug } from "@/services/category.service";
 import { buildMetadata } from "@/utils/metadata";
 
 export async function generateMetadata({
@@ -27,6 +27,16 @@ export async function generateMetadata({
   });
 }
 
-export default function CategoryLayout({ children }: { children: ReactNode }) {
+// The unknown-slug check lives here, not only in page.tsx: the page renders
+// inside loading.tsx's Suspense boundary, so by the time its notFound() runs
+// the 200 status has already been streamed and Google sees a soft 404. A
+// layout sits outside that boundary, so notFound() here still sends a real
+// 404. A backend outage (null) falls through to the page's own
+// "temporarily unavailable" state rather than 404ing a real category.
+export default async function CategoryLayout({ children, params }: LayoutProps<"/category/[slug]">) {
+  const { slug } = await params;
+  const categories = await getCategories().catch(() => null);
+  if (categories && !categories.some((category) => category.slug === slug)) notFound();
+
   return children;
 }
