@@ -1,14 +1,17 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { ApiError } from "@/lib/api";
+import { syncCartWithAccount } from "@/services/cart-sync.service";
 import { useAuthStore } from "@/store/auth.store";
+import { safeNextPath } from "@/utils/safeNext";
 
 export function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const register = useAuthStore((state) => state.register);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +31,12 @@ export function RegisterForm() {
         last_name: String(data.get("last_name")),
         ...(phone ? { phone } : {}),
       });
-      router.push("/account");
+      // saves a guest's bag to the new account, so it survives the
+      // verification link opening in a different browser
+      await syncCartWithAccount();
+      // same ?next= handling as LoginForm: signing up mid-checkout (RequireAuth
+      // → /login?next=/checkout → "Create an account") returns to checkout
+      router.push(safeNextPath(searchParams.get("next")) ?? "/account");
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Something went wrong. Please try again.");
     } finally {

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { ApiError } from "@/lib/api";
 import { verifyEmail } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
+import { useCartStore } from "@/store/cart.store";
 
 type Status = "loading" | "success" | "error" | "missing-token";
 
@@ -16,6 +17,8 @@ export function VerifyEmailStatus() {
   const [status, setStatus] = useState<Status>(token ? "loading" : "missing-token");
   const [message, setMessage] = useState<string | null>(null);
   const attempted = useRef(false);
+  const loggedIn = useAuthStore((state) => state.token !== null);
+  const hasBag = useCartStore((state) => state.lines.length > 0);
 
   useEffect(() => {
     if (!token || attempted.current) return;
@@ -74,10 +77,34 @@ export function VerifyEmailStatus() {
     <div className="flex flex-col items-center gap-4 py-16 text-center">
       <GemIcon className="h-8 w-8 text-burgundy" />
       <h1 className="font-serif text-3xl text-charcoal">Email verified.</h1>
-      <p className="max-w-sm text-sm text-muted">Your Vylore account email is confirmed.</p>
-      <Button href="/account" variant="primary" size="md">
-        Go to Your Account
-      </Button>
+      {/* Verification usually happens mid-checkout (the order was blocked
+          until now), and the link often opens in a different browser than
+          the one holding the bag — e.g. Gmail's in-app browser. Signing in
+          here restores the bag saved on the account (syncCartWithAccount). */}
+      {loggedIn && hasBag ? (
+        <>
+          <p className="max-w-sm text-sm text-muted">You&apos;re all set to place your order.</p>
+          <Button href="/checkout" variant="primary" size="md">
+            Continue to Checkout
+          </Button>
+        </>
+      ) : loggedIn ? (
+        <>
+          <p className="max-w-sm text-sm text-muted">Your Vylore account email is confirmed.</p>
+          <Button href="/account" variant="primary" size="md">
+            Go to Your Account
+          </Button>
+        </>
+      ) : (
+        <>
+          <p className="max-w-sm text-sm text-muted">
+            Sign in to continue — anything in your bag is saved to your account.
+          </p>
+          <Button href="/login?next=%2Fcheckout" variant="primary" size="md">
+            Sign In to Continue
+          </Button>
+        </>
+      )}
     </div>
   );
 }

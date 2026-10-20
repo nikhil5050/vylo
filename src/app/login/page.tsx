@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { AuthSwitchLink } from "@/components/auth/AuthSwitchLink";
 import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
@@ -40,12 +40,9 @@ export default function LoginPage() {
             </Suspense>
             <p className="mt-8 text-center text-sm text-muted">
               New to Vylore?{" "}
-              <Link
-                href="/register"
-                className="font-medium text-burgundy transition-colors hover:text-burgundy-dark"
-              >
-                Create an account
-              </Link>
+              <Suspense fallback={null}>
+                <AuthSwitchLink href="/register">Create an account</AuthSwitchLink>
+              </Suspense>
             </p>
           </FadeIn>
         </div>

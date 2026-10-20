@@ -1,5 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
+import { AuthSwitchLink } from "@/components/auth/AuthSwitchLink";
+import { Suspense } from "react";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
@@ -34,15 +35,14 @@ export default function RegisterPage() {
       <div className="flex flex-1 justify-center px-4 pb-16 sm:px-6 lg:pb-24">
         <div className="relative z-10 -mt-16 w-full max-w-xl rounded-sm border border-silver/40 bg-white p-8 shadow-[0_30px_80px_-30px_rgba(24,25,22,0.3)] sm:-mt-20 sm:p-12">
           <FadeIn direction="up">
-            <RegisterForm />
+            <Suspense fallback={null}>
+              <RegisterForm />
+            </Suspense>
             <p className="mt-8 text-center text-sm text-muted">
               Already have an account?{" "}
-              <Link
-                href="/login"
-                className="font-medium text-burgundy transition-colors hover:text-burgundy-dark"
-              >
-                Sign in
-              </Link>
+              <Suspense fallback={null}>
+                <AuthSwitchLink href="/login">Sign in</AuthSwitchLink>
+              </Suspense>
             </p>
           </FadeIn>
         </div>
