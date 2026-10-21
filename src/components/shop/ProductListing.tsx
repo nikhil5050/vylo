@@ -1,6 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useMemo, useRef, useState, type MouseEvent } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Button } from "@/components/ui/Button";
@@ -189,6 +190,20 @@ export function ProductListing({ products, categories, themes, themeTiles }: Pro
                 Load More
               </Button>
             </div>
+          )}
+
+          {/* Googlebot never clicks "Load More", so without these the
+              products past the first page had no crawlable link from the
+              shop or category pages. Hidden from users, who reach the same
+              products through the button. */}
+          {visibleCount < filtered.length && (
+            <ul hidden>
+              {filtered.slice(visibleCount).map((product) => (
+                <li key={product.id}>
+                  <Link href={`/product/${product.slug}`}>{product.name}</Link>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       </div>
