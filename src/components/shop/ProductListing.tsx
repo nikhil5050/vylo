@@ -1,7 +1,6 @@
 "use client";
 
 import { useLayoutEffect, useMemo, useRef, useState, type MouseEvent } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Button } from "@/components/ui/Button";
@@ -15,17 +14,15 @@ import { SortSelect, type SortOption } from "./SortSelect";
 import { ThemeFilterBar } from "./ThemeFilterBar";
 import { isHistoryNavigation, restoreScrollPosition } from "@/utils/historyNavigation";
 
-const PAGE_SIZE = 8;
 const EMPTY_FILTERS: FilterState = { categorySlugs: [], themeSlugs: [], inStockOnly: false };
 
 // Snapshot taken when a product is opened, so Back can rebuild the grid as
-// it was (filters, sort, how many "Load More" pages were open) and return to
-// the same scroll position — without it the grid resets to the first 8
-// pieces and a product further down no longer exists to scroll back to.
+// it was (filters, sort) and return to the same scroll position — without it
+// the grid resets and a product it had filtered in may no longer be there to
+// scroll back to.
 interface ListingSnapshot {
   filters: FilterState;
   sort: SortOption;
-  visibleCount: number;
   scrollY: number;
   // The opened product and where its card sat in the viewport — restoring
   // relative to the card keeps it in place even if content above it ends up
@@ -76,7 +73,6 @@ function sortProducts(products: Product[], sort: SortOption): Product[] {
 export function ProductListing({ products, categories, themes, themeTiles }: ProductListingProps) {
   const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
   const [sort, setSort] = useState<SortOption>("newest");
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const pathname = usePathname();
   const storageKey = `listing:${pathname}`;
@@ -97,7 +93,6 @@ export function ProductListing({ products, categories, themes, themeTiles }: Pro
       // eslint-disable-next-line react-hooks/set-state-in-effect -- one-off restore from sessionStorage, which isn't readable during SSR
       setFilters(snapshot.filters);
       setSort(snapshot.sort);
-      setVisibleCount(snapshot.visibleCount);
       restoreScrollPosition(() => {
         const card = listingRef.current?.querySelector(`a[href="${snapshot.productHref}"]`);
         return card
@@ -115,7 +110,6 @@ export function ProductListing({ products, categories, themes, themeTiles }: Pro
     const snapshot: ListingSnapshot = {
       filters,
       sort,
-      visibleCount,
       scrollY: window.scrollY,
       productHref: link.getAttribute("href") ?? "",
       productTop: link.getBoundingClientRect().top,
@@ -124,12 +118,10 @@ export function ProductListing({ products, categories, themes, themeTiles }: Pro
   }
 
   const filtered = useMemo(() => sortProducts(filterProducts(products, filters), sort), [products, filters, sort]);
-  const visible = filtered.slice(0, visibleCount);
   const showThemeTiles = themeTiles && themes && themes.length > 0;
 
   function handleFiltersChange(next: FilterState) {
     setFilters(next);
-    setVisibleCount(PAGE_SIZE);
   }
 
   function selectTile(slug: string | null) {
@@ -166,7 +158,7 @@ export function ProductListing({ products, categories, themes, themeTiles }: Pro
         </aside>
 
         <div>
-          {visible.length === 0 ? (
+          {filtered.length === 0 ? (
             <EmptyState
               title="No pieces match"
               description="Try adjusting or clearing your filters to see more of the collection."
@@ -178,32 +170,10 @@ export function ProductListing({ products, categories, themes, themeTiles }: Pro
             />
           ) : (
             <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-6">
-              {visible.map((product) => (
+              {filtered.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
-          )}
-
-          {visibleCount < filtered.length && (
-            <div className="mt-12 flex justify-center">
-              <Button variant="secondary" size="md" onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}>
-                Load More
-              </Button>
-            </div>
-          )}
-
-          {/* Googlebot never clicks "Load More", so without these the
-              products past the first page had no crawlable link from the
-              shop or category pages. Hidden from users, who reach the same
-              products through the button. */}
-          {visibleCount < filtered.length && (
-            <ul hidden>
-              {filtered.slice(visibleCount).map((product) => (
-                <li key={product.id}>
-                  <Link href={`/product/${product.slug}`}>{product.name}</Link>
-                </li>
-              ))}
-            </ul>
           )}
         </div>
       </div>
