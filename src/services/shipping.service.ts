@@ -11,7 +11,7 @@ export async function getDeliveryOptions(): Promise<DeliveryOption[]> {
     {
       id: "standard",
       label: "Standard Delivery",
-      description: "Dispatched within 2–4 business days. Exact timelines confirmed after payment.",
+      description: "Dispatched within 5–8 business days. Exact timelines confirmed after payment.",
     },
   ];
 }

@@ -7,7 +7,7 @@ import { AnimatePresence, motion, useInView } from "framer-motion";
 import { Play, X } from "lucide-react";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Container } from "@/components/ui/Container";
-import { AboutHero } from "@/components/about/AboutHero";
+// import { AboutHero } from "@/components/about/AboutHero";
 
 // "Behind the craft" video gallery
 const craftVideos = [
@@ -158,10 +158,10 @@ export default function AboutPage() {
         onClose={() => setLightboxVideo(null)}
       />
 
-      {/* Hero Container Wrap */}
+      {/* Hero Container Wrap
       <div className="w-full overflow-hidden">
         <AboutHero />
-      </div>
+      </div> */}
 
       {/* Scrolling Marquee Divider */}
       <div className="w-full overflow-hidden border-y border-charcoal/10 bg-white py-3 sm:py-4">
