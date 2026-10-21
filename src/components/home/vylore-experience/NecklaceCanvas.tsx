@@ -11,10 +11,17 @@ const TOTAL_FRAMES = 150;
 const START_FRAME = 1; // front/assembled view
 const END_FRAME = 150; // full rotation
 
-function getFramePath(index: number): string {
+// On phones only (below MOBILE_BREAKPOINT_PX, the same cutoff as the mobile
+// pose layout) the sequence loads from public/necklace-frames-mobile instead:
+// the same 150 frames, downscaled to 800px wide at lower WebP quality (~3.4MB
+// total vs ~10MB), so phones decode and hold far less image data while
+// scrubbing. Laptops/desktops always get the full-size 1280px frames.
+
+function getFramePath(index: number, mobile: boolean): string {
   // Background-removed WebP — see public/necklace-frames (transparent everywhere
   // except the necklace itself, including its inner gaps between links/stones).
-  return `/necklace-frames/frame_${String(index).padStart(4, "0")}.webp`;
+  const dir = mobile ? "necklace-frames-mobile" : "necklace-frames";
+  return `/${dir}/frame_${String(index).padStart(4, "0")}.webp`;
 }
 
 function lerp(a: number, b: number, t: number): number {
@@ -375,6 +382,11 @@ export function NecklaceCanvas({ sceneState, reducedMotion }: NecklaceCanvasProp
   // silently behind it (drawFrame just holds the last-loaded frame for any
   // rotation angle that hasn't arrived yet, so there's nothing to block on).
   const [firstFrameLoaded, setFirstFrameLoaded] = useState(false);
+  // Decided once on mount — swapping frame sets mid-session (e.g. on a
+  // window resize) would mean re-downloading the whole sequence.
+  const [useMobileFrames] = useState(
+    () => window.innerWidth < MOBILE_BREAKPOINT_PX,
+  );
 
   // Build the ordered list of frame indices for the scroll sequence.
   // Goes from START_FRAME up to END_FRAME.
@@ -450,7 +462,7 @@ export function NecklaceCanvas({ sceneState, reducedMotion }: NecklaceCanvasProp
         resolve();
       };
     });
-    firstImg.src = getFramePath(firstFrameIndex);
+    firstImg.src = getFramePath(firstFrameIndex, useMobileFrames);
 
     // Load the rest of the sequence (the first frame is already in flight above).
     const restPromises = frameSequence.current
@@ -458,7 +470,7 @@ export function NecklaceCanvas({ sceneState, reducedMotion }: NecklaceCanvasProp
       .map((fi) => {
         return new Promise<void>((resolve) => {
           const img = new Image();
-          img.src = getFramePath(fi);
+          img.src = getFramePath(fi, useMobileFrames);
           img.onload = () => {
             recordAnalysis(fi, img);
             loaded++;
@@ -477,7 +489,7 @@ export function NecklaceCanvas({ sceneState, reducedMotion }: NecklaceCanvasProp
       imagesRef.current = images;
       setIsReady(true);
     });
-  }, [totalSequenceFrames, drawFrame]);
+  }, [totalSequenceFrames, drawFrame, useMobileFrames]);
 
   // Resize both canvases to match CSS pixel size (retina-aware).
   useEffect(() => {
@@ -630,7 +642,7 @@ export function NecklaceCanvas({ sceneState, reducedMotion }: NecklaceCanvasProp
       <div className="absolute inset-0 z-10 flex items-center justify-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={getFramePath(START_FRAME)}
+          src={getFramePath(START_FRAME, useMobileFrames)}
           alt="Vylore emerald necklace"
           className="h-full w-full object-contain"
         />
