@@ -8,7 +8,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/account", "/cart", "/checkout", "/order-confirmation"],
+      // Private, per-visitor pages — also left out of sitemap.ts.
+      disallow: ["/account", "/cart", "/checkout", "/wishlist", "/order-confirmation"],
     },
     sitemap: `${siteConfig.url}/sitemap.xml`,
   };

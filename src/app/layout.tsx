@@ -5,8 +5,8 @@ import { Bricolage_Grotesque, Open_Sans } from "next/font/google";
 import "./globals.css";
 import { SiteChrome } from "@/components/layout/SiteChrome";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { contactInfo } from "@/config/contact";
-import { siteConfig } from "@/config/site";
+import { analyticsConfig } from "@/config/analytics";
+import { absoluteAssetUrl, absoluteUrl, organizationId, siteConfig, socialLinks, websiteId } from "@/config/site";
 import { isComingSoon } from "@/config/launch";
 import { defaultOgImage } from "@/utils/metadata";
 
@@ -30,10 +30,13 @@ const body = Open_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} | Premium Silver Jewellery`,
+    default: `${siteConfig.name} | Silver Jewellery`,
     template: `%s | ${siteConfig.name}`,
   },
-  
+  description: siteConfig.description,
+  // Pages built with buildMetadata set this themselves; this covers any route
+  // that doesn't (e.g. not-found) while the site is gated.
+  ...(isComingSoon ? { robots: { index: false, follow: false } } : {}),
   // Replaces the old placeholder gem-shaped app/icon.svg — this points
   // straight at the real logo instead, so there's only one favicon source.
   icons: {
@@ -53,28 +56,39 @@ export const metadata: Metadata = {
   },
 };
 
-const organizationJsonLd = {
+// One @graph instead of separate Organization/WebSite blocks, so the two
+// nodes (and every page that references their @id) resolve as one entity.
+const siteJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: siteConfig.name,
-  url: siteConfig.url,
-  description: siteConfig.description,
-  image: `${siteConfig.url}${defaultOgImage.url}`,
-  logo: `${siteConfig.url}/logo/logo.png`,
-  contactPoint: {
-    "@type": "ContactPoint",
-    contactType: "customer service",
-    telephone: contactInfo.phone,
-    email: contactInfo.email,
-    areaServed: "IN",
-  },
-};
-
-const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: siteConfig.name,
-  url: siteConfig.url,
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": organizationId,
+      name: siteConfig.name,
+      // TODO(client): legalName
+      url: absoluteUrl("/"),
+      description: siteConfig.description,
+      logo: {
+        "@type": "ImageObject",
+        url: absoluteAssetUrl("/logo/logo.png"),
+        width: 2277,
+        height: 2044,
+      },
+      image: absoluteAssetUrl(defaultOgImage.url),
+      founder: { "@type": "Person", name: siteConfig.founder },
+      sameAs: Object.values(socialLinks),
+      // TODO(client): telephone — config/contact.ts still marks the phone and
+      // email as unconfirmed placeholders, so no ContactPoint is published.
+    },
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      name: siteConfig.name,
+      url: absoluteUrl("/"),
+      inLanguage: "en-IN",
+      publisher: { "@id": organizationId },
+    },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -84,7 +98,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 
   return (
     <html
-      lang="en"
+      lang="en-IN"
       // globals.css sets scroll-behavior: smooth; this tells Next 16 to
       // switch it off during route changes so a new page jumps straight to
       // the top instead of animating (and stopping partway down).
@@ -106,17 +120,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-K6SXZHSJ');`}
+})(window,document,'script','dataLayer',${JSON.stringify(analyticsConfig.gtmId)});`}
         </Script>
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-GX4R2NYDD0"
+          src={`https://www.googletagmanager.com/gtag/js?id=${analyticsConfig.ga4Id}`}
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
           {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'G-GX4R2NYDD0');`}
+gtag('config', ${JSON.stringify(analyticsConfig.ga4Id)});`}
         </Script>
         <Script id="meta-pixel" strategy="afterInteractive">
           {`!function(f,b,e,v,n,t,s)
@@ -127,7 +141,7 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1035289126003863');
+fbq('init', ${JSON.stringify(analyticsConfig.metaPixelId)});
 fbq('track', 'PageView');`}
         </Script>
         <Script id="microsoft-clarity" strategy="afterInteractive">
@@ -135,11 +149,11 @@ fbq('track', 'PageView');`}
 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-})(window, document, "clarity", "script", "yrtm2bshlh");`}
+})(window, document, "clarity", "script", ${JSON.stringify(analyticsConfig.clarityId)});`}
         </Script>
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-K6SXZHSJ"
+            src={`https://www.googletagmanager.com/ns.html?id=${analyticsConfig.gtmId}`}
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
@@ -151,11 +165,11 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
             height="1"
             width="1"
             style={{ display: "none" }}
-            src="https://www.facebook.com/tr?id=1035289126003863&ev=PageView&noscript=1"
+            src={`https://www.facebook.com/tr?id=${analyticsConfig.metaPixelId}&ev=PageView&noscript=1`}
             alt=""
           />
         </noscript>
-        <JsonLd data={[organizationJsonLd, websiteJsonLd]} />
+        <JsonLd data={siteJsonLd} />
         <SiteChrome comingSoon={isComingSoon}>{children}</SiteChrome>
       </body>
     </html>

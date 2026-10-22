@@ -19,15 +19,16 @@ const nextConfig: NextConfig = {
   experimental: {
     workerThreads: true,
   },
-  // Tried enabling Next's built-in image optimizer here (removing this and
-  // allowlisting the two remote hosts via remotePatterns) as a "faster,
-  // no UI change" win, but in this environment the optimizer's server-side
-  // fetch to ik.imagekit.io timed out ("upstream image response timed out"),
-  // which would render as a broken image — a UI regression, not a perf
-  // win. Reverted; revisit only after confirming the optimizer can actually
-  // reach ik.imagekit.io/images.unsplash.com from wherever this deploys.
+  // Next's built-in optimizer stays off: its server-side fetch to
+  // ik.imagekit.io timed out in this environment ("upstream image response
+  // timed out"), rendering broken images. The custom loader instead points
+  // each srcset entry straight at ImageKit's own resizing (or Pexels'), so
+  // next/image still emits responsive srcsets without that server fetch.
+  // Note `unoptimized: true` can't be combined with this — it makes
+  // next/image ignore the loader and drop the srcset.
   images: {
-    unoptimized: true,
+    loader: "custom",
+    loaderFile: "./src/utils/imageLoader.ts",
     remotePatterns: [
       { protocol: "https", hostname: "ik.imagekit.io" },
       // Blog editorial photography (src/content/blog/images.ts).

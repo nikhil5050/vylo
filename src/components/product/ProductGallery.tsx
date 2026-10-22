@@ -4,7 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 import { SearchIcon } from "@/components/icons/Icons";
-import { imageKitUrl, ProductThumbnail } from "@/components/ui/ProductThumbnail";
+import { ProductThumbnail } from "@/components/ui/ProductThumbnail";
+import { imageKitUrl } from "@/utils/imageLoader";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { useCanHover } from "@/hooks/useCanHover";
 import type { ProductImage } from "@/types/product";
@@ -94,7 +95,13 @@ export function ProductGallery({ productName, images }: ProductGalleryProps) {
                 aria-label={`${productName} — zoom image ${active + 1}`}
                 className="block h-full w-full cursor-zoom-in"
               >
-                <ProductThumbnail src={activeImage.url} alt={activeImage.altText ?? productName} transform="w-1200" />
+                <ProductThumbnail
+                  src={activeImage.url}
+                  alt={activeImage.altText ?? `${productName}, view ${active + 1}`}
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  // The first view is the page's LCP image.
+                  priority={active === 0}
+                />
               </button>
             ) : (
               <PlaceholderImage />
@@ -151,7 +158,7 @@ export function ProductGallery({ productName, images }: ProductGalleryProps) {
               )}
             >
               {image ? (
-                <ProductThumbnail src={image.url} alt={image.altText ?? productName} transform="w-200" />
+                <ProductThumbnail src={image.url} alt="" sizes="(min-width: 1024px) 12vw, 25vw" />
               ) : (
                 <PlaceholderImage />
               )}

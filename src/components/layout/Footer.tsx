@@ -9,7 +9,7 @@ import {
 } from "@/components/icons/Icons";
 import { Container } from "@/components/ui/Container";
 import { footerNav, type NavItem } from "@/config/navigation";
-import { siteConfig } from "@/config/site";
+import { siteConfig, socialLinks } from "@/config/site";
 import { Logo1 } from "./logo1";
 
 
@@ -35,14 +35,14 @@ export function Footer() {
           <Logo1 className="text-ivory" />
           <p className="max-w-xs text-sm text-ivory/70">{siteConfig.description}</p>
           <div className="mt-2 flex items-center gap-4">
-            <a href="https://www.instagram.com/vylore.in?stkn=MXB4MDd1Z211bDBpMQ==" aria-label="Instagram" className="text-ivory/70 transition-colors hover:text-champagne">
+            <a href={socialLinks.instagram} aria-label="Instagram" className="text-ivory/70 transition-colors hover:text-champagne">
               <InstagramIcon />
             </a>
-            <a href="https://www.facebook.com/share/1BumDiprJ1/" aria-label="Facebook" className="text-ivory/70 transition-colors hover:text-champagne">
+            <a href={socialLinks.facebook} aria-label="Facebook" className="text-ivory/70 transition-colors hover:text-champagne">
               <FacebookIcon />
             </a>
             <a
-              href="https://www.linkedin.com/company/vylore/"
+              href={socialLinks.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
@@ -51,7 +51,7 @@ export function Footer() {
               <LinkedinIcon />
             </a>
             <a
-              href="https://in.pinterest.com/businessvylore/"
+              href={socialLinks.pinterest}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Pinterest"
@@ -60,7 +60,7 @@ export function Footer() {
               <PinterestIcon />
             </a>
             <a
-              href="https://x.com/BusinessVylore"
+              href={socialLinks.x}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="X"
@@ -68,7 +68,7 @@ export function Footer() {
             >
               <XIcon />
             </a>
-            <a href="https://m.youtube.com/@business.vylore?fbclid=PAT01DUAUKVyJwZG9mAmV4dG4DYWVtAjEwAHNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABpz7qh61VhXDpYbapCs-L3MVtQQWSvxMq6_1dp74q7ORpanODuxzC0BePPvo4_aem_UYSlM8LV_zagZjxBKNP_Sg" aria-label="YouTube" className="text-ivory/70 transition-colors hover:text-champagne">
+            <a href={socialLinks.youtube} aria-label="YouTube" className="text-ivory/70 transition-colors hover:text-champagne">
               <svg
                 aria-hidden="true"
                 viewBox="0 0 24 24"

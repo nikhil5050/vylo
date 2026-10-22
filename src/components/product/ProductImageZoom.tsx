@@ -260,8 +260,9 @@ export function ProductImageZoom({ productName, images, initialIndex, onClose }:
           {activeImage ? (
             <ProductThumbnail
               src={activeImage.url}
-              alt={activeImage.altText ?? productName}
-              transform="w-1600"
+              alt={activeImage.altText ?? `${productName}, view ${index + 1}`}
+              sizes="100vw"
+              loading="eager"
               fit="contain"
               className="pointer-events-none"
             />

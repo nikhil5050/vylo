@@ -13,7 +13,7 @@ import { Container } from "@/components/ui/Container";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { careTips, getProductFaqs, getProductHighlights, getStylingTips } from "@/config/productContent";
-import { absoluteUrl, siteConfig } from "@/config/site";
+import { absoluteUrl, organizationId } from "@/config/site";
 import { getAllProducts, getProductBySlug, getRelatedProducts } from "@/services/product.service";
 
 // Without this, each static product page is cached forever after build
@@ -40,6 +40,7 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
       <main className="flex flex-1 flex-col pb-24 pt-16 lg:pb-0 lg:pt-24">
         <Container>
           <EmptyState
+            headingLevel={1}
             title="This product is temporarily unavailable"
             description="We're having trouble reaching the catalog. Please try again shortly."
           />
@@ -54,23 +55,30 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
   // RelatedProducts' own empty render rather than taking the page down.
   const related = await getRelatedProducts(product).catch(() => []);
 
-  // No real reviews exist yet, so aggregateRating is intentionally omitted
-  // rather than fabricated.
+  // No real reviews exist yet, so aggregateRating/review are intentionally
+  // omitted rather than fabricated.
+  const productUrl = absoluteUrl(`/product/${product.slug}`);
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
+    "@id": `${productUrl}#product`,
     name: product.name,
-    description: product.description,
+    url: productUrl,
+    ...(product.description ? { description: product.description } : {}),
     sku: product.id,
     category: product.category,
     ...(product.images.length > 0 ? { image: product.images.map((image) => image.url) } : {}),
-    brand: { "@type": "Brand", name: siteConfig.name },
+    brand: { "@type": "Brand", name: "Vylore" },
+    material: "Silver",
     offers: {
       "@type": "Offer",
-      url: absoluteUrl(`/product/${product.slug}`),
+      url: productUrl,
       priceCurrency: "INR",
       price: product.price,
       availability: product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      seller: { "@id": organizationId },
+      // TODO(client): shippingDetails, hasMerchantReturnPolicy — omitted until
+      // confirmed shipping rates/times and a return window exist as data.
     },
   };
 

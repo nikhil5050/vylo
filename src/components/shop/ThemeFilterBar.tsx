@@ -55,7 +55,7 @@ export function ThemeFilterBar({ themes, selectedSlug, onSelect }: ThemeFilterBa
                 <ProductThumbnail
                   src={tile.slug ? THEME_IMAGES[tile.slug] : ALL_THEME_IMAGE}
                   alt={tile.name}
-                  transform="w-200"
+                  sizes="(min-width: 1024px) 160px, 96px"
                 />
               </div>
               <div

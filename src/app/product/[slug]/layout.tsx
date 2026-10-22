@@ -15,16 +15,10 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: product.name,
-    description: product.description,
+    description:
+      product.description || `Shop the ${product.name} from Vylore's ${product.category.toLowerCase()} collection.`,
     path: `/product/${product.slug}`,
     image: product.images[0]?.url,
-    keywords: [
-      product.name,
-      `${product.category} silver jewellery`,
-      product.metal ? `${product.metal} jewellery` : "sterling silver jewellery",
-      "buy silver jewellery online",
-      "925 sterling silver",
-    ],
   });
 }
 

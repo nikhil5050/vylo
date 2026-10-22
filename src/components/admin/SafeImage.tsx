@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ImagePlaceholder } from "@/components/admin/ImagePlaceholder";
-import { imageKitUrl } from "@/components/ui/ProductThumbnail";
+import { imageKitUrl } from "@/utils/imageLoader";
 
 interface SafeImageProps {
   src?: string;

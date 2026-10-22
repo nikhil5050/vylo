@@ -4,7 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { absoluteUrl } from "@/config/site";
+import { absoluteUrl, websiteId } from "@/config/site";
 import { getCategories } from "@/services/category.service";
 import { getThemes } from "@/services/theme.service";
 import { getProductsByCategory } from "@/services/product.service";
@@ -34,6 +34,7 @@ export default async function CategoryPage({ params }: PageProps<"/category/[slu
         <Container>
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Shop", href: "/shop" }]} />
           <EmptyState
+            headingLevel={1}
             title="This category is temporarily unavailable"
             description="We're having trouble reaching the catalog. Please try again shortly."
           />
@@ -53,20 +54,36 @@ export default async function CategoryPage({ params }: PageProps<"/category/[slu
     getThemes().catch(() => []),
   ]);
 
-  const itemListJsonLd = {
+  // BreadcrumbList comes from the visible <Breadcrumb> below.
+  const categoryUrl = absoluteUrl(`/category/${category.slug}`);
+  const collectionJsonLd = {
     "@context": "https://schema.org",
-    "@type": "ItemList",
-    itemListElement: products.map((product, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      url: absoluteUrl(`/product/${product.slug}`),
-      name: product.name,
-    })),
+    "@type": "CollectionPage",
+    "@id": categoryUrl,
+    url: categoryUrl,
+    name: category.name,
+    ...(category.description ? { description: category.description } : {}),
+    inLanguage: "en-IN",
+    isPartOf: { "@id": websiteId },
+    ...(products.length > 0
+      ? {
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: products.length,
+            itemListElement: products.map((product, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              url: absoluteUrl(`/product/${product.slug}`),
+              name: product.name,
+            })),
+          },
+        }
+      : {}),
   };
 
   return (
     <main className="flex flex-1 flex-col py-16 lg:py-24">
-      {products.length > 0 && <JsonLd data={itemListJsonLd} />}
+      <JsonLd data={collectionJsonLd} />
       <Container>
         <Breadcrumb
           items={[{ label: "Home", href: "/" }, { label: "Shop", href: "/shop" }, { label: category.name }]}
@@ -75,6 +92,8 @@ export default async function CategoryPage({ params }: PageProps<"/category/[slu
         <p className="mt-3 max-w-xl text-base text-muted">{category.description}</p>
 
         <div className="mt-10">
+          {/* Keeps the outline h1 → h2 → h3 (product cards) without a visible heading. */}
+          <h2 className="sr-only">{category.name} products</h2>
           <ProductListing products={products} themes={themes} />
         </div>
       </Container>

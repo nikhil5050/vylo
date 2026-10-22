@@ -44,9 +44,9 @@ export function AboutOverlay({ innerRef }: AboutOverlayProps) {
         {/* Text on the RIGHT so it doesn't obstruct the necklace (left-of-center) */}
         <div className="pointer-events-auto flex max-w-md flex-col items-start px-6 lg:px-0 lg:justify-self-end">
           <p className="about-stagger-item eyebrow text-xs  text-[#810201]">The Vylore Philosophy</p>
-          <h5 className="about-stagger-item mt-2 max-w-md font-serif text-2xl leading-tight text-charcoal sm:mt-4 sm:text-2xl lg:text-3xl">
+          <h2 className="about-stagger-item mt-2 max-w-md font-serif text-2xl leading-tight text-charcoal sm:mt-4 sm:text-2xl lg:text-3xl">
             More Than an Ornament. Jewellery That Defines You.
-          </h5>
+          </h2>
           <p className="about-stagger-item mt-2 max-w-md text-sm leading-relaxed text-muted sm:mt-6 sm:text-base">
             At Vylore, we create contemporary silver jewellery that reflects
             your individuality. Every piece combines modern design, refined

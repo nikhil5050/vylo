@@ -14,16 +14,12 @@ export async function generateMetadata({
   if (!category) return {};
 
   return buildMetadata({
-    title: category.name,
-    description: category.description,
+    // "Rings" alone is a weak title next to what shoppers search ("silver rings").
+    title: /silver/i.test(category.name) ? category.name : `Silver ${category.name}`,
+    description:
+      category.description ||
+      `Explore Vylore's collection of silver ${category.name.toLowerCase()}, designed for everyday wear and special occasions.`,
     path: `/category/${category.slug}`,
-    keywords: [
-      `${category.name} silver jewellery`,
-      `buy ${category.name.toLowerCase()} online`,
-      `sterling silver ${category.name.toLowerCase()}`,
-      "silver jewellery India",
-      "925 sterling silver",
-    ],
   });
 }
 

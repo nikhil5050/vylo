@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Accordion } from "@/components/ui/Accordion";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
-import { absoluteUrl, siteConfig } from "@/config/site";
+import { absoluteUrl, organizationId, siteConfig } from "@/config/site";
 import {
   blogPosts,
   formatPostDate,
@@ -36,7 +36,6 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
     absoluteTitle: post.seoTitle.includes("Vylore"),
     description: post.metaDescription,
     path: `/blog/${post.slug}`,
-    keywords: post.keywords,
     image: post.cover.src,
     article: {
       publishedTime: post.datePublished,
@@ -57,6 +56,8 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
   const related = getRelatedPosts(post);
   const minutes = readingTimeMinutes(post);
 
+  // BlogPosting is schema.org's Article subtype for blog content; Google reads
+  // it as an Article.
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -70,12 +71,10 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
     wordCount: post.body.split(/\s+/).filter(Boolean).length,
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     url,
-    author: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      logo: { "@type": "ImageObject", url: `${siteConfig.url}/logo/logo.png` },
-    },
+    inLanguage: "en-IN",
+    // Posts carry no individual byline; the visible "By Vylore Jewellery" matches this.
+    author: { "@type": "Organization", "@id": organizationId, name: siteConfig.name, url: absoluteUrl("/") },
+    publisher: { "@id": organizationId },
   };
 
   const faqJsonLd = {
@@ -90,7 +89,8 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
 
   return (
     <main className="flex flex-1 flex-col">
-      <JsonLd data={[articleJsonLd, faqJsonLd]} />
+      {/* FAQPage only when the FAQ section below actually renders. */}
+      <JsonLd data={post.faqs.length > 0 ? [articleJsonLd, faqJsonLd] : articleJsonLd} />
 
       <article>
         <header className="bg-moonlight/60">

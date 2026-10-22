@@ -153,6 +153,9 @@ export default function AboutPage() {
   );
   return (
     <main className="flex min-h-screen flex-1 flex-col overflow-x-hidden bg-[#FAF9F6]/50">
+      {/* The page's h1 lived in AboutHero, which is hidden for now — this
+          keeps exactly one h1 on the page until it comes back. */}
+      <h1 className="sr-only">About Vylore Jewellery</h1>
       <VideoLightbox
         video={lightboxVideo}
         onClose={() => setLightboxVideo(null)}
@@ -292,7 +295,7 @@ export default function AboutPage() {
                 <button
                   type="button"
                   onClick={() => setLightboxVideo(clip)}
-                  className="group relative block aspect-video w-full overflow-hidden   border border-charcoal/10 shadow-md sm:shadow-lg text-left focus:outline-none lg:aspect-auto lg:h-full"
+                  className="group relative block aspect-video w-full overflow-hidden   border border-charcoal/10 shadow-md sm:shadow-lg text-left lg:aspect-auto lg:h-full"
                 >
                   <AutoplayVideo
                     src={clip.src}

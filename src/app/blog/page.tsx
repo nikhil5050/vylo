@@ -4,7 +4,7 @@ import { BlogGrid } from "@/components/blog/BlogGrid";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
-import { absoluteUrl, siteConfig } from "@/config/site";
+import { absoluteUrl, organizationId } from "@/config/site";
 import { blogPosts } from "@/content/blog";
 import { buildMetadata } from "@/utils/metadata";
 
@@ -14,14 +14,6 @@ export const metadata: Metadata = buildMetadata({
     "The Vylore Journal: expert guides to 925 sterling silver, styling earrings, rings, necklaces, bracelets and anklets, gifting, and contemporary jewellery design.",
   path: "/blog",
   image: blogPosts[0].cover.src,
-  keywords: [
-    "Vylore blog",
-    "silver jewellery blog",
-    "925 sterling silver guide",
-    "silver jewellery styling tips",
-    "how to buy silver jewellery online",
-    "contemporary jewellery design India",
-  ],
 });
 
 const blogJsonLd = {
@@ -30,11 +22,7 @@ const blogJsonLd = {
   name: "The Vylore Journal",
   url: absoluteUrl("/blog"),
   description: "Guides, styling notes and design stories on contemporary 925 sterling silver jewellery.",
-  publisher: {
-    "@type": "Organization",
-    name: siteConfig.name,
-    logo: { "@type": "ImageObject", url: `${siteConfig.url}/logo/logo.png` },
-  },
+  publisher: { "@id": organizationId },
   blogPost: blogPosts.map((post) => ({
     "@type": "BlogPosting",
     headline: post.title,

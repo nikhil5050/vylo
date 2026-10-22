@@ -170,8 +170,9 @@ export function ProductListing({ products, categories, themes, themeTiles }: Pro
             />
           ) : (
             <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-6">
-              {filtered.map((product) => (
-                <ProductCard key={product.id} product={product} />
+              {filtered.map((product, index) => (
+                // The first row (4 across on desktop) is visible on load; the rest lazy-load.
+                <ProductCard key={product.id} product={product} imageLoading={index < 4 ? "eager" : "lazy"} />
               ))}
             </div>
           )}

@@ -21,7 +21,7 @@ export function CartLineItem({ line, compact = false }: CartLineItemProps) {
         href={`/product/${line.product.slug}`}
         className={cn("shrink-0 overflow-hidden", compact ? "h-20 w-16" : "h-32 w-24")}
       >
-        <ProductThumbnail src={line.product.images?.[0]?.url} alt={line.product.name} transform="w-200" />
+        <ProductThumbnail src={line.product.images?.[0]?.url} alt={line.product.name} sizes="96px" />
       </Link>
 
       <div className="flex flex-1 flex-col justify-between">

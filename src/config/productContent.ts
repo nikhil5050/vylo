@@ -80,7 +80,7 @@ export function getProductHighlights(product: Product) {
       description: "Made to move easily from daily wear to festive and special occasions.",
     },
     {
-      title: "Dispatched in 2–4 Days",
+      title: "Dispatched in 5–7 Days",
       description: "Shipped across India, with tracking available from our Track Order page.",
     },
     {
@@ -119,7 +119,7 @@ export function getProductFaqs(product: Product): FaqItem[] {
     {
       question: "How long does delivery take?",
       answer:
-        "Orders are typically dispatched within 2–4 business days and shipped across India. Exact delivery timelines are confirmed after your order is placed, and you can follow your order on the Track Order page.",
+        "Orders are typically dispatched within 5–7 business days and shipped across India. Exact delivery timelines are confirmed after your order is placed, and you can follow your order on the Track Order page.",
     },
     {
       question: "Can I get a replacement if there's a problem?",

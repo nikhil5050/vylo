@@ -152,7 +152,7 @@ export function Header() {
               type="button"
               aria-label="Open menu"
               onClick={() => setMenuOpen(true)}
-              className="rounded-lg p-2 text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy focus:outline-none"
+              className="rounded-lg p-2 text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy"
             >
               <MenuIcon className="h-6 w-6" />
             </button>

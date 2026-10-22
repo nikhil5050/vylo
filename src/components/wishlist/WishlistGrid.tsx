@@ -34,6 +34,8 @@ export function WishlistGrid() {
 
   return (
     <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-3 lg:gap-x-6">
+      {/* The page h1 is above; this keeps the product cards' h3s nested under an h2. */}
+      <h2 className="sr-only">Saved pieces</h2>
       {items.map((product) => (
         <div key={product.id} className="flex flex-col gap-3">
           <ProductCard product={product} />

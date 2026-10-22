@@ -2,9 +2,7 @@
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
 import { useEffect, useRef } from "react";
-import { GemIcon } from "@/components/icons/Icons";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/ui/FadeIn";
@@ -177,9 +175,9 @@ function StaticExperience() {
           </FadeIn>
           <FadeIn delay={0.1}>
             <p className="eyebrow text-xs text-muted">The Vylore Philosophy</p>
-            <h5 className="mt-4 font-serif text-4xl leading-tight text-charcoal sm:text-5xl">
+            <h2 className="mt-4 font-serif text-4xl leading-tight text-charcoal sm:text-5xl">
               More Than an Ornament. Jewellery That Defines You.
-            </h5>
+            </h2>
             <p className="mt-6 max-w-lg text-base leading-relaxed text-muted">
               At Vylore, we create contemporary silver jewellery that reflects
               your individuality. Every piece combines modern design, refined

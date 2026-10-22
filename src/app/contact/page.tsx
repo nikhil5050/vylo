@@ -324,9 +324,9 @@ export default function ContactPage() {
             {faqs.map((faq, index) => (
               <FadeIn key={faq.question} delay={0.05 * index}>
                 <div className="h-full rounded-2xl border border-charcoal/10 bg-[#FAF9F6] p-6 sm:p-8">
-                  <h4 className="font-serif text-lg text-charcoal">
+                  <h3 className="font-serif text-lg text-charcoal">
                     {faq.question}
-                  </h4>
+                  </h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted">
                     {faq.answer}
                   </p>

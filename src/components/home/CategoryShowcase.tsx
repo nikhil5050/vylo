@@ -19,8 +19,8 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
         >
           <ProductThumbnail
             src={category.imageUrl}
-            alt={category.name}
-            transform="w-600"
+            alt={`${category.name} from the Vylore collection`}
+            sizes="192px"
             loading="lazy"
             className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
           />

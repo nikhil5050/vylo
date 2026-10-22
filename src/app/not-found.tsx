@@ -12,6 +12,7 @@ export default function NotFound() {
     <main className="flex flex-1 flex-col py-16 lg:py-24">
       <Container>
         <EmptyState
+          headingLevel={1}
           title="Page Not Found"
           description="The page you're looking for doesn't exist or may have moved."
           action={

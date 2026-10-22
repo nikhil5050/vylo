@@ -20,36 +20,13 @@ import { buildMetadata } from "@/utils/metadata";
 export const revalidate = 60;
 
 export const metadata: Metadata = buildMetadata({
-  title: "Sterling Silver Jewellery Online | Rings,Necklaces,Earrings, Bracelets, Anklets",
+  // The root layout's title template only applies to child segments, never to
+  // this page itself, so the brand is written out here.
+  title: "Silver Rings, Necklaces & Earrings | Vylore Jewellery",
+  absoluteTitle: true,
   description:
-    "Explore modern silver rings, necklaces, earrings, bracelets, chain and more, designed with intention and crafted  with attention to detail. ",
+    "Explore modern silver rings, necklaces, earrings, bracelets, chains and more, designed with intention and crafted with attention to detail.",
   path: "/",
-  keywords: [
-    "silver jewellery",
-    "sterling silver jewellery",
-    "925 sterling silver jewellery",
-    "silver jewellery online",
-    "silver jewellery for women",
-    "sterling silver rings",
-    "silver rings",
-    "silver necklaces",
-    "silver earrings",
-    "silver bracelets",
-    "silver anklets",
-    "silver ear cuffs",
-    "contemporary silver jewellery",
-    "minimalist silver jewellery",
-    "everyday silver jewellery",
-    "designer silver jewellery",
-    "silver jewellery online",
-    "silver jewellery India",
-    "custom silver jewellery",
-    " modern silver jewellery",
-    "pune best silver jewellery",
-    "silver jewellery for gifting",
-
-
-  ],
 });
 
 export default function Home() {

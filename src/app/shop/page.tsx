@@ -103,6 +103,8 @@ export default async function ShopPage() {
         <ShopIntro categories={categories} />
 
         <div id="shop-products" className="mt-10 mb-0">
+          {/* Keeps the outline h1 → h2 → h3 (product cards) without a visible heading. */}
+          <h2 className="sr-only">All products</h2>
           <ProductListing products={products} categories={categories} themes={themes} themeTiles />
         </div>
       </Container>
@@ -250,7 +252,7 @@ function ShopCategoryGuide({ categories }: { categories: Category[] }) {
                     <ProductThumbnail
                       src={category?.imageUrl}
                       alt={guide.heading}
-                      transform="w-800"
+                      sizes="(min-width: 768px) 40vw, 100vw"
                       loading="lazy"
                       className="absolute inset-0"
                     />
