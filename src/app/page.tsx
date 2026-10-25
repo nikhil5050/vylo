@@ -11,7 +11,10 @@ import { OfferBanner } from "@/components/home/OfferBanner";
 import { isComingSoon } from "@/config/launch";
 // import { HeroGrid } from "@/components/home/HeroGrid";
 import { Faq } from "@/components/home/Faq";
-import { VyloreExperienceLazy as VyloreExperience } from "@/components/home/vylore-experience/VyloreExperienceLazy";
+import { Hero } from "@/components/home/Hero";
+// Scroll-driven necklace animation — hidden for now, restore along with the
+// <VyloreExperience /> line below (and remove <Hero />).
+// import { VyloreExperienceLazy as VyloreExperience } from "@/components/home/vylore-experience/VyloreExperienceLazy";
 import { buildMetadata } from "@/utils/metadata";
 
 // Without this, the static home page is cached forever after build (Next's
@@ -34,7 +37,8 @@ export default function Home() {
 
   return (
     <main className="flex flex-1 flex-col">
-     <VyloreExperience />
+      {/* <VyloreExperience /> */}
+      <Hero />
       <CategoryGrid />
       {/* <HeroGrid /> */}
       <OfferBanner />

@@ -160,6 +160,18 @@ body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Cormorant Garamond (--font-display) has a small x-height and thin strokes:
+   scale it up to match a regular x-height (~15% larger at every size) and
+   default it to semibold. In the base layer, so a heading's own font-* weight
+   utility still wins. */
+@layer base {
+  :where(h1, h2, h3, h4, h5, h6),
+  .font-serif {
+    font-size-adjust: 0.46;
+    font-weight: 600;
+  }
+}
+
 /* Sane branded default; components with their own focus-visible ring (e.g. Button) override this. */
 :focus-visible {
   outline: 2px solid var(--burgundy);

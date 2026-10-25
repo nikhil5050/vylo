@@ -49,6 +49,13 @@ export function Header() {
   const wishlistCount = useWishlistStore((state) => state.items.length);
   // Bounces the bag icon whenever an add-to-cart pushes the count up.
   const cartBumped = useBumpOnIncrease(cartCount);
+  // The home hero's photo runs up behind this bar (see components/home/Hero.tsx):
+  // light icons while it's over the photo, a solid bar once the page scrolls.
+  const isHome = pathname === "/";
+  const onHero = isHome && !scrolled;
+  const iconTone = onHero
+    ? "text-white hover:bg-white/15 hover:text-white"
+    : "text-charcoal hover:bg-burgundy/10 hover:text-burgundy";
 
   function handleLogout() {
     logout();
@@ -62,7 +69,9 @@ export function Header() {
         className={cn(
           "border-b transition-all duration-500 ease-in-out",
           scrolled
-            ? "border-transparent bg-transparent shadow-none"
+            ? isHome
+              ? "border-charcoal/5 bg-white/90 shadow-sm backdrop-blur-md"
+              : "border-transparent bg-transparent shadow-none"
             : "border-transparent bg-transparent",
         )}
       >
@@ -80,7 +89,7 @@ export function Header() {
               aria-label="Vylore home"
               className="justify-self-start transition-transform duration-300 hover:scale-105"
             >
-              <Logo />
+              <Logo className={cn("transition-[filter] duration-300", onHero && "brightness-0 invert")} />
             </Link>
 
             {/* Center Nav */}
@@ -100,12 +109,15 @@ export function Header() {
 
             {/* Right Action Icons */}
             <div className="flex items-center justify-end gap-5">
-              <AccountMenu user={user} onLogout={handleLogout} />
+              <AccountMenu user={user} onLogout={handleLogout} light={onHero} />
 
               <Link
                 href="/wishlist"
                 aria-label="Wishlist"
-                className="group relative rounded-full p-2 text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy focus:outline-none focus:ring-2 focus:ring-burgundy/20"
+                className={cn(
+                  "group relative rounded-full p-2 transition-colors focus:outline-none focus:ring-2 focus:ring-burgundy/20",
+                  iconTone,
+                )}
               >
                 <HeartIcon className="h-5 w-5 transition-transform duration-200 group-hover:scale-110" />
                 {wishlistCount > 0 && (
@@ -120,7 +132,10 @@ export function Header() {
                 type="button"
                 aria-label="Open cart"
                 onClick={() => setCartOpen(true)}
-                className="group relative rounded-full p-2 text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy focus:outline-none focus:ring-2 focus:ring-burgundy/20"
+                className={cn(
+                  "group relative rounded-full p-2 transition-colors focus:outline-none focus:ring-2 focus:ring-burgundy/20",
+                  iconTone,
+                )}
               >
                 <motion.span
                   className="block"
@@ -152,13 +167,13 @@ export function Header() {
               type="button"
               aria-label="Open menu"
               onClick={() => setMenuOpen(true)}
-              className="rounded-lg p-2 text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy"
+              className={cn("rounded-lg p-2 transition-colors", iconTone)}
             >
               <MenuIcon className="h-6 w-6" />
             </button>
 
             <Link href="/" aria-label="Vylore home">
-              <Logo size="sm" />
+              <Logo size="sm" className={cn("transition-[filter] duration-300", onHero && "brightness-0 invert")} />
             </Link>
 
             <div className="flex items-center gap-1">
@@ -166,7 +181,7 @@ export function Header() {
                 type="button"
                 aria-label="Open cart"
                 onClick={() => setCartOpen(true)}
-                className="relative rounded-lg p-2 text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy"
+                className={cn("relative rounded-lg p-2 transition-colors", iconTone)}
               >
                 <motion.span
                   className="block"
@@ -279,11 +294,14 @@ function AccountMenu({
   onLogout,
   mobile = false,
   active = false,
+  light = false,
 }: {
   user: { first_name: string; last_name: string } | null;
   onLogout: () => void;
   mobile?: boolean;
   active?: boolean;
+  /** Desktop trigger sits over the dark home hero. */
+  light?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -337,7 +355,12 @@ function AccountMenu({
                 "flex h-full w-full flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-medium transition-colors",
                 active ? "text-burgundy" : "text-muted hover:text-burgundy",
               )
-            : "group flex min-h-10 items-center gap-2 rounded-sm px-2 text-sm text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-burgundy/30"
+            : cn(
+                "group flex min-h-10 items-center gap-2 rounded-sm px-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-burgundy/30",
+                light
+                  ? "text-white hover:bg-white/15"
+                  : "text-charcoal hover:bg-burgundy/10 hover:text-burgundy",
+              )
         }
       >
         <UserIcon

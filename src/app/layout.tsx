@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { preconnect } from "react-dom";
-import { Bricolage_Grotesque, Open_Sans } from "next/font/google";
+import { Cormorant_Garamond, Jost } from "next/font/google";
 import "./globals.css";
 import { SiteChrome } from "@/components/layout/SiteChrome";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -10,18 +10,19 @@ import { absoluteAssetUrl, absoluteUrl, organizationId, siteConfig, socialLinks,
 import { isComingSoon } from "@/config/launch";
 import { defaultOgImage } from "@/utils/metadata";
 
-// TEMPORARY stand-in for "Black Mango" (a paid/personal-use display font,
-// not on Google Fonts — see AGENTS.md note or ask about licensing). Swap this
-// next/font/google call for a next/font/local call against the licensed
-// Black Mango files once available; keep the "--font-display" variable name
+// Primary (headings, --font-display): Cormorant Garamond — high-contrast serif
+// with a true italic for the gold accent lines. If the licensed "Black Mango"
+// files arrive, swap this for a next/font/local call and keep the variable name
 // so no other file needs to change.
-const display = Bricolage_Grotesque({
+const display = Cormorant_Garamond({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
-const body = Open_Sans({
+// Secondary (body and UI, --font-body): Jost — clean geometric sans.
+const body = Jost({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
