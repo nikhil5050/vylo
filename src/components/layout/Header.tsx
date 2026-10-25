@@ -50,7 +50,8 @@ export function Header() {
   // Bounces the bag icon whenever an add-to-cart pushes the count up.
   const cartBumped = useBumpOnIncrease(cartCount);
   // The home hero's photo runs up behind this bar (see components/home/Hero.tsx):
-  // light icons while it's over the photo, a solid bar once the page scrolls.
+  // light icons while it's over the photo. The bar itself never changes on
+  // scroll — no fill, blur or shrink — so it looks the same on every page.
   const isHome = pathname === "/";
   const onHero = isHome && !scrolled;
   const iconTone = onHero
@@ -65,24 +66,10 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full transition-all duration-300">
       {/* Main Header Bar */}
-      <div
-        className={cn(
-          "border-b transition-all duration-500 ease-in-out",
-          scrolled
-            ? isHome
-              ? "border-charcoal/5 bg-white/90 shadow-sm backdrop-blur-md"
-              : "border-transparent bg-transparent shadow-none"
-            : "border-transparent bg-transparent",
-        )}
-      >
+      <div className="border-b border-transparent bg-transparent">
         <Container>
           {/* Desktop Navigation */}
-          <div
-            className={cn(
-              "hidden grid-cols-[auto_1fr_auto] items-center gap-8 transition-all duration-500 lg:grid",
-              scrolled ? "h-16" : "h-20",
-            )}
-          >
+          <div className="hidden h-20 grid-cols-[auto_1fr_auto] items-center gap-8 lg:grid">
             {/* Left Logo */}
             <Link
               href="/"

@@ -18,9 +18,12 @@ const features = [
 
 // ImageKit resizes on the fly via `tr=w-…`. Desktop original is 1536×1024; the
 // portrait mobile crop (900×1600) leaves empty curtain across its top ~40% for the copy.
-const HERO_BG = "https://ik.imagekit.io/vyloreimgs/vylore/banners/vylore-bg.webp";
+// `updatedAt` pins the ImageKit version, so a re-upload under the same name
+// isn't masked by a cached copy; bump it after replacing either file.
+const HERO_BG =
+  "https://ik.imagekit.io/vyloreimgs/vylore/banners/vylore-bg.webp?updatedAt=1792892283352";
 const HERO_BG_MOBILE =
-  "https://ik.imagekit.io/vyloreimgs/vylore/banners/vylore_mobileview-bg.webp";
+  "https://ik.imagekit.io/vyloreimgs/vylore/banners/vylore_mobileview-bg.webp?updatedAt=1792893195453";
 
 /**
  * Home hero — full-bleed burgundy lounge photo (served from ImageKit, see HERO_BG),
@@ -47,7 +50,7 @@ export function Hero() {
         />
         <img
           src={HERO_BG}
-          srcSet={`${HERO_BG}?tr=w-900 900w, ${HERO_BG} 1536w`}
+          srcSet={`${HERO_BG}&tr=w-900 900w, ${HERO_BG} 1536w`}
           sizes="100vw"
           width={1536}
           height={1024}
@@ -66,22 +69,24 @@ export function Hero() {
 
       <Container className="flex min-h-[100dvh] flex-col justify-between gap-10 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-24 lg:justify-center lg:gap-14 lg:pb-8 lg:pt-28">
         {/* --- Copy --- */}
-        <FadeIn className="relative z-10 max-w-xl lg:max-w-[40%]">
+        <FadeIn className="relative z-10 max-w-xl lg:max-w-[56%] xl:max-w-[50%]">
           <div className="flex items-center gap-4">
             <span className="h-px w-12 bg-gold" />
             <p className="text-[11px] font-medium uppercase tracking-[0.32em] text-white/85 sm:text-xs">
-              925 Sterling Silver Jewellery
+              The Vylore Signature
             </p>
           </div>
 
-          <h1 className="mt-5 font-serif text-[3.25rem] leading-[0.98] text-white sm:text-7xl lg:text-[4rem] xl:text-[4.75rem]">
-            Timeless Elegance,{" "}
-            <span className="block italic text-gold">Made for You</span>
+          {/* Each line kept whole; the phone size scales with the viewport so the
+              first line fits even on narrow screens. */}
+          <h1 className="mt-5 font-serif text-[clamp(1.75rem,9.6vw,2.75rem)] leading-[1.02] text-white sm:text-6xl lg:text-[3.5rem] xl:text-[4rem]">
+            <span className="block whitespace-nowrap">The Silver Jewellery</span>{" "}
+            <span className="block whitespace-nowrap italic text-gold">You&rsquo;ve Dreamed Of.</span>
           </h1>
 
           <p className="mt-4 max-w-[15rem] text-[15px] leading-relaxed text-white/80 sm:max-w-sm sm:text-base lg:mt-7">
-            Discover exquisitely crafted 925 silver jewellery that blends
-            tradition with modern elegance for every special moment.
+            Designed to be treasured, made in 925 sterling silver for the
+            moments you&rsquo;ll remember forever.
           </p>
 
           <Link
@@ -95,6 +100,14 @@ export function Hero() {
               strokeWidth={1.5}
               aria-hidden
             />
+          </Link>
+
+          <Link
+            href="/about"
+            className="group ml-6 hidden items-center gap-2 text-sm font-medium uppercase tracking-[0.18em] text-white/85 transition-colors hover:text-gold sm:inline-flex"
+          >
+            Our Story
+            <span className="h-px w-8 bg-current transition-all duration-300 group-hover:w-12" />
           </Link>
 
           {/* Decorative slide markers (single slide for now); desktop only, so the

@@ -1,3 +1,4 @@
+import { Archive, Droplets, Sparkles, SprayCan } from "lucide-react";
 import type { FaqItem } from "@/config/faq";
 import type { Product } from "@/types/product";
 
@@ -60,11 +61,20 @@ export function getStylingTips(product: Product): string[] {
   return stylingByCategory[product.categorySlug] ?? defaultStyling;
 }
 
+// Shown as a list on the PDP and as icon cards in the home page's care section.
 export const careTips = [
-  "Put jewellery on after perfume, lotion and hairspray.",
-  "Remove before swimming, bathing, exercising or cleaning.",
-  "Store separately in a dry pouch or box, away from moisture and direct sunlight.",
-  "Wipe gently with a soft polishing cloth to restore shine — avoid harsh chemicals.",
+  { icon: SprayCan, title: "Wear It Last", text: "Put jewellery on after perfume, lotion and hairspray." },
+  { icon: Droplets, title: "Keep It Dry", text: "Remove before swimming, bathing, exercising or cleaning." },
+  {
+    icon: Archive,
+    title: "Store Separately",
+    text: "Store separately in a dry pouch or box, away from moisture and direct sunlight.",
+  },
+  {
+    icon: Sparkles,
+    title: "Polish Gently",
+    text: "Wipe gently with a soft polishing cloth to restore shine — avoid harsh chemicals.",
+  },
 ];
 
 export function getProductHighlights(product: Product) {

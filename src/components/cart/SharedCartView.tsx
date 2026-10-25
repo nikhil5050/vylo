@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { showAddedManyToBag } from "@/components/ui/AddedToBagToast";
 import { Button } from "@/components/ui/Button";
 import { getProductBySlug } from "@/services/product.service";
 import type { SharedCart } from "@/services/shared-cart.service";
 import { useAuthStore } from "@/store/auth.store";
 import { useCartStore } from "@/store/cart.store";
+import type { Product } from "@/types/product";
 import { formatPrice } from "@/utils/formatPrice";
 
 export function SharedCartView({ sharedCart }: { sharedCart: SharedCart }) {
@@ -22,6 +24,7 @@ export function SharedCartView({ sharedCart }: { sharedCart: SharedCart }) {
   async function handleAddAll() {
     setStatus("adding");
     let skipped = sharedCart.items.length - availableItems.length;
+    const added: Product[] = [];
 
     for (const item of availableItems) {
       const product = item.productSlug ? await getProductBySlug(item.productSlug) : undefined;
@@ -36,8 +39,10 @@ export function SharedCartView({ sharedCart }: { sharedCart: SharedCart }) {
       const variant =
         item.variantId != null ? product.variants?.find((v) => v.id === String(item.variantId)) : undefined;
       addItem(product, { quantity: item.quantity, size: variant?.size, variantId: variant?.id });
+      added.push(product);
     }
 
+    showAddedManyToBag(added, skipped);
     setSkippedCount(skipped);
     setStatus("done");
   }

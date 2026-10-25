@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { showAddedToBag } from "@/components/ui/AddedToBagToast";
 import { Button } from "@/components/ui/Button";
 import { useCartStore } from "@/store/cart.store";
 import type { Product } from "@/types/product";
@@ -12,6 +13,7 @@ export function StickyMobileCta({ product }: { product: Product }) {
 
   function handleAddToCart() {
     addItem(product, { size: product.sizes?.[0], variantId: product.variants?.[0]?.id });
+    showAddedToBag(product, { size: product.sizes?.[0] });
     setAdded(true);
     window.setTimeout(() => setAdded(false), 2000);
   }

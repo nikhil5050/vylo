@@ -141,7 +141,7 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
       content: (
         <ul className="flex list-disc flex-col gap-1 pl-5">
           {careTips.map((tip) => (
-            <li key={tip}>{tip}</li>
+            <li key={tip.title}>{tip.text}</li>
           ))}
         </ul>
       ),
@@ -196,24 +196,33 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
             className="pointer-events-none absolute right-[4%] top-4 hidden h-auto w-[clamp(240px,22vw,320px)] select-none opacity-[0.65] xl:block"
           />
         </div>
+      </Container>
 
-        <section className="mt-16 lg:mt-24" aria-labelledby="product-highlights-heading">
-          <p className="eyebrow text-xs text-burgundy">Why You&apos;ll Love It</p>
-          <h2 id="product-highlights-heading" className="mt-4 font-serif text-3xl text-charcoal sm:text-4xl">
+      {/* Below the product, full-width bands alternate like the home page:
+          burgundy-dark → moonlight → burgundy-dark (reviews) → white (related). */}
+      <section
+        className="mt-16 bg-burgundy-dark py-16 lg:mt-24 lg:py-24"
+        aria-labelledby="product-highlights-heading"
+      >
+        <Container>
+          <p className="eyebrow text-xs text-gold">Why You&apos;ll Love It</p>
+          <h2 id="product-highlights-heading" className="mt-4 font-serif text-3xl text-moonlight sm:text-4xl">
             The Details That Matter
           </h2>
-          <div className="mt-8 grid gap-px overflow-hidden border border-silver/40 bg-silver/40 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
             {highlights.map((highlight, index) => (
-              <div key={highlight.title} className="bg-white p-6">
-                <span className="font-serif text-2xl text-burgundy/30">0{index + 1}</span>
-                <h3 className="mt-2 font-serif text-lg text-charcoal">{highlight.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{highlight.description}</p>
+              <div key={highlight.title} className="bg-burgundy-dark p-6 lg:p-8">
+                <span className="font-serif text-3xl text-gold/70">0{index + 1}</span>
+                <h3 className="mt-2 font-serif text-lg text-moonlight">{highlight.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-moonlight/70">{highlight.description}</p>
               </div>
             ))}
           </div>
-        </section>
+        </Container>
+      </section>
 
-        <section className="mt-16 lg:mt-24" aria-labelledby="product-faq-heading">
+      <section className="bg-moonlight py-16 lg:py-24" aria-labelledby="product-faq-heading">
+        <Container>
           <p className="eyebrow text-xs text-burgundy">Questions</p>
           <h2 id="product-faq-heading" className="mt-4 font-serif text-3xl text-charcoal sm:text-4xl">
             About the {product.name}
@@ -235,11 +244,11 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
             </Link>
             .
           </p>
-        </section>
+        </Container>
+      </section>
 
-        <ProductReviews />
-        <RelatedProducts products={related} />
-      </Container>
+      <ProductReviews />
+      <RelatedProducts products={related} />
 
       <StickyMobileCta product={product} />
     </main>

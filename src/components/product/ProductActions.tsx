@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
 import { HeartIcon } from "@/components/icons/Icons";
+import { showAddedToBag } from "@/components/ui/AddedToBagToast";
 import { Button } from "@/components/ui/Button";
 import { useCartStore } from "@/store/cart.store";
 import { useWishlistStore } from "@/store/wishlist.store";
@@ -29,6 +30,7 @@ export function ProductActions({ product }: { product: Product }) {
 
   function handleAddToCart() {
     addItem(product, { size: selectedSize, variantId: selectedVariantId, quantity });
+    showAddedToBag(product, { quantity, size: selectedSize });
     setAdded(true);
     window.setTimeout(() => setAdded(false), 2000);
   }

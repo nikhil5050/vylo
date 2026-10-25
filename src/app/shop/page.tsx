@@ -93,7 +93,9 @@ export default async function ShopPage() {
   };
 
   return (
-    <main className="flex flex-1 flex-col pb-0 pt-16 lg:pt-24">
+    // Pulled up by the header's height (h-16 / lg:h-20) so the moonlight
+    // background also fills the transparent header bar; padding adds it back.
+    <main className="-mt-16 flex flex-1 flex-col bg-moonlight pb-0 pt-32 lg:-mt-20 lg:pt-44">
       {products.length > 0 && <JsonLd data={itemListJsonLd} />}
       {shopFaqs.length > 0 && <JsonLd data={shopFaqJsonLd} />}
 
@@ -221,7 +223,7 @@ function ShopIntro({ categories }: { categories: Category[] }) {
 
 function ShopCategoryGuide({ categories }: { categories: Category[] }) {
   return (
-    <section className="bg-white py-16 sm:py-20 lg:py-24" aria-labelledby="shop-category-guide-heading">
+    <section className="py-16 sm:py-20 lg:py-24" aria-labelledby="shop-category-guide-heading">
       <Container>
         <FadeIn className="mx-auto max-w-2xl text-center">
           <p className="eyebrow text-xs text-burgundy">Shop by Category</p>
@@ -296,7 +298,7 @@ function ShopCategoryGuide({ categories }: { categories: Category[] }) {
 
 function ShopBuyingGuide() {
   return (
-    <section className="bg-white py-16 sm:py-20 lg:py-24" aria-labelledby="shop-buying-guide-heading">
+    <section className="py-16 sm:py-20 lg:py-24" aria-labelledby="shop-buying-guide-heading">
       <Container>
         <div className="grid gap-10 lg:grid-cols-3 lg:gap-16">
           <FadeIn className="lg:sticky lg:top-28 lg:self-start">
@@ -407,7 +409,7 @@ function ShopSeoContent() {
 
 function ShopFinalCta() {
   return (
-    <section className="border-t border-silver/30 bg-white py-14 sm:py-16">
+    <section className="border-t border-silver/30 py-14 sm:py-16">
       <Container className="flex flex-col items-center text-center">
         <FadeIn>
           <p className="eyebrow text-xs text-[#810201]">Still Deciding?</p>

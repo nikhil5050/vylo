@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import { StoreToaster } from "@/components/ui/AddedToBagToast";
 
 // The /admin section renders its own sidebar/header chrome (see
 // app/admin/layout.tsx) and must not be wrapped in the storefront's
@@ -42,6 +43,7 @@ export function SiteChrome({ children, comingSoon }: { children: ReactNode; comi
         {children}
       </div>
       <Footer />
+      <StoreToaster />
     </>
   );
 }

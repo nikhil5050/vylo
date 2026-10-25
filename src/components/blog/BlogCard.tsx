@@ -4,8 +4,18 @@ import { readingTimeMinutes, type BlogPost } from "@/content/blog";
 import { resizePexels } from "@/content/blog/images";
 import { cn } from "@/utils/cn";
 
-export function BlogCard({ post, featured = false }: { post: BlogPost; featured?: boolean }) {
+export function BlogCard({
+  post,
+  featured = false,
+  headingLevel = "h2",
+}: {
+  post: BlogPost;
+  featured?: boolean;
+  // h3 where the card sits under another section's h2 (e.g. the home page).
+  headingLevel?: "h2" | "h3";
+}) {
   const href = `/blog/${post.slug}/`;
+  const Heading = headingLevel;
 
   return (
     <article
@@ -30,7 +40,7 @@ export function BlogCard({ post, featured = false }: { post: BlogPost; featured?
 
       <div className={cn("flex flex-1 flex-col gap-3 p-6", featured && "lg:justify-center lg:gap-5 lg:p-12")}>
         {featured && <p className="eyebrow text-[11px] font-semibold text-burgundy">Featured story</p>}
-        <h2
+        <Heading
           className={cn(
             "font-serif leading-snug text-charcoal transition-colors group-hover:text-burgundy",
             featured ? "text-2xl sm:text-3xl lg:text-[2.25rem] lg:leading-tight" : "text-xl",
@@ -40,7 +50,7 @@ export function BlogCard({ post, featured = false }: { post: BlogPost; featured?
           <Link href={href} className="after:absolute after:inset-0">
             {post.title}
           </Link>
-        </h2>
+        </Heading>
         <p className={cn("text-muted", featured ? "text-base leading-relaxed" : "line-clamp-2 text-sm leading-relaxed")}>
           {post.excerpt}
         </p>

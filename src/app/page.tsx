@@ -3,9 +3,12 @@ import { Bestsellers } from "@/components/home/Bestsellers";
 import { CategoryGrid } from "@/components/home/CategoryGrid";
 import { ComingSoon } from "@/components/home/ComingSoon";
 import { FinalCta } from "@/components/home/FinalCta";
+import { FromTheJournal } from "@/components/home/FromTheJournal";
+import { InstagramReels } from "@/components/home/InstagramReels";
 // import { MaterialStory } from "@/components/home/MaterialStory";
 import { OfferBanner } from "@/components/home/OfferBanner";
 // import { OurPackaging } from "@/components/home/OurPackaging";
+import { SilverCare } from "@/components/home/SilverCare";
 // import { Testimonials } from "@/components/home/Testimonials";
 // import { TrustSection } from "@/components/home/TrustSection";
 import { isComingSoon } from "@/config/launch";
@@ -40,14 +43,20 @@ export default function Home() {
       {/* <VyloreExperience /> */}
       <Hero />
       <CategoryGrid />
+      
+      
       {/* <HeroGrid /> */}
       <OfferBanner />
+      <SilverCare />
       <Bestsellers />
+      
       {/* <OurPackaging /> */}
       {/* <TrustSection /> */}
       {/* <MaterialStory />  */}
       {/* Hidden for now — restore along with the import above. */}
       {/* <Testimonials /> */}
+      <InstagramReels />
+      <FromTheJournal />
       <FinalCta />
       <Faq />
       

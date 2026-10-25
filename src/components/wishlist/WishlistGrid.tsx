@@ -1,6 +1,7 @@
 "use client";
 
 import { ProductCard } from "@/components/product/ProductCard";
+import { showAddedToBag } from "@/components/ui/AddedToBagToast";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useCartStore } from "@/store/cart.store";
@@ -15,6 +16,7 @@ export function WishlistGrid() {
     const product = items.find((item) => item.id === productId);
     if (!product) return;
     addToCart(product);
+    showAddedToBag(product);
     removeFromWishlist(productId);
   }
 

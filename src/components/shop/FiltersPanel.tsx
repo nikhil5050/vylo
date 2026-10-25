@@ -24,6 +24,58 @@ const priceBands: PriceBand[] = [
   { label: "Above ₹8,000", min: 8000 },
 ];
 
+// Custom-drawn controls in the brand palette: the native white boxes clashed
+// with the shop's moonlight background. The real <input> stays in place
+// (keyboard, screen readers, form semantics); only its look is replaced.
+const optionLabel =
+  "group flex cursor-pointer items-center gap-3 py-1 text-sm text-charcoal transition-colors hover:text-burgundy has-checked:font-medium has-checked:text-burgundy";
+
+const controlBase =
+  "peer h-[18px] w-[18px] shrink-0 cursor-pointer appearance-none border border-burgundy/35 bg-burgundy/[0.05] transition-colors group-hover:border-burgundy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-burgundy/30 focus-visible:ring-offset-1";
+
+function FilterCheckbox({ checked, onChange }: { checked: boolean; onChange: () => void }) {
+  return (
+    <span className="relative flex">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        className={`${controlBase} rounded-[4px] checked:border-burgundy checked:bg-burgundy`}
+      />
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 16 16"
+        className="pointer-events-none absolute inset-0 m-auto h-3 w-3 text-ivory opacity-0 transition-opacity peer-checked:opacity-100"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M3 8.5 6.5 12 13 4.5" />
+      </svg>
+    </span>
+  );
+}
+
+function FilterRadio({ name, checked, onChange }: { name: string; checked: boolean; onChange: () => void }) {
+  return (
+    <span className="relative flex">
+      <input
+        type="radio"
+        name={name}
+        checked={checked}
+        onChange={onChange}
+        className={`${controlBase} rounded-full checked:border-burgundy`}
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 m-auto h-2 w-2 scale-0 rounded-full bg-burgundy transition-transform peer-checked:scale-100"
+      />
+    </span>
+  );
+}
+
 interface FiltersPanelProps {
   categories?: Category[];
   themes?: Theme[];
@@ -68,12 +120,10 @@ export function FiltersPanel({ categories, themes, filters, onChange }: FiltersP
           <p className="eyebrow text-xs text-muted">Category</p>
           <div className="mt-4 flex flex-col gap-3">
             {categories.map((category) => (
-              <label key={category.slug} className="flex items-center gap-3 py-1 text-sm text-charcoal">
-                <input
-                  type="checkbox"
+              <label key={category.slug} className={optionLabel}>
+                <FilterCheckbox
                   checked={filters.categorySlugs.includes(category.slug)}
                   onChange={() => toggleCategory(category.slug)}
-                  className="h-4 w-4 accent-burgundy"
                 />
                 {category.name}
               </label>
@@ -87,12 +137,10 @@ export function FiltersPanel({ categories, themes, filters, onChange }: FiltersP
           <p className="eyebrow text-xs text-muted">Theme</p>
           <div className="mt-4 flex flex-col gap-3">
             {themes.map((theme) => (
-              <label key={theme.slug} className="flex items-center gap-3 py-1 text-sm text-charcoal">
-                <input
-                  type="checkbox"
+              <label key={theme.slug} className={optionLabel}>
+                <FilterCheckbox
                   checked={filters.themeSlugs.includes(theme.slug)}
                   onChange={() => toggleTheme(theme.slug)}
-                  className="h-4 w-4 accent-burgundy"
                 />
                 {theme.name}
               </label>
@@ -105,13 +153,11 @@ export function FiltersPanel({ categories, themes, filters, onChange }: FiltersP
         <p className="eyebrow text-xs text-muted">Price</p>
         <div className="mt-4 flex flex-col gap-3">
           {priceBands.map((band) => (
-            <label key={band.label} className="flex items-center gap-3 py-1 text-sm text-charcoal">
-              <input
-                type="radio"
+            <label key={band.label} className={optionLabel}>
+              <FilterRadio
                 name={priceBandName}
                 checked={filters.minPrice === band.min && filters.maxPrice === band.max}
                 onChange={() => selectPriceBand(band)}
-                className="h-4 w-4 accent-burgundy"
               />
               {band.label}
             </label>
@@ -120,12 +166,10 @@ export function FiltersPanel({ categories, themes, filters, onChange }: FiltersP
       </div>
 
       <div>
-        <label className="flex items-center gap-3 py-1 text-sm text-charcoal">
-          <input
-            type="checkbox"
+        <label className={optionLabel}>
+          <FilterCheckbox
             checked={filters.inStockOnly}
             onChange={() => onChange({ ...filters, inStockOnly: !filters.inStockOnly })}
-            className="h-4 w-4 accent-burgundy"
           />
           In Stock Only
         </label>
