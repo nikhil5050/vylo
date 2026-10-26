@@ -1,6 +1,5 @@
 import { apiFetch } from "@/lib/api";
 import type { CartLine } from "@/store/cart.store";
-import type { ShippingAddress } from "@/types/order";
 
 interface PayUCheckoutParams {
   action_url: string;
@@ -33,26 +32,6 @@ export async function syncCartToBackend(lines: CartLine[]): Promise<void> {
       },
     });
   }
-}
-
-interface CreatedAddress {
-  id: number;
-}
-
-async function createShippingAddress(address: ShippingAddress): Promise<CreatedAddress> {
-  return apiFetch<CreatedAddress>("/addresses", {
-    method: "POST",
-    body: {
-      recipient_name: address.fullName,
-      phone: address.phone,
-      address_line_1: address.line1,
-      address_line_2: address.line2 || undefined,
-      city: address.city,
-      state: address.state,
-      postal_code: address.postalCode,
-      country: address.country,
-    },
-  });
 }
 
 interface CreatedOrder {
@@ -111,10 +90,12 @@ function redirectToPayU(params: PayUCheckoutParams): void {
 // success redirect lands on. Throws ApiError on failure (e.g. insufficient
 // stock, COD not available for this order/address) so the caller can show it
 // and let the user retry.
-export async function placeOrder(lines: CartLine[], address: ShippingAddress, paymentMethod: string): Promise<void> {
+// addressId is a saved address-book entry: the address step (AddressStep)
+// either picks an existing one or saves the new one first, so placing an
+// order never re-creates the address.
+export async function placeOrder(lines: CartLine[], addressId: number, paymentMethod: string): Promise<void> {
   await syncCartToBackend(lines);
-  const createdAddress = await createShippingAddress(address);
-  const order = await createOrder(createdAddress.id, paymentMethod);
+  const order = await createOrder(addressId, paymentMethod);
 
   if (paymentMethod === "cod") {
     window.location.href = `/order-confirmation?order_number=${encodeURIComponent(order.order_number)}`;

@@ -10,9 +10,9 @@ import { COD_HANDLING_FEE, COD_MAX_ORDER_VALUE, type PaymentMethod } from "@/ser
 import { placeOrder } from "@/services/checkout.service";
 import type { DeliveryOption } from "@/services/shipping.service";
 import { useCartStore } from "@/store/cart.store";
-import type { ShippingAddress } from "@/types/order";
+import type { SavedAddress } from "@/services/address.service";
 import { formatPrice } from "@/utils/formatPrice";
-import { AddressForm } from "./AddressForm";
+import { AddressStep } from "./AddressStep";
 import { CheckoutStep } from "./CheckoutStep";
 import { ContactForm } from "./ContactForm";
 import { DeliveryForm } from "./DeliveryForm";
@@ -40,7 +40,7 @@ function CheckoutFlowInner({ deliveryOptions, paymentMethods }: CheckoutFlowProp
 
   const [step, setStep] = useState<Step>(1);
   const [contactConfirmed, setContactConfirmed] = useState(false);
-  const [address, setAddress] = useState<ShippingAddress | undefined>(undefined);
+  const [address, setAddress] = useState<SavedAddress | undefined>(undefined);
   const [deliveryOptionId, setDeliveryOptionId] = useState<string | undefined>(undefined);
   const [paymentMethodId, setPaymentMethodId] = useState<string | undefined>(undefined);
   const [placing, setPlacing] = useState(false);
@@ -57,7 +57,7 @@ function CheckoutFlowInner({ deliveryOptions, paymentMethods }: CheckoutFlowProp
       // On success this navigates the browser away (to PayU, or straight to
       // order-confirmation for COD) — it never resolves normally, so there's
       // nothing to do after awaiting it.
-      await placeOrder(lines, address, paymentMethodId);
+      await placeOrder(lines, address.id, paymentMethodId);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Something went wrong placing your order. Please try again.");
       setPlacing(false);
@@ -129,8 +129,8 @@ function CheckoutFlowInner({ deliveryOptions, paymentMethods }: CheckoutFlowProp
                 )
               }
             >
-              <AddressForm
-                defaultValue={address}
+              <AddressStep
+                selectedId={address?.id}
                 onSubmit={(value) => {
                   setAddress(value);
                   setStep(3);
