@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ApiError } from "@/lib/api";
-import { COD_MAX_ORDER_VALUE, type PaymentMethod } from "@/services/payment.service";
+import { COD_HANDLING_FEE, COD_MAX_ORDER_VALUE, type PaymentMethod } from "@/services/payment.service";
 import { placeOrder } from "@/services/checkout.service";
 import type { DeliveryOption } from "@/services/shipping.service";
 import { useCartStore } from "@/store/cart.store";
@@ -86,7 +86,10 @@ function CheckoutFlowInner({ deliveryOptions, paymentMethods }: CheckoutFlowProp
   // filtered out here rather than left selectable and rejected at submit, but
   // the backend remains the real authority (it also rejects unserviceable
   // pincodes, which can't be checked client-side without another API call).
-  const codOverCap = total > COD_MAX_ORDER_VALUE;
+  // The backend checks the cap against the total *including* the COD fee —
+  // compare the same thing, or a bag just under the cap would be offered COD
+  // and then rejected at "Place order".
+  const codOverCap = total + COD_HANDLING_FEE > COD_MAX_ORDER_VALUE;
   const availablePaymentMethods = codOverCap ? paymentMethods.filter((m) => m.id !== "cod") : paymentMethods;
 
   const selectedDelivery = deliveryOptions.find((option) => option.id === deliveryOptionId);

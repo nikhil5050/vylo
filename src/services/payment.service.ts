@@ -11,7 +11,8 @@ export interface PaymentMethod {
 // duplicated here for the pre-submit eligibility check in CheckoutFlow.
 // The backend is still the actual authority: it re-validates both on
 // POST /checkout/create and rejects with a clear error if this drifts.
-export const COD_MAX_ORDER_VALUE = 5000;
+// lowered from ₹5,000 on 2026-10-26 at the owner's request
+export const COD_MAX_ORDER_VALUE = 3000;
 export const COD_HANDLING_FEE = 50;
 
 export async function getPaymentMethods(): Promise<PaymentMethod[]> {
