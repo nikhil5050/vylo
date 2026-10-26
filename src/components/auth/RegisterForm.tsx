@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { ApiError } from "@/lib/api";
 import { syncCartWithAccount } from "@/services/cart-sync.service";
+import { syncWishlistWithAccount } from "@/services/wishlist.service";
 import { useAuthStore } from "@/store/auth.store";
 import { safeNextPath } from "@/utils/safeNext";
 
@@ -33,7 +34,7 @@ export function RegisterForm() {
       });
       // saves a guest's bag to the new account, so it survives the
       // verification link opening in a different browser
-      await syncCartWithAccount();
+      await Promise.all([syncCartWithAccount(), syncWishlistWithAccount()]);
       // same ?next= handling as LoginForm: signing up mid-checkout (RequireAuth
       // → /login?next=/checkout → "Create an account") returns to checkout
       router.push(safeNextPath(searchParams.get("next")) ?? "/account");

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { ApiError } from "@/lib/api";
 import { syncCartWithAccount } from "@/services/cart-sync.service";
+import { syncWishlistWithAccount } from "@/services/wishlist.service";
 import { useAuthStore } from "@/store/auth.store";
 import { safeNextPath } from "@/utils/safeNext";
 
@@ -26,7 +27,7 @@ export function LoginForm() {
     try {
       await login({ email: String(data.get("email")), password: String(data.get("password")) });
       // before navigating, so a checkout-bound customer lands on a full bag
-      await syncCartWithAccount();
+      await Promise.all([syncCartWithAccount(), syncWishlistWithAccount()]);
       router.push(safeNextPath(searchParams.get("next")) ?? "/account");
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Something went wrong. Please try again.");
