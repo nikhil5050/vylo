@@ -14,7 +14,7 @@ export function EmailVerificationBanner() {
       <div>
         <p className="text-sm font-medium text-charcoal">Please verify your email address.</p>
         <p className="mt-0.5 text-sm text-muted">
-          You&apos;ll need a verified email before placing an order — check {user.email} for the link we sent.
+          Confirming {user.email} keeps your order updates and account recovery reliable — use the link we sent.
         </p>
       </div>
       <ResendVerificationButton />

@@ -1,4 +1,3 @@
-import { ResendVerificationButton } from "@/components/auth/ResendVerificationButton";
 import { Button } from "@/components/ui/Button";
 import type { PaymentMethod } from "@/services/payment.service";
 import type { DeliveryOption } from "@/services/shipping.service";
@@ -12,7 +11,6 @@ interface ReviewStepProps {
   onPlaceOrder: () => void;
   placing: boolean;
   error?: string | null;
-  verificationRequired?: boolean;
 }
 
 export function ReviewStep({
@@ -22,7 +20,6 @@ export function ReviewStep({
   onPlaceOrder,
   placing,
   error,
-  verificationRequired,
 }: ReviewStepProps) {
   const email = useAuthStore((state) => state.user?.email);
 
@@ -62,7 +59,6 @@ export function ReviewStep({
       </p>
 
       {error && <p className="text-sm text-burgundy">{error}</p>}
-      {verificationRequired && <ResendVerificationButton />}
 
       <Button variant="primary" size="lg" onClick={onPlaceOrder} disabled={placing} className="w-fit">
         {placing ? "Placing Order…" : "Place Order"}

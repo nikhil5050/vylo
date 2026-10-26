@@ -45,10 +45,6 @@ function CheckoutFlowInner({ deliveryOptions, paymentMethods }: CheckoutFlowProp
   const [paymentMethodId, setPaymentMethodId] = useState<string | undefined>(undefined);
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // The backend's only 403 on /checkout/create is the email-verification gate
-  // — distinguishing it lets the review step offer a resend button instead of
-  // just a dead-end error message.
-  const [verificationRequired, setVerificationRequired] = useState(false);
 
   const total = lines.reduce((sum, line) => sum + line.product.price * line.quantity, 0);
 
@@ -56,7 +52,6 @@ function CheckoutFlowInner({ deliveryOptions, paymentMethods }: CheckoutFlowProp
     if (!address || !deliveryOptionId || !paymentMethodId) return;
     setPlacing(true);
     setError(null);
-    setVerificationRequired(false);
 
     try {
       // On success this navigates the browser away (to PayU, or straight to
@@ -65,7 +60,6 @@ function CheckoutFlowInner({ deliveryOptions, paymentMethods }: CheckoutFlowProp
       await placeOrder(lines, address, paymentMethodId);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Something went wrong placing your order. Please try again.");
-      setVerificationRequired(err instanceof ApiError && err.status === 403);
       setPlacing(false);
     }
   }
@@ -189,7 +183,6 @@ function CheckoutFlowInner({ deliveryOptions, paymentMethods }: CheckoutFlowProp
                   onPlaceOrder={handlePlaceOrder}
                   placing={placing}
                   error={error}
-                  verificationRequired={verificationRequired}
                 />
               )}
             </CheckoutStep>
