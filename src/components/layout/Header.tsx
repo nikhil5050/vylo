@@ -50,8 +50,8 @@ export function Header() {
   // Bounces the bag icon whenever an add-to-cart pushes the count up.
   const cartBumped = useBumpOnIncrease(cartCount);
   // The home hero's photo runs up behind this bar (see components/home/Hero.tsx):
-  // light icons while it's over the photo. The bar itself never changes on
-  // scroll — no fill, blur or shrink — so it looks the same on every page.
+  // light icons and links while it's over the photo. On desktop the bar fills
+  // white once scrolled; on mobile it stays clear.
   const isHome = pathname === "/";
   const onHero = isHome && !scrolled;
   const iconTone = onHero
@@ -66,7 +66,13 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full transition-all duration-300">
       {/* Main Header Bar */}
-      <div className="border-b border-transparent bg-transparent">
+      <div
+        className={cn(
+          "border-b border-transparent bg-transparent transition-[background-color,box-shadow,border-color] duration-300",
+          // Desktop only: clear at the top, a full-width white bar once scrolled.
+          scrolled && "lg:border-charcoal/5 lg:bg-white lg:shadow-[0_10px_30px_-18px_rgba(24,25,22,0.25)]",
+        )}
+      >
         <Container>
           {/* Desktop Navigation */}
           <div className="hidden h-20 grid-cols-[auto_1fr_auto] items-center gap-8 lg:grid">
@@ -80,13 +86,16 @@ export function Header() {
             </Link>
 
             {/* Center Nav */}
-            <nav className="justify-self-center rounded-full bg-white px-3 py-2 shadow-lg shadow-charcoal/10 ring-1 ring-charcoal/5">
+            <nav className="justify-self-center px-3 py-2">
               <div className="flex items-center gap-2">
                 {mainNav.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="rounded-full px-5 py-3 text-sm font-medium text-charcoal transition-colors hover:bg-burgundy/10 hover:text-burgundy"
+                    className={cn(
+                      "rounded-full px-5 py-3 text-sm font-medium transition-colors",
+                      iconTone,
+                    )}
                   >
                     {item.label}
                   </Link>

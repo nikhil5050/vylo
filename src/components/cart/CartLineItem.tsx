@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { showRemovedFromBag } from "@/components/ui/AddedToBagToast";
 import { ProductThumbnail } from "@/components/ui/ProductThumbnail";
 import { useCartStore, type CartLine } from "@/store/cart.store";
 import { cn } from "@/utils/cn";
@@ -53,7 +54,14 @@ export function CartLineItem({ line, compact = false }: CartLineItemProps) {
             <button
               type="button"
               aria-label="Decrease quantity"
-              onClick={() => setQuantity(line.product.id, line.size, line.quantity - 1)}
+              onClick={() => {
+                if (line.quantity <= 1) {
+                  removeLine(line.product.id, line.size);
+                  showRemovedFromBag(line.product);
+                  return;
+                }
+                setQuantity(line.product.id, line.size, line.quantity - 1);
+              }}
               className="flex h-full w-9 items-center justify-center text-charcoal transition-colors hover:text-burgundy"
             >
               −

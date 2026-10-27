@@ -52,7 +52,11 @@ export const useCartStore = create<CartState>()(
         set({ lines: get().lines.filter((line) => !matches(line, productId, size)) });
       },
       setQuantity: (productId, size, quantity) => {
-        if (quantity < 1) return;
+        // Dropping below 1 removes the line rather than leaving a 0/negative quantity.
+        if (quantity < 1) {
+          get().removeLine(productId, size);
+          return;
+        }
         set({
           lines: get().lines.map((line) => (matches(line, productId, size) ? { ...line, quantity } : line)),
         });
