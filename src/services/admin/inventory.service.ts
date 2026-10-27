@@ -19,7 +19,10 @@ export async function getAdminInventory(): Promise<InventoryItem[]> {
   const variantOwner = new Map<string, { productName: string; sku: string }>();
   for (const product of products) {
     for (const variant of product.variants) {
-      variantOwner.set(variant.id, { productName: product.name, sku: variant.sku });
+      // the size in the name, so a product's rows can be told apart — they
+      // otherwise all read as the same product name
+      const label = [variant.size && `Size ${variant.size}`, !variant.isActive && "inactive"].filter(Boolean).join(", ");
+      variantOwner.set(variant.id, { productName: label ? `${product.name} (${label})` : product.name, sku: variant.sku });
     }
   }
 
