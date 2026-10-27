@@ -1,19 +1,20 @@
 import Link from "next/link";
-import { ArrowRight, Flower2, Gem, Gift, Heart } from "lucide-react";
+import { ArrowRight, Award, Fingerprint, Gem, Truck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 const features = [
   {
     icon: Gem,
-    title: "Premium 925 Silver",
-    text: "Skin Friendly & Long Lasting",
+    title: "92.5% Pure Silver",
+    text: "925 sterling silver, made to last",
     href: "/blog/why-vylore-chooses-925-sterling-silver",
   },
-  { icon: Flower2, title: "Elegant Designs", text: "For Every Occasion", href: "/shop" },
-  { icon: Gift, title: "Beautifully Packed", text: "Delivered with Care", href: "/shipping" },
-  // TODO(client): confirm the customer count before launch.
-  { icon: Heart, title: "Trusted by 12K+ Customers", text: "Loved Across India", href: "/about" },
+  { icon: Truck, title: "Ships Across India", text: "Packed with care for delivery", href: "/shipping" },
+  // TODO(client): confirm the 25+ years figure before publishing.
+  { icon: Award, title: "25+ Years of Family Legacy", text: "Rooted in jewellery and gold", href: "/about" },
+  // TODO(client): confirm the one-of-one mechanism (also referenced in the supporting copy).
+  { icon: Fingerprint, title: "Made to Be Kept", text: "Each piece a single unit", href: "/shop" },
 ];
 
 // ImageKit resizes on the fly via `tr=w-…`. Desktop original is 1536×1024; the
@@ -73,7 +74,7 @@ export function Hero() {
           <div className="flex items-center gap-4">
             <span className="h-px w-12 bg-gold" />
             <p className="text-[11px] font-medium uppercase tracking-[0.32em] text-white/85 sm:text-xs">
-              The Vylore Signature
+              Vylore
             </p>
           </div>
 
@@ -81,32 +82,31 @@ export function Hero() {
               first line fits even on narrow screens. */}
           <h1 className="mt-5 font-serif text-[clamp(1.75rem,9.6vw,2.75rem)] leading-[1.02] text-white sm:text-6xl lg:text-[3.5rem] xl:text-[4rem]">
             <span className="block whitespace-nowrap">The Silver Jewellery</span>{" "}
-            <span className="block whitespace-nowrap italic text-gold">You&rsquo;ve Dreamed Of.</span>
+            <span className="block whitespace-nowrap italic text-gold">You&rsquo;ve Dreamed Of</span>
           </h1>
 
           <p className="mt-4 max-w-[15rem] text-[15px] leading-relaxed text-white/80 sm:max-w-sm sm:text-base lg:mt-7">
-            Designed to be treasured, made in 925 sterling silver for the
-            moments you&rsquo;ll remember forever.
+            One-of-one 925 sterling silver jewellery, for those who want a piece that feels like them.
           </p>
 
           <Link
             href="/shop"
             data-cursor="cta"
-            className="group mt-6 inline-flex h-14 items-center gap-3 rounded-full border border-gold/70 bg-maroon px-9 font-serif text-lg text-white shadow-[0_14px_30px_-12px_rgba(0,0,0,0.7)] transition-colors duration-300 hover:bg-maroon-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-maroon-dark lg:mt-9 lg:h-16 lg:px-10 lg:text-xl"
+            className="group mt-5 inline-flex h-11 items-center gap-2 rounded-full border border-gold/70 bg-maroon px-6 font-serif text-base text-white sm:mt-6 sm:h-14 sm:gap-3 sm:px-9 sm:text-lg shadow-[0_14px_30px_-12px_rgba(0,0,0,0.7)] transition-colors duration-300 hover:bg-maroon-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-maroon-dark lg:mt-9 lg:h-16 lg:px-10 lg:text-xl"
           >
-            Shop Collection
+            Find Your One
             <ArrowRight
-              className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
+              className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 sm:h-5 sm:w-5"
               strokeWidth={1.5}
               aria-hidden
             />
           </Link>
 
           <Link
-            href="/about"
+            href="/shop"
             className="group ml-6 hidden items-center gap-2 text-sm font-medium uppercase tracking-[0.18em] text-white/85 transition-colors hover:text-gold sm:inline-flex"
           >
-            Our Story
+            Explore the Collection
             <span className="h-px w-8 bg-current transition-all duration-300 group-hover:w-12" />
           </Link>
 
