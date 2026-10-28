@@ -105,13 +105,13 @@ export function Hero() {
             />
           </Link>
 
-          <Link
+          {/* <Link
             href="/shop"
             className="group ml-6 hidden items-center gap-2 text-sm font-medium uppercase tracking-[0.18em] text-white/85 transition-colors hover:text-gold sm:inline-flex"
           >
             Explore the Collection
             <span className="h-px w-8 bg-current transition-all duration-300 group-hover:w-12" />
-          </Link>
+          </Link> */}
 
           {/* Decorative slide markers (single slide for now); desktop only, so the
               mobile copy stays above the model's face. */}

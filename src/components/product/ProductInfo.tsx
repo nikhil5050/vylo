@@ -90,7 +90,7 @@ export function ProductInfo({ product }: { product: Product }) {
       </p>
 
       <div className="mt-2 border-t border-silver/30 pt-4 text-sm text-muted">
-        <p>Estimated dispatch: 2–4 business days.</p>
+        <p>Estimated dispatch: 5-7 business days.</p>
         <p>Exact delivery timelines are confirmed at checkout.</p>
       </div>
 
