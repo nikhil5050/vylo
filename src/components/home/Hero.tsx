@@ -68,7 +68,10 @@ export function Hero() {
         className="absolute inset-0 -z-10 bg-gradient-to-b from-black/50 via-transparent to-black/80 lg:bg-gradient-to-r lg:from-black/55 lg:via-black/15 lg:to-transparent"
       />
 
-      <Container className="flex min-h-[100dvh] flex-col justify-between gap-10 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-24 lg:justify-center lg:gap-14 lg:pb-8 lg:pt-28">
+      {/* Mobile uses svh, not dvh: dvh tracks the browser's collapsing URL bar,
+          so the section (and its object-cover photo) resized mid-scroll and the
+          image appeared to zoom. svh stays fixed while scrolling. */}
+      <Container className="flex min-h-[100svh] lg:min-h-[100dvh] flex-col justify-between gap-10 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-24 lg:justify-center lg:gap-14 lg:pb-8 lg:pt-28">
         {/* --- Copy --- */}
         <FadeIn className="relative z-10 max-w-xl lg:max-w-[56%] xl:max-w-[50%]">
           <div className="flex items-center gap-4">
