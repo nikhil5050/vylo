@@ -42,6 +42,13 @@ const nextConfig: NextConfig = {
   // `immutable` tells the browser it never needs to revalidate for the life
   // of this max-age, which is safe here since a changed file gets a new
   // deploy (and CDN cache key) anyway, not an in-place edit at the same URL.
+  // The ring size checker page was removed; send old links and search
+  // results to Contact, where the team helps with sizing.
+  async redirects() {
+    return [
+      { source: "/ring-size-checker", destination: "/contact/", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

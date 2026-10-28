@@ -108,7 +108,7 @@ Personal style should decide whether a silver ring blends or stands apart.
 
 Ask how often the ring will be worn, what visual role it should play and whether it remains comfortable through movement. A low profile may suit frequent wear; projecting details require more awareness. A band supports layering, while a designer silver ring can become the hand’s main detail.
 
-A wider form may need space from neighbouring rings, while a narrow band can fit into a stack. Use exact measurements and personal comfort instead of generic rules — our [ring size checker](/ring-size-checker/) can help.
+A wider form may need space from neighbouring rings, while a narrow band can fit into a stack. Use exact measurements and personal comfort instead of generic rules.
 
 ## Silver Rings for Different Occasions
 

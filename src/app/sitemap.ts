@@ -10,7 +10,7 @@ import { blogPosts } from "@/content/blog";
 // sitemap keeps being served.
 export const revalidate = 3600;
 
-const staticPaths = ["", "/shop", "/about", "/contact", "/faq", "/track-order", "/ring-size-checker", "/blog"];
+const staticPaths = ["", "/shop", "/about", "/contact", "/faq", "/track-order", "/blog"];
 
 // Next's sitemap serializer interpolates `url` and `images` into the XML
 // as-is, without escaping. A raw "&" (e.g. in the Pexels cover URLs'

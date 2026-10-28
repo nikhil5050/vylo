@@ -171,7 +171,7 @@ For a silver pendant, check both pendant dimensions and chain compatibility. Thi
 
 Online jewellery sizing becomes much easier when you work from measurements instead of photographs.
 
-For rings, use the brand’s own size guide whenever available — Vylore’s [ring size checker](/ring-size-checker/) is a good place to start. For bracelets, compare the listed circumference or length with a bracelet that already fits you comfortably.
+For rings, use the brand’s own size guide whenever available. For bracelets, compare the listed circumference or length with a bracelet that already fits you comfortably.
 
 For necklaces and chains, look at the exact length and, ideally, visualise it against a ruler or measuring tape. Sizing standards can vary between brands, so avoid assuming that one universal conversion will always apply.
 
