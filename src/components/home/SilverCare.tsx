@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { careTips } from "@/config/productContent";
 import { headingId } from "@/content/blog";
+import { cn } from "@/utils/cn";
 
 // The care section of the 925 sterling silver guide (BlogBody gives each H2 a headingId anchor).
 const careGuideHref = `/blog/why-vylore-chooses-925-sterling-silver/#${headingId(
@@ -39,19 +40,49 @@ export function SilverCare() {
         </div>
 
         <ul className="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
-          {careTips.map(({ icon: Icon, title, text }, index) => (
-            <li key={title}>
-              <FadeIn delay={index * 0.06} className="h-full">
-                <div className="flex h-full flex-col rounded-3xl bg-white/[0.04] p-5 ring-1 ring-white/10 sm:p-7">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10 text-gold ring-1 ring-gold/30">
-                    <Icon className="h-5 w-5" strokeWidth={1.4} aria-hidden />
-                  </span>
-                  <h3 className="mt-5 font-serif text-xl text-moonlight sm:text-2xl">{title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-moonlight/70">{text}</p>
-                </div>
-              </FadeIn>
-            </li>
-          ))}
+          {careTips.map(({ icon: Icon, title, text }, index) => {
+            // Every second card is moonlight, with dark text and a burgundy icon.
+            const light = index % 2 === 1;
+            return (
+              <li key={title}>
+                <FadeIn delay={index * 0.06} className="h-full">
+                  <div
+                    className={cn(
+                      "flex h-full flex-col rounded-3xl p-5 sm:p-7",
+                      light ? "bg-moonlight" : "bg-white/[0.04] ring-1 ring-white/10",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "flex h-12 w-12 items-center justify-center rounded-full ring-1",
+                        light
+                          ? "bg-burgundy/10 text-burgundy ring-burgundy/20"
+                          : "bg-gold/10 text-gold ring-gold/30",
+                      )}
+                    >
+                      <Icon className="h-5 w-5" strokeWidth={1.4} aria-hidden />
+                    </span>
+                    <h3
+                      className={cn(
+                        "mt-5 font-serif text-xl sm:text-2xl",
+                        light ? "text-burgundy-dark" : "text-moonlight",
+                      )}
+                    >
+                      {title}
+                    </h3>
+                    <p
+                      className={cn(
+                        "mt-2 text-sm leading-relaxed",
+                        light ? "text-charcoal/75" : "text-moonlight/70",
+                      )}
+                    >
+                      {text}
+                    </p>
+                  </div>
+                </FadeIn>
+              </li>
+            );
+          })}
         </ul>
       </Container>
     </section>

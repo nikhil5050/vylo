@@ -152,7 +152,7 @@ export default function AboutPage() {
     null,
   );
   return (
-    <main className="flex min-h-screen flex-1 flex-col overflow-x-hidden bg-[#FAF9F6]/50">
+    <main className="flex min-h-screen flex-1 flex-col overflow-x-hidden bg-white">
       {/* The page's h1 lived in AboutHero, which is hidden for now — this
           keeps exactly one h1 on the page until it comes back. */}
       <h1 className="sr-only">About Vylore Jewellery</h1>
@@ -182,7 +182,7 @@ export default function AboutPage() {
                     className="mx-3 sm:mx-6 flex items-center gap-3 sm:gap-6 font-serif text-sm sm:text-lg text-charcoal/70"
                   >
                     {text}
-                    <span className="h-1 sm:h-1.5 w-1 sm:w-1.5 rounded-full bg-burgundy shrink-0" />
+                    <span className="h-1 sm:h-1.5 w-1 sm:w-1.5 rounded-full bg-gold shrink-0" />
                   </span>
                 ))}
               </div>
@@ -211,7 +211,7 @@ export default function AboutPage() {
             direction="right"
             className="flex flex-col items-start"
           >
-            <span className="inline-block rounded-full bg-charcoal/5 px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-muted border border-charcoal/5">
+            <span className="inline-block rounded-full bg-burgundy/10 px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-burgundy border border-burgundy/10">
               The Beginning
             </span>
             <h2 className="mt-3 sm:mt-5 font-serif text-2xl sm:text-4xl lg:text-5xl tracking-tight text-charcoal leading-tight sm:leading-none">
@@ -264,7 +264,7 @@ export default function AboutPage() {
       </section>
 
       {/* Behind The Craft — Video Grid */}
-      <section className="bg-[#FAF9F6] py-12 sm:py-20 lg:py-28">
+      <section className="bg-moonlight py-12 sm:py-20 lg:py-28">
         <Container>
           <FadeIn className="max-w-2xl">
             <span className="inline-block rounded-full bg-burgundy/10 px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-burgundy border border-burgundy/10">
@@ -326,22 +326,22 @@ export default function AboutPage() {
       </section>
 
       {/* Legacy Banner Highlight */}
-      <section className="bg-charcoal py-14 sm:py-20 lg:py-28 text-ivory relative overflow-hidden">
+      <section className="bg-burgundy-dark py-14 sm:py-20 lg:py-28 text-moonlight relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px] sm:[background-size:20px_20px]" />
         <motion.div
-          className="absolute -top-16 -right-16 h-48 w-48 sm:h-72 sm:w-72 rounded-full bg-burgundy/30 blur-3xl"
+          className="absolute -top-16 -right-16 h-48 w-48 sm:h-72 sm:w-72 rounded-full bg-gold/15 blur-3xl"
           animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <Container className="relative max-w-3xl text-center px-4">
           <FadeIn direction="scale">
-            <span className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-white font-medium">
+            <span className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-gold font-medium">
               Family Legacy
             </span>
-            <h2 className="mt-3 font-serif text-2xl sm:text-4xl lg:text-5xl tracking-tight text-white leading-tight">
+            <h2 className="mt-3 font-serif text-2xl sm:text-4xl lg:text-5xl tracking-tight text-moonlight leading-tight">
               More Than Twenty-Five Years in the Making
             </h2>
-            <p className="mt-4 sm:mt-6 text-sm sm:text-base lg:text-lg leading-relaxed text-ivory/80 font-light">
+            <p className="mt-4 sm:mt-6 text-sm sm:text-base lg:text-lg leading-relaxed text-moonlight/80 font-light">
               A Quarter-Century of Getting It Right
 Twenty-five years of working metal teaches you things no manual can: how silver behaves under heat, where a setting holds and where it fails. That knowledge isn't written down it's inherited.
 <br/><br/>
@@ -406,7 +406,7 @@ He founded Vylore to close that gap building custom jewelry design around indivi
           <div className="grid gap-5 sm:gap-8 md:grid-cols-2">
             <FadeIn
               direction="left"
-              className="group rounded-2xl sm:rounded-3xl border border-charcoal/10 bg-[#FAF9F6] p-5 sm:p-10 lg:p-12 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-burgundy/30"
+              className="group rounded-2xl sm:rounded-3xl border border-charcoal/10 bg-moonlight p-5 sm:p-10 lg:p-12 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-burgundy/30"
             >
               <span className="text-[10px] sm:text-xs uppercase tracking-widest text-burgundy font-semibold">
                 Why Vylore
@@ -434,7 +434,7 @@ He founded Vylore to close that gap building custom jewelry design around indivi
             <FadeIn
               delay={0.1}
               direction="right"
-              className="group rounded-2xl sm:rounded-3xl border border-charcoal/10 bg-[#FAF9F6] p-5 sm:p-10 lg:p-12 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-burgundy/30"
+              className="group rounded-2xl sm:rounded-3xl border border-charcoal/10 bg-moonlight p-5 sm:p-10 lg:p-12 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-burgundy/30"
             >
               <span className="text-[10px] sm:text-xs uppercase tracking-widest text-burgundy font-semibold">
                 Quality &amp; Purity
@@ -462,7 +462,7 @@ He founded Vylore to close that gap building custom jewelry design around indivi
             <FadeIn
               delay={0.2}
               direction="left"
-              className="group rounded-2xl sm:rounded-3xl border border-charcoal/10 bg-[#FAF9F6] p-5 sm:p-10 lg:p-12 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-burgundy/30"
+              className="group rounded-2xl sm:rounded-3xl border border-charcoal/10 bg-moonlight p-5 sm:p-10 lg:p-12 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-burgundy/30"
             >
               <span className="text-[10px] sm:text-xs uppercase tracking-widest text-burgundy font-semibold">
                 Another Reason to Love Us
@@ -485,7 +485,7 @@ He founded Vylore to close that gap building custom jewelry design around indivi
             <FadeIn
               delay={0.3}
               direction="right"
-              className="group rounded-2xl sm:rounded-3xl border border-charcoal/10 bg-[#FAF9F6] p-5 sm:p-10 lg:p-12 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-burgundy/30"
+              className="group rounded-2xl sm:rounded-3xl border border-charcoal/10 bg-moonlight p-5 sm:p-10 lg:p-12 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-burgundy/30"
             >
               <span className="text-[10px] sm:text-xs uppercase tracking-widest text-burgundy font-semibold">
                 Our Commitments
@@ -530,7 +530,7 @@ He founded Vylore to close that gap building custom jewelry design around indivi
             direction="right"
             className="flex flex-col items-start"
           >
-            <span className="inline-block rounded-full bg-charcoal/5 px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-muted border border-charcoal/5">
+            <span className="inline-block rounded-full bg-burgundy/10 px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-burgundy border border-burgundy/10">
               Design Philosophy
             </span>
             <h2 className="mt-3 sm:mt-5 font-serif text-2xl sm:text-4xl lg:text-5xl tracking-tight text-charcoal">
@@ -564,7 +564,7 @@ A minimalist necklace from Vylore isn't undecorated because decoration was skipp
         </Container>
       </section>
 
-      <section className="border-t border-charcoal/10 bg-[#FAF9F6] py-12 sm:py-20 lg:py-28">
+      <section className="border-t border-charcoal/10 bg-moonlight py-12 sm:py-20 lg:py-28">
         <Container>
           <FadeIn className="mx-auto max-w-2xl text-center">
             <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-burgundy sm:text-xs">
@@ -578,15 +578,15 @@ A minimalist necklace from Vylore isn't undecorated because decoration was skipp
           <div className="mt-10 grid gap-5 sm:mt-14 lg:grid-cols-2 lg:gap-8">
             <FadeIn
               direction="left"
-              className="relative overflow-hidden bg-burgundy p-6 text-ivory sm:p-10 lg:p-12"
+              className="relative overflow-hidden bg-burgundy-dark p-6 text-moonlight sm:p-10 lg:p-12"
             >
-              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white">
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
                Our Mission
               </span>
-              <h3 className="mt-5 max-w-md font-serif text-3xl leading-tight text-white sm:text-4xl">
+              <h3 className="mt-5 max-w-md font-serif text-3xl leading-tight text-moonlight sm:text-4xl">
                 Silver jewellery deserves its own identity.
               </h3>
-              <div className="mt-6 space-y-4 text-sm leading-relaxed text-ivory/85 sm:text-base">
+              <div className="mt-6 space-y-4 text-sm leading-relaxed text-moonlight/80 sm:text-base">
                 <p>
                   At Vylore, we believe silver is more than an alternative to
                   gold — it is a statement of individuality, design, and modern
@@ -605,7 +605,7 @@ A minimalist necklace from Vylore isn't undecorated because decoration was skipp
                   personal, designed to stand apart and made to be remembered.
                 </p>
               </div>
-              <div className="absolute -bottom-14 -right-10 h-40 w-40 rounded-full border border-champagne/20" />
+              <div className="absolute -bottom-14 -right-10 h-40 w-40 rounded-full border border-gold/30" />
             </FadeIn>
 
             <FadeIn

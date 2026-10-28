@@ -166,7 +166,7 @@ export default function ContactPage() {
                       href={href}
                       target={external ? "_blank" : undefined}
                       rel={external ? "noopener noreferrer" : undefined}
-                      className="group flex min-w-0 items-center justify-between overflow-hidden rounded-2xl border border-charcoal/10 bg-[#FAF9F6] p-4 transition-all hover:border-burgundy/30 hover:bg-white hover:shadow-sm"
+                      className="group flex min-w-0 items-center justify-between overflow-hidden rounded-2xl border border-charcoal/10 bg-moonlight p-4 transition-all hover:border-burgundy/30 hover:bg-white hover:shadow-sm"
                     >
                       <div className="flex items-center gap-4 min-w-0">
                         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-charcoal/10 bg-white text-burgundy transition-colors group-hover:bg-burgundy group-hover:text-white">
@@ -192,7 +192,7 @@ export default function ContactPage() {
 
             {/* Mini Map Preview */}
             <FadeIn delay={0.3} className="mt-8">
-              <div className="overflow-hidden rounded-2xl border border-charcoal/10 bg-[#FAF9F6] p-2">
+              <div className="overflow-hidden rounded-2xl border border-charcoal/10 bg-moonlight p-2">
                 <div className="aspect-[16/9] w-full overflow-hidden rounded-xl">
                   <iframe
                     src={mapEmbedSrc}
@@ -209,8 +209,8 @@ export default function ContactPage() {
           {/* Right Column: Contact Form Panel */}
           <div className="min-w-0 lg:col-span-7 lg:pl-6 lg:mt-16">
             <FadeIn direction="right" delay={0.1}>
-              <div className="rounded-3xl border border-charcoal/10 bg-[#FAF9F6] p-6 sm:p-10 shadow-sm">
-                <p className="eyebrow text-xs text-muted">Send a Message</p>
+              <div className="rounded-3xl border border-charcoal/10 bg-moonlight p-6 sm:p-10 shadow-sm">
+                <p className="eyebrow text-xs text-burgundy">Send a Message</p>
                 <h2 className="mt-2 font-serif text-2xl text-charcoal sm:text-3xl">
                   Write to Us
                 </h2>
@@ -232,13 +232,13 @@ export default function ContactPage() {
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Opening Hours Card */}
             <FadeIn delay={0.1}>
-              <div className="h-full rounded-3xl border border-charcoal/10 bg-[#FAF9F6] p-8 sm:p-10">
+              <div className="h-full rounded-3xl border border-charcoal/10 bg-moonlight p-8 sm:p-10">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-burgundy/10 text-burgundy">
                     <Clock className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="eyebrow text-xs text-muted">
+                    <p className="eyebrow text-xs text-burgundy">
                       Visit In Person
                     </p>
                     <h3 className="font-serif text-xl text-charcoal">
@@ -270,18 +270,18 @@ export default function ContactPage() {
 
             {/* Custom Jewellery Bespoke Feature Box */}
             <FadeIn delay={0.2}>
-              <div className="flex h-full flex-col justify-between rounded-3xl border border-burgundy/20 bg-burgundy/5 p-8 sm:p-10">
+              <div className="flex h-full flex-col justify-between rounded-3xl bg-burgundy-dark p-8 sm:p-10">
                 <div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-burgundy text-white">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold/10 text-gold ring-1 ring-gold/30">
                     <Sparkles className="h-5 w-5" />
                   </div>
-                  <p className="eyebrow mt-6 text-xs text-burgundy">
+                  <p className="eyebrow mt-6 text-xs text-gold">
                     Bespoke Design Service
                   </p>
-                  <h3 className="mt-1 font-serif text-2xl text-charcoal sm:text-3xl">
+                  <h3 className="mt-1 font-serif text-2xl text-moonlight sm:text-3xl">
                     Looking for a Custom Piece?
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted">
+                  <p className="mt-3 text-sm leading-relaxed text-moonlight/75">
                     Work directly with our lead artisans to design one-of-a-kind
                     engagement rings, heirloom redesigns, or customized luxury
                     gifts tailored to your exact story.
@@ -293,7 +293,7 @@ export default function ContactPage() {
                     href={`https://wa.me/${contactInfo.whatsapp}?text=${encodeURIComponent("Hi Vylore team, I would like to enquire about a custom jewellery design.")}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-xl bg-burgundy px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-burgundy/90"
+                    className="inline-flex items-center gap-2 rounded-xl border border-gold/70 bg-burgundy px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-gold hover:text-burgundy-dark"
                   >
                     <MessageCircle className="h-4 w-4" />
                     Book Custom Consultation
@@ -307,8 +307,8 @@ export default function ContactPage() {
         {/* --- Bottom Design Content Section 2: FAQ Grid --- */}
         <div className="mt-20 lg:mt-28">
           <FadeIn className="text-center max-w-xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full border border-charcoal/10 bg-[#FAF9F6] px-3.5 py-1 text-xs font-medium text-charcoal">
-              <HelpCircle className="h-3.5 w-3.5 text-burgundy" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-charcoal/10 bg-moonlight px-3.5 py-1 text-xs font-medium text-charcoal">
+              <HelpCircle className="h-3.5 w-3.5 text-gold" />
               Frequently Asked Questions
             </div>
             <h2 className="mt-4 font-serif text-3xl text-charcoal sm:text-4xl">
@@ -323,7 +323,7 @@ export default function ContactPage() {
           <div className="mt-12 grid gap-6 md:grid-cols-2">
             {faqs.map((faq, index) => (
               <FadeIn key={faq.question} delay={0.05 * index}>
-                <div className="h-full rounded-2xl border border-charcoal/10 bg-[#FAF9F6] p-6 sm:p-8">
+                <div className="h-full rounded-2xl border border-charcoal/10 bg-moonlight p-6 sm:p-8">
                   <h3 className="font-serif text-lg text-charcoal">
                     {faq.question}
                   </h3>
@@ -338,20 +338,20 @@ export default function ContactPage() {
 
         {/* --- Bottom Design Content Section 3: Visit Location Banner --- */}
         <FadeIn delay={0.2} className="mt-20 lg:mt-28">
-          <div className="relative overflow-hidden rounded-3xl border border-charcoal/10 bg-charcoal p-8 sm:p-12 text-white">
+          <div className="relative overflow-hidden rounded-3xl bg-burgundy-dark p-8 sm:p-12 text-moonlight">
             <div className="relative z-10 flex min-w-0 flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
               <div className="min-w-0">
-                <p className="eyebrow text-xs text-white">Store Location</p>
-                <h3 className="mt-2 font-serif text-2xl sm:text-3xl text-white">
+                <p className="eyebrow text-xs text-gold">Store Location</p>
+                <h3 className="mt-2 font-serif text-2xl sm:text-3xl text-moonlight">
                   Come See Us in Belhe
                 </h3>
-                <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/70">
+                <p className="mt-2 max-w-xl text-sm leading-relaxed text-moonlight/75">
                   A piece is meant to be felt, not just seen. Visit our Belhe
                   boutique and hold the craftsmanship for yourself — the weight,
                   the finish, the detail no photograph fully captures.
                 </p>
-                <div className="mt-4 flex items-center gap-2 text-xs text-white/80">
-                  <MapPin className="h-4 w-4 shrink-0 text-burgundy" />
+                <div className="mt-4 flex items-center gap-2 text-xs text-moonlight/80">
+                  <MapPin className="h-4 w-4 shrink-0 text-gold" />
                   <span className="break-words">{contactInfo.address}</span>
                 </div>
               </div>
@@ -360,7 +360,7 @@ export default function ContactPage() {
                 href={directionsHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-white px-6 py-3.5 text-xs font-medium uppercase tracking-wider text-charcoal transition-colors hover:bg-burgundy hover:text-white"
+                className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-moonlight px-6 py-3.5 text-xs font-medium uppercase tracking-wider text-burgundy-dark transition-colors hover:bg-gold hover:text-burgundy-dark"
               >
                 <Navigation className="h-4 w-4" />
                 Get Directions
