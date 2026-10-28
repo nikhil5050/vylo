@@ -35,6 +35,10 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  // Renders <meta name="facebook-domain-verification" content="…"> in <head>.
+  verification: {
+    other: { "facebook-domain-verification": "qz2ea7rowqd1y65eflcztucmnyowgc" },
+  },
   // Pages built with buildMetadata set this themselves; this covers any route
   // that doesn't (e.g. not-found) while the site is gated.
   ...(isComingSoon ? { robots: { index: false, follow: false } } : {}),
