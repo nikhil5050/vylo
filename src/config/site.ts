@@ -7,6 +7,9 @@ export const siteConfig = {
     "Discover contemporary silver jewellery designed with intention. Explore distinctive rings, necklaces, earrings, bracelets, anklets and ear cuffs created for everyday expression.",
   announcement: "CRAFTED WITH PRECISION • DESIGNED WITHOUT COMPROMISE",
   founder: "Akash Kapile",
+  // Shown in the footer under the brand description.
+  hallmarkCertificate: "HM/C-7591236422",
+  gstin: "27AAMCV4663R1Z9",
   // TODO(client): legalName — the registered business name, for Organization JSON-LD.
 };
 

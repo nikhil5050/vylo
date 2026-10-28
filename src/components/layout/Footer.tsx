@@ -8,6 +8,7 @@ import {
   XIcon,
 } from "@/components/icons/Icons";
 import { Container } from "@/components/ui/Container";
+import { contactInfo } from "@/config/contact";
 import { footerNav, type NavItem } from "@/config/navigation";
 import { siteConfig, socialLinks } from "@/config/site";
 import { Logo1 } from "./logo1";
@@ -34,6 +35,32 @@ export function Footer() {
         <div className="col-span-2 flex flex-col gap-4">
           <Logo1 className="text-ivory" />
           <p className="max-w-xs text-sm text-ivory/70">{siteConfig.description}</p>
+          <dl className="flex flex-col gap-1 text-xs text-ivory/70">
+            <div className="flex gap-1.5">
+              <dt className="font-semibold text-ivory">Hallmark Certificate No.:</dt>
+              <dd>{siteConfig.hallmarkCertificate}</dd>
+            </div>
+            <div className="flex gap-1.5">
+              <dt className="font-semibold text-ivory">GSTIN:</dt>
+              <dd>{siteConfig.gstin}</dd>
+            </div>
+            <div className="flex gap-1.5">
+              <dt className="font-semibold text-ivory">Support:</dt>
+              <dd>
+                <a href={`mailto:${contactInfo.email}`} className="transition-colors hover:text-champagne">
+                  {contactInfo.email}
+                </a>
+              </dd>
+            </div>
+            <div className="flex gap-1.5">
+              <dt className="font-semibold text-ivory">Phone:</dt>
+              <dd>
+                <a href={`tel:${contactInfo.phone.replace(/\s/g, "")}`} className="transition-colors hover:text-champagne">
+                  {contactInfo.phone}
+                </a>
+              </dd>
+            </div>
+          </dl>
           <div className="mt-2 flex items-center gap-4">
             <a href={socialLinks.instagram} aria-label="Instagram" className="text-ivory/70 transition-colors hover:text-champagne">
               <InstagramIcon />
