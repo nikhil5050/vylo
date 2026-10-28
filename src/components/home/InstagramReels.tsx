@@ -94,7 +94,7 @@ export function InstagramReels() {
           >
             <span className="rounded-full bg-gradient-to-tr from-gold via-cherry to-gold p-[2px] transition-transform duration-500 group-hover:rotate-180">
               <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white">
-                <Image src="/logo/logo.png" alt="" width={28} height={28} className="h-7 w-7 object-contain" />
+                <Image src="/logo/logo-160.webp" alt="" width={28} height={28} className="h-7 w-7 object-contain" />
               </span>
             </span>
             <span className="text-left">

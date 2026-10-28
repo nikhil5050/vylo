@@ -614,7 +614,7 @@ A minimalist necklace from Vylore isn't undecorated because decoration was skipp
               className="relative overflow-hidden border border-charcoal/10 bg-white p-6 text-charcoal sm:p-10 lg:p-12"
             >
               <Image
-                src="/logo/logo.png"
+                src="/logo/logo-640.webp"
                 alt="vylore logo"
                 aria-hidden="true"
                 width={480}

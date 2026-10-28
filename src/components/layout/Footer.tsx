@@ -23,7 +23,7 @@ export function Footer() {
     // further room to scroll into view. That nav is lg:hidden, hence lg:pb-0.
     <footer className="relative overflow-hidden bg-burgundy-dark text-ivory pb-24 lg:pb-0">
       <Image
-        src="/logo/logo1.png"
+        src="/logo/logo1-832.webp"
         alt=""
         aria-hidden="true"
         width={480}

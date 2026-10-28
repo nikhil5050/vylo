@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CustomCursor } from "@/components/ui/CustomCursor";
@@ -18,6 +18,18 @@ export function SiteChrome({ children, comingSoon }: { children: ReactNode; comi
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith("/admin");
   const isComingSoonRoot = comingSoon && pathname === "/";
+
+  // The route fade only runs after a client-side navigation, never on the
+  // first page load: fading the server-rendered page in from opacity 0 held
+  // back the hero photo (the mobile LCP element) from counting as painted
+  // until the fade finished, which Lighthouse then chained behind all the
+  // hydration JS. Set during render (React's "store info from previous
+  // renders" pattern) so the very first frame of a new route already has
+  // the class, with no flash of unfaded content.
+  const [initialPathname] = useState(pathname);
+  const [hasNavigated, setHasNavigated] = useState(false);
+  if (!hasNavigated && pathname !== initialPathname) setHasNavigated(true);
+  const fadeIn = hasNavigated || pathname !== initialPathname;
 
   if (isAdmin || isComingSoonRoot) {
     return <>{children}</>;
@@ -39,7 +51,7 @@ export function SiteChrome({ children, comingSoon }: { children: ReactNode; comi
           forward, tab hidden mid-navigation) left this wrapper stuck at
           opacity 0 — the new page fully rendered but invisible until a
           refresh. A CSS animation always settles on the visible end state. */}
-      <div key={pathname} id="main-content" className="page-enter flex flex-1 flex-col">
+      <div key={pathname} id="main-content" className={`${fadeIn ? "page-enter " : ""}flex flex-1 flex-col`}>
         {children}
       </div>
       <Footer />

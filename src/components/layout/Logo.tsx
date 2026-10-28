@@ -12,12 +12,12 @@ export function Logo({ size = "md", className }: LogoProps) {
   return (
     <>
       <Image
-        src="/logo/logo.png"
+        src="/logo/logo-160.webp"
         alt="Vylore"
         width={logoSize}
         height={logoSize}
         className={cn("select-none", className)}
-        priority
+        loading="eager"
       />
     </>
     

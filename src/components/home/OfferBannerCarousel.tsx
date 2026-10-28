@@ -78,7 +78,9 @@ export function OfferBannerCarousel({ banners }: { banners: Banner[] }) {
         alt={banner.title ?? "Offer"}
         fit="contain"
         sizes={BANNER_SIZES}
-        priority={index === 0}
+        // Not `priority`: the banner sits below the full-height hero, so a
+        // high-priority preload only competed with the hero photo (the LCP).
+        // Lazy-loading still fetches it well before it scrolls into view.
       />
     </div>
   );

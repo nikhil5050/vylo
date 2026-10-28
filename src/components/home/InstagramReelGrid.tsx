@@ -30,7 +30,7 @@ export interface Reel {
 // don't all download and decode at once. Reduced-motion visitors get the
 // poster frame instead; `paused` holds it while the lightbox is playing.
 // The story-style bar is updated straight from timeupdate (no re-render).
-function ReelPreview({ reel, paused }: { reel: Reel; paused: boolean }) {
+function ReelPreview({ reel, paused, showPoster }: { reel: Reel; paused: boolean; showPoster: boolean }) {
   const ref = useRef<HTMLVideoElement>(null);
   const barRef = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { amount: 0.5 });
@@ -54,7 +54,7 @@ function ReelPreview({ reel, paused }: { reel: Reel; paused: boolean }) {
       <video
         ref={ref}
         src={reel.previewSrc}
-        poster={reel.poster}
+        poster={showPoster ? reel.poster : undefined}
         muted
         loop
         playsInline
@@ -75,7 +75,17 @@ function ReelPreview({ reel, paused }: { reel: Reel; paused: boolean }) {
 
 // Card with a gentle 3D tilt toward a mouse pointer (never on touch, never
 // for reduced motion) and a glowing gold ring on hover.
-function ReelCard({ reel, paused, onOpen }: { reel: Reel; paused: boolean; onOpen: () => void }) {
+function ReelCard({
+  reel,
+  paused,
+  showPoster,
+  onOpen,
+}: {
+  reel: Reel;
+  paused: boolean;
+  showPoster: boolean;
+  onOpen: () => void;
+}) {
   const reduceMotion = useReducedMotion();
   const rotateX = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
   const rotateY = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
@@ -104,7 +114,7 @@ function ReelCard({ reel, paused, onOpen }: { reel: Reel; paused: boolean; onOpe
         className="group relative block aspect-[9/16] w-full rounded-[1.75rem] bg-gradient-to-br from-white/15 via-white/5 to-white/10 p-[1.5px] text-left shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] transition-[background,box-shadow] duration-500 hover:from-gold hover:via-cherry hover:to-gold hover:shadow-[0_40px_80px_-30px_rgba(176,141,87,0.55)] focus-visible:outline-none focus-visible:from-gold focus-visible:to-gold"
       >
         <span className="relative block h-full w-full overflow-hidden rounded-[calc(1.75rem-1.5px)] bg-black/40">
-          <ReelPreview reel={reel} paused={paused} />
+          <ReelPreview reel={reel} paused={paused} showPoster={showPoster} />
 
           <span
             aria-hidden="true"
@@ -209,12 +219,22 @@ function ReelLightbox({ reel, onClose }: { reel: Reel | null; onClose: () => voi
 export function InstagramReelGrid({ reels }: { reels: Reel[] }) {
   const [active, setActive] = useState<Reel | null>(null);
   const close = useCallback(() => setActive(null), []);
+  // A <video>'s `poster` downloads as soon as it's in the DOM, even with
+  // preload="none" — four full-size (~1080×1920) frames that ImageKit can't
+  // resize, fetched on page load for a section far below the fold. Attach
+  // them once the row is within a screen of the viewport (all at once, so
+  // cards further along the mobile swipe row aren't blank when swiped to).
+  const listRef = useRef<HTMLUListElement>(null);
+  const showPosters = useInView(listRef, { once: true, margin: "100% 0px" });
 
   return (
     <>
       {/* Phones/tablets: a swipeable row. Desktop: four columns, the even
           ones dropped lower for a staggered editorial rhythm. */}
-      <ul className="no-scrollbar -mx-4 mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-4">
+      <ul
+        ref={listRef}
+        className="no-scrollbar -mx-4 mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-4"
+      >
         {reels.map((reel, index) => (
           <motion.li
             key={reel.id}
@@ -227,7 +247,12 @@ export function InstagramReelGrid({ reels }: { reels: Reel[] }) {
               index % 2 === 1 && "lg:mt-16",
             )}
           >
-            <ReelCard reel={reel} paused={active !== null} onOpen={() => setActive(reel)} />
+            <ReelCard
+              reel={reel}
+              paused={active !== null}
+              showPoster={showPosters}
+              onOpen={() => setActive(reel)}
+            />
           </motion.li>
         ))}
       </ul>

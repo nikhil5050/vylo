@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Award, Fingerprint, Gem, Truck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { FadeIn } from "@/components/ui/FadeIn";
 
 const features = [
   {
@@ -45,7 +44,8 @@ export function Hero() {
       <picture>
         <source
           media="(max-width: 1023px)"
-          srcSet={HERO_BG_MOBILE}
+          srcSet={`${HERO_BG_MOBILE}&tr=w-480 480w, ${HERO_BG_MOBILE}&tr=w-640 640w, ${HERO_BG_MOBILE}&tr=w-750 750w, ${HERO_BG_MOBILE} 900w`}
+          sizes="100vw"
           width={900}
           height={1600}
         />
@@ -73,7 +73,11 @@ export function Hero() {
           image appeared to zoom. svh stays fixed while scrolling. */}
       <Container className="flex min-h-[100svh] lg:min-h-[100dvh] flex-col justify-between gap-10 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-24 lg:justify-center lg:gap-14 lg:pb-8 lg:pt-28">
         {/* --- Copy --- */}
-        <FadeIn className="relative z-10 max-w-xl lg:max-w-[56%] xl:max-w-[50%]">
+        {/* CSS fade-up (.hero-rise in globals.css) instead of <FadeIn>: the
+            framer-motion version server-renders at opacity 0 and stays hidden
+            until the page's JS hydrates, which on a slow phone left the
+            headline invisible for seconds. This plays from the first paint. */}
+        <div className="hero-rise relative z-10 max-w-xl lg:max-w-[56%] xl:max-w-[50%]">
           <div className="flex items-center gap-4">
             <span className="h-px w-12 bg-gold" />
             <p className="text-[11px] font-medium uppercase tracking-[0.32em] text-white/85 sm:text-xs">
@@ -122,10 +126,10 @@ export function Hero() {
             <span className="h-3 w-3 rounded-full border border-white/70" />
             <span className="ml-3 hidden h-px w-32 bg-white/30 lg:block" />
           </div>
-        </FadeIn>
+        </div>
 
         {/* --- Features --- */}
-        <FadeIn delay={0.2}>
+        <div className="hero-rise [animation-delay:200ms]">
           {/* Four columns at every size; desktop sets icon and text side by side. */}
           <ul className="grid grid-cols-4 divide-x divide-white/15 lg:border-t lg:border-white/15 lg:pt-7">
             {features.map(({ icon: Icon, title, text, href }) => (
@@ -149,7 +153,7 @@ export function Hero() {
               </li>
             ))}
           </ul>
-        </FadeIn>
+        </div>
       </Container>
     </section>
   );
