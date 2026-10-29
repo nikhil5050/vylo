@@ -19,7 +19,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const shopPosters = {
-  top: "https://ik.imagekit.io/vyloreimgs/vylore/banners/2.webp",
+  top: "https://ik.imagekit.io/vyloreimgs/vylore/banners/topbanner.jpeg",
   bottom: "https://ik.imagekit.io/vyloreimgs/vylore/banners/posterbottom.png",
 };
 
@@ -93,9 +93,9 @@ export default async function ShopPage() {
   };
 
   return (
-    // Pulled up by the header's height (h-16 / lg:h-20) so the moonlight
+    // Pulled up by the header's height (h-16 / lg:h-20) so the white
     // background also fills the transparent header bar; padding adds it back.
-    <main className="-mt-16 flex flex-1 flex-col bg-moonlight pb-0 pt-32 lg:-mt-20 lg:pt-44">
+    <main className="-mt-16 flex flex-1 flex-col bg-white pb-0 pt-32 lg:-mt-20 lg:pt-44">
       {products.length > 0 && <JsonLd data={itemListJsonLd} />}
       {shopFaqs.length > 0 && <JsonLd data={shopFaqJsonLd} />}
 
@@ -172,21 +172,6 @@ function ShopIntro({ categories }: { categories: Category[] }) {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 mx-auto h-64 max-w-3xl -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(201,164,108,0.18),transparent_70%)]"
       />
-      {/* Mirrored floral line art in the empty space either side; only from
-          xl, where there's room beside the one-line heading. */}
-      {(["left", "right"] as const).map((side) => (
-        <Image
-          key={side}
-          src="/images/decor/shop-intro-sprig.svg"
-          alt=""
-          aria-hidden
-          width={260}
-          height={300}
-          className={`pointer-events-none absolute top-[62%] hidden h-auto w-[clamp(160px,13vw,210px)] -translate-y-1/2 select-none opacity-40 xl:block ${
-            side === "left" ? "left-0" : "right-0 -scale-x-100"
-          }`}
-        />
-      ))}
 
       <div className="relative mx-auto max-w-4xl">
         <p className="eyebrow flex items-center justify-center gap-3 text-xs text-gold">

@@ -25,7 +25,7 @@ const priceBands: PriceBand[] = [
 ];
 
 // Custom-drawn controls in the brand palette: the native white boxes clashed
-// with the shop's moonlight background. The real <input> stays in place
+// with the shop's page background. The real <input> stays in place
 // (keyboard, screen readers, form semantics); only its look is replaced.
 const optionLabel =
   "group flex cursor-pointer items-center gap-3 py-1 text-sm text-charcoal transition-colors hover:text-burgundy has-checked:font-medium has-checked:text-burgundy";
