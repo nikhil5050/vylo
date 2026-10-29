@@ -15,7 +15,7 @@ export interface ShopCategoryGuide {
 
 export const shopIntro = {
   heading: "Shop Sterling Silver Jewellery for Women",
-  body: "Explore Vylore's complete collection of contemporary 925 sterling silver jewellery — rings, necklaces, earrings, bracelets and anklets designed for everyday wear, gifting and the occasions in between. Filter by category or theme, compare designs and order online with secure checkout and delivery across India.",
+  body: "Explore Vylore's complete collection of contemporary 925 sterling silver jewellery — rings, necklaces, earrings and bracelets designed for everyday wear, gifting and the occasions in between. Filter by category or theme, compare designs and order online with secure checkout and delivery across India.",
 };
 
 export const shopCategoryGuides: ShopCategoryGuide[] = [
