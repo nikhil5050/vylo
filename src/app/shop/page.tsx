@@ -101,8 +101,11 @@ export default async function ShopPage() {
 
       <Container>
         <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Shop" }]} />
-        <ShopPoster position="top" className="mt-6" />
-        <ShopIntro categories={categories} />
+        {/* Burgundy panel framing the top poster and the intro. */}
+        <div className="mt-6 bg-burgundy p-3 sm:p-4">
+          <ShopPoster position="top" />
+          <ShopIntro categories={categories} />
+        </div>
 
         <div id="shop-products" className="mt-10 mb-0">
           {/* Keeps the outline h1 → h2 → h3 (product cards) without a visible heading. */}
@@ -123,12 +126,12 @@ export default async function ShopPage() {
 function ShopPoster({ position, className = "" }: { position: "top" | "bottom"; className?: string }) {
   return (
     <section
-      className={`${position === "top" ? "mb-10" : "mt-16"} ${className}`}
+      className={`${position === "bottom" ? "mt-16" : ""} ${className}`}
       aria-label={`Vylore jewellery collection ${position} poster`}
     >
       <Link href={position === "top" ? "#shop-products" : "/contact"}>
         <div
-          className={`relative w-full overflow-hidden bg-charcoal ${
+          className={`relative w-full overflow-hidden ${position === "top" ? "bg-burgundy" : "bg-charcoal"} ${
             // posterbottom.png is a wide 2048x768 banner — a fixed height on
             // mobile (the old "h-[360px]") forced object-cover to crop most
             // of it away. Sizing by its own aspect ratio below `sm` shows the
@@ -163,11 +166,11 @@ function ShopIntro({ categories }: { categories: Category[] }) {
   const heading = shopIntro.heading.replace(/ (\S+)$/, "\u00a0$1");
 
   return (
-    <header className="relative isolate mx-auto py-8 text-center sm:py-12">
-      {/* Soft champagne glow behind the heading. */}
+    <header className="relative isolate mx-auto px-3 py-8 text-center sm:py-12">
+      {/* Soft champagne glow behind the heading, on the burgundy panel. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 mx-auto h-64 max-w-3xl -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(201,164,108,0.14),transparent_70%)]"
+        className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 mx-auto h-64 max-w-3xl -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(201,164,108,0.18),transparent_70%)]"
       />
       {/* Mirrored floral line art in the empty space either side; only from
           xl, where there's room beside the one-line heading. */}
@@ -179,19 +182,19 @@ function ShopIntro({ categories }: { categories: Category[] }) {
           aria-hidden
           width={260}
           height={300}
-          className={`pointer-events-none absolute top-[62%] hidden h-auto w-[clamp(160px,13vw,210px)] -translate-y-1/2 select-none opacity-60 xl:block ${
+          className={`pointer-events-none absolute top-[62%] hidden h-auto w-[clamp(160px,13vw,210px)] -translate-y-1/2 select-none opacity-40 xl:block ${
             side === "left" ? "left-0" : "right-0 -scale-x-100"
           }`}
         />
       ))}
 
       <div className="relative mx-auto max-w-4xl">
-        <p className="eyebrow flex items-center justify-center gap-3 text-xs text-burgundy">
+        <p className="eyebrow flex items-center justify-center gap-3 text-xs text-gold">
           <span aria-hidden className="h-px w-10 bg-gradient-to-r from-transparent to-gold sm:w-16" />
           The Vylore Collection
           <span aria-hidden className="h-px w-10 bg-gradient-to-l from-transparent to-gold sm:w-16" />
         </p>
-        <h1 className="mt-4 font-serif text-3xl leading-tight text-[#680307] sm:text-4xl lg:whitespace-nowrap lg:text-[2.6rem] xl:text-5xl">
+        <h1 className="mt-4 font-serif text-3xl leading-tight text-ivory sm:text-4xl lg:whitespace-nowrap lg:text-[2.6rem] xl:text-5xl">
           {heading}
         </h1>
         {/* Gold hairline divider with a centre sparkle. */}
@@ -202,14 +205,14 @@ function ShopIntro({ categories }: { categories: Category[] }) {
           </svg>
           <span className="h-px flex-1 bg-gradient-to-l from-transparent to-gold/70" />
         </div>
-        <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">{shopIntro.body}</p>
+        <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-ivory/80 sm:text-base">{shopIntro.body}</p>
         {live.length > 0 && (
           <nav aria-label="Shop by category" className="mt-7 flex flex-wrap justify-center gap-2 sm:gap-3">
             {live.map((guide) => (
               <Link
                 key={guide.slug}
                 href={`/category/${guide.slug}`}
-                className="rounded-full border border-gold/40 bg-white/80 px-4 py-2 text-xs tracking-wide text-charcoal shadow-[0_1px_2px_rgba(104,3,7,0.06)] transition-colors duration-300 hover:border-burgundy hover:bg-burgundy hover:text-ivory sm:px-5 sm:text-[13px]"
+                className="rounded-full border border-gold/50 bg-white/10 px-4 py-2 text-xs tracking-wide text-ivory transition-colors duration-300 hover:border-ivory hover:bg-ivory hover:text-burgundy sm:px-5 sm:text-[13px]"
               >
                 Silver {guide.name}
               </Link>
