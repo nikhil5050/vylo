@@ -25,13 +25,17 @@ function mapCategory(category: BackendCategory): Category {
   };
 }
 
-// Small, mostly-static list — one request covers every category, cached for
-// the life of the server process (or the page load, on the client) rather
-// than re-fetched on every call site.
+// Small, mostly-static list — one request covers every category, shared by
+// every call site rather than re-fetched each time. Expires after a minute
+// (matching the pages' revalidate) so a category switched off or added in
+// the admin shows up without a server restart.
+const CATEGORIES_TTL_MS = 60_000;
 let categoriesPromise: Promise<Category[]> | null = null;
+let categoriesFetchedAt = 0;
 
 export async function getCategories(): Promise<Category[]> {
-  if (!categoriesPromise) {
+  if (!categoriesPromise || Date.now() - categoriesFetchedAt > CATEGORIES_TTL_MS) {
+    categoriesFetchedAt = Date.now();
     categoriesPromise = apiFetch<BackendCategory[] | BackendCategoryResponse>("/categories", { auth: false })
       .then((response) => (Array.isArray(response) ? response : response.value).map(mapCategory))
       .catch((error) => {

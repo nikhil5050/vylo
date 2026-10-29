@@ -10,12 +10,14 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
   if (categories.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-2 justify-items-center gap-3 sm:grid-cols-3 md:gap-3 lg:grid-cols-6 lg:gap-4">
+    // Flex-wrap rather than a grid so a part-filled last row (or fewer than
+    // six categories on desktop) sits centred instead of hugging the left.
+    <div className="flex flex-wrap justify-center gap-3 lg:gap-4">
       {categories.map((category) => (
         <Link
           key={category.id}
           href={`/category/${category.slug}`}
-          className="group relative block aspect-[3/4] w-full max-w-48 overflow-hidden bg-charcoal"
+          className="group relative block aspect-[3/4] w-[calc((100%-0.75rem)/2)] max-w-48 overflow-hidden bg-charcoal sm:w-[calc((100%-1.5rem)/3)] lg:w-[calc((100%-5rem)/6)]"
         >
           <ProductThumbnail
             src={category.imageUrl}
