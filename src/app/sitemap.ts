@@ -3,6 +3,7 @@ import { absoluteUrl } from "@/config/site";
 import { getCategories } from "@/services/category.service";
 import { getAllProducts } from "@/services/product.service";
 import { blogPosts } from "@/content/blog";
+import { absoluteImageUrl } from "@/content/blog/images";
 
 // Regenerated at most once an hour (ISR) instead of once per deploy, so
 // products/categories added or removed in the admin reach the sitemap without
@@ -48,7 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogRoutes = blogPosts.map((post) => ({
     url: absoluteUrl(`/blog/${post.slug}`),
     lastModified: new Date(post.dateModified ?? post.datePublished),
-    images: [xmlEscape(post.cover.src)],
+    images: [xmlEscape(absoluteImageUrl(post.cover.src))],
   }));
 
   // One entry per URL — a duplicate slug in the catalog would otherwise list

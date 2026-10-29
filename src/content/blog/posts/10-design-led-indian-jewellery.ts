@@ -22,7 +22,7 @@ export const post: BlogPost = {
   ],
   datePublished: "2026-10-13",
   cover: {
-    src: pexels(17611594),
+    src: "/blogs/10.webp",
     alt: "Indian woman wearing silver jewellery, representing a design-led Indian jewellery approach",
   },
   inlineImage: {

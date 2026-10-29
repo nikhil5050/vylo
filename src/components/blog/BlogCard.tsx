@@ -24,7 +24,7 @@ export function BlogCard({
         featured && "lg:grid lg:grid-cols-[1.25fr_1fr]",
       )}
     >
-      <div className={cn("relative overflow-hidden bg-moonlight", featured ? "aspect-[16/10] lg:aspect-auto lg:min-h-[26rem]" : "aspect-[4/3]")}>
+      <div className={cn("relative aspect-video overflow-hidden bg-moonlight", featured && "lg:self-center")}>
         <Image
           src={resizePexels(post.cover.src, featured ? 1400 : 800)}
           alt={post.cover.alt}

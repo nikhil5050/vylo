@@ -21,7 +21,7 @@ export const post: BlogPost = {
   ],
   datePublished: "2026-10-13",
   cover: {
-    src: pexels(16242338),
+    src: "/blogs/2.webp",
     alt: "Close-up of 925 sterling silver jewellery showing its surface and finish",
   },
   inlineImage: {

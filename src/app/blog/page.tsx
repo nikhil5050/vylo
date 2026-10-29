@@ -6,6 +6,7 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
 import { absoluteUrl, organizationId } from "@/config/site";
 import { blogPosts } from "@/content/blog";
+import { absoluteImageUrl } from "@/content/blog/images";
 import { buildMetadata } from "@/utils/metadata";
 
 export const metadata: Metadata = buildMetadata({
@@ -28,7 +29,7 @@ const blogJsonLd = {
     headline: post.title,
     description: post.metaDescription,
     url: absoluteUrl(`/blog/${post.slug}`),
-    image: post.cover.src,
+    image: absoluteImageUrl(post.cover.src),
     datePublished: post.datePublished,
     dateModified: post.dateModified ?? post.datePublished,
   })),

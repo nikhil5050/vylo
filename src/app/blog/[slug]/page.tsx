@@ -17,6 +17,7 @@ import {
   getTableOfContents,
   readingTimeMinutes,
 } from "@/content/blog";
+import { absoluteImageUrl, isBannerCover } from "@/content/blog/images";
 import { buildMetadata } from "@/utils/metadata";
 
 // Every article is known at build time; anything else is a real 404.
@@ -55,6 +56,7 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
   const toc = getTableOfContents(post);
   const related = getRelatedPosts(post);
   const minutes = readingTimeMinutes(post);
+  const bannerCover = isBannerCover(post.cover.src);
 
   // BlogPosting is schema.org's Article subtype for blog content; Google reads
   // it as an Article.
@@ -63,7 +65,7 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
     "@type": "BlogPosting",
     headline: post.title,
     description: post.metaDescription,
-    image: [post.cover.src],
+    image: [absoluteImageUrl(post.cover.src)],
     datePublished: post.datePublished,
     dateModified: post.dateModified ?? post.datePublished,
     articleSection: post.category,
@@ -119,7 +121,7 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
 
         <Container className="max-w-6xl">
           <figure className="relative -mt-0 overflow-hidden rounded-b-3xl sm:rounded-3xl sm:mt-8">
-            <div className="relative aspect-[16/10] sm:aspect-[16/8]">
+            <div className={bannerCover ? "relative aspect-video" : "relative aspect-[16/10] sm:aspect-[16/8]"}>
               <Image
                 src={post.cover.src}
                 alt={post.cover.alt}
@@ -128,13 +130,17 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
                 sizes="(min-width: 1152px) 1152px, 100vw"
                 className="object-cover"
               />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent"
-              />
-              <p className="absolute right-6 bottom-6 left-6 max-w-xl font-serif text-2xl leading-tight text-white sm:right-10 sm:bottom-10 sm:left-10 sm:text-4xl">
-                {post.coverHeadline}
-              </p>
+              {!bannerCover && (
+                <>
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent"
+                  />
+                  <p className="absolute right-6 bottom-6 left-6 max-w-xl font-serif text-2xl leading-tight text-white sm:right-10 sm:bottom-10 sm:left-10 sm:text-4xl">
+                    {post.coverHeadline}
+                  </p>
+                </>
+              )}
             </div>
           </figure>
         </Container>

@@ -22,7 +22,7 @@ export const post: BlogPost = {
   ],
   datePublished: "2026-10-13",
   cover: {
-    src: pexels(8093082),
+    src: "/blogs/4.webp",
     alt: "Vylore silver earrings showcasing contemporary minimalist and statement designs",
   },
   inlineImage: {

@@ -22,7 +22,7 @@ export const post: BlogPost = {
   ],
   datePublished: "2026-10-13",
   cover: {
-    src: pexels(1050312),
+    src: "/blogs/3.webp",
     alt: "Jewellery designer sketching contemporary silver jewellery designs on paper",
   },
   inlineImage: {

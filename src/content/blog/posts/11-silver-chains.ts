@@ -21,7 +21,7 @@ export const post: BlogPost = {
   ],
   datePublished: "2026-10-13",
   cover: {
-    src: pexels(16124724),
+    src: "/blogs/11.webp",
     alt: "Close-up of a silver chain showing its link structure and design",
   },
   inlineImage: {

@@ -22,7 +22,7 @@ export const post: BlogPost = {
   ],
   datePublished: "2026-10-13",
   cover: {
-    src: pexels(16304539),
+    src: "/blogs/6.webp",
     alt: "Vylore silver bracelet worn on the wrist in a contemporary design",
   },
   inlineImage: {

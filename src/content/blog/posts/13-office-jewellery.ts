@@ -22,7 +22,7 @@ export const post: BlogPost = {
   ],
   datePublished: "2026-10-13",
   cover: {
-    src: pexels(8485714),
+    src: "/blogs/13.webp",
     alt: "Professional woman in a white blazer at a modern office, styled with silver jewellery",
   },
   inlineImage: {

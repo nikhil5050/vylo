@@ -22,7 +22,7 @@ export const post: BlogPost = {
   ],
   datePublished: "2026-10-13",
   cover: {
-    src: pexels(10474303),
+    src: "/blogs/12.webp",
     alt: "Silver jewellery presented in a gift box as a meaningful gift for a special occasion",
   },
   inlineImage: {
