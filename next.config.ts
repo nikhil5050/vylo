@@ -47,6 +47,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/ring-size-checker", destination: "/contact/", permanent: true },
+      // Anklets are discontinued and the category was removed, so its page
+      // 404s. Send old links and search results to the full shop instead.
+      { source: "/category/anklets", destination: "/shop/", permanent: true },
     ];
   },
   async headers() {

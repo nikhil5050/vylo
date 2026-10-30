@@ -84,7 +84,7 @@ In a 925 silver anklet design, material and form work together. Link thickness, 
 
 For Vylore, reimagining begins with design thinking rather than novelty for its own sake. The ankle creates a moving frame, so silhouette and spacing matter as much as decoration. A detail must make sense close up, then remain balanced when seen with an entire outfit.
 
-This design-led approach connects the brand’s family jewellery knowledge with a contemporary point of view. Precision supports clean connections and deliberate proportions; wearability considers movement; individuality leaves room for restraint or stronger expression. See [Vylore silver anklets](/category/anklets/).
+This design-led approach connects the brand’s family jewellery knowledge with a contemporary point of view. Precision supports clean connections and deliberate proportions; wearability considers movement; individuality leaves room for restraint or stronger expression. See [Vylore silver anklets](/shop/).
 
 The result is a direction for contemporary jewelry that remains aware of Indian visual culture without copying a historical object. Familiarity becomes a starting point. Form, finish and styling determine what comes next.
 
@@ -154,6 +154,6 @@ The anklet remains relevant because it can hold cultural memory and respond to a
   cta: {
     text: "Explore Vylore’s silver anklets and discover contemporary designs created for modern personal expression.",
     label: "Shop anklets",
-    href: "/category/anklets",
+    href: "/shop",
   },
 };

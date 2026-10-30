@@ -91,7 +91,7 @@ Earrings can alter the balance of a look. The category may include refined forms
 
 ### Anklets
 
-Anklets have a familiar place in Indian jewellery and modern styling. A silver anklet may use clean links, engineered details or more expressive forms. Browse [modern anklets](/category/anklets/).
+Anklets have a familiar place in Indian jewellery and modern styling. A silver anklet may use clean links, engineered details or more expressive forms. Browse [modern anklets](/shop/).
 
 ### Watches and Kambar Patta
 
