@@ -147,7 +147,7 @@ function ShopPoster({ position, className = "" }: { position: "top" | "bottom"; 
             fill
             priority={position === "top"}
             sizes="100vw"
-            className="object-cover object-center"
+            className={`object-cover ${position === "top" ? "object-bottom" : "object-center"}`}
           />
         </div>
       </Link>
