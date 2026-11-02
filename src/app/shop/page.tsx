@@ -138,7 +138,7 @@ function ShopPoster({ position, className = "" }: { position: "top" | "bottom"; 
             // full banner instead; the fixed height takes back over from
             // `sm` up, where the viewport is wide enough for it to look
             // right without becoming absurdly tall.
-            position === "bottom" ? "aspect-[2048/768] sm:aspect-auto sm:h-[420px]" : "h-48 sm:h-64"
+            position === "bottom" ? "aspect-[2048/768] sm:aspect-auto sm:h-[420px]" : "aspect-[1600/534]"
           }`}
         >
           <Image
@@ -147,7 +147,7 @@ function ShopPoster({ position, className = "" }: { position: "top" | "bottom"; 
             fill
             priority={position === "top"}
             sizes="100vw"
-            className={`object-cover ${position === "top" ? "origin-bottom scale-125 object-bottom" : "object-center"}`}
+            className="object-cover object-center"
           />
         </div>
       </Link>
