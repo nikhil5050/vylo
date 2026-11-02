@@ -19,7 +19,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const shopPosters = {
-  top: "https://ik.imagekit.io/vyloreimgs/vylore/banners/topbanner.jpeg",
+  top: "https://ik.imagekit.io/vyloreimgs/vylore/banners/shopbannertop.jpeg",
   bottom: "https://ik.imagekit.io/vyloreimgs/vylore/banners/posterbottom.png",
 };
 
@@ -49,7 +49,7 @@ const shopHighlights = [
   {
     title: "Shipped Across India",
     description:
-      "Orders are dispatched within 2–4 business days and can be tracked anytime from our Track Order page.",
+      "Orders are dispatched within 5–7 business days and can be tracked anytime from our Track Order page.",
   },
 ];
 
