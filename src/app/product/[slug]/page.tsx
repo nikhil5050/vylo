@@ -7,6 +7,7 @@ import { ProductReviews } from "@/components/product/ProductReviews";
 import { RelatedProducts } from "@/components/product/RelatedProducts";
 import { ScrollToTopOnOpen } from "@/components/product/ScrollToTopOnOpen";
 import { StickyMobileCta } from "@/components/product/StickyMobileCta";
+import { ViewContentTracker } from "@/components/product/ViewContentTracker";
 import { ShopFaqGrid } from "@/components/shop/ShopFaqGrid";
 import { Accordion, type AccordionItem } from "@/components/ui/Accordion";
 import { Container } from "@/components/ui/Container";
@@ -170,6 +171,12 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
   return (
     <main className="flex flex-1 flex-col pb-24 pt-16 lg:pb-0 lg:pt-24">
       <ScrollToTopOnOpen />
+      <ViewContentTracker
+        id={product.id}
+        name={product.name}
+        category={product.category}
+        price={Number(product.price)}
+      />
       {/* BreadcrumbList comes from the visible <Breadcrumb> in ProductInfo; a
           second copy here was emitting duplicate breadcrumb markup. */}
       <JsonLd data={[productJsonLd, faqJsonLd]} />
