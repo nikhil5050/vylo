@@ -5,7 +5,7 @@ import { buildMetadata } from "@/utils/metadata";
 
 export async function generateMetadata({
   params,
-}: PageProps<"/product/[slug]">): Promise<Metadata> {
+}: LayoutProps<"/product/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   // A backend outage here (getProductBySlug rethrows anything but a genuine
   // 404) shouldn't crash metadata generation — falling back to default

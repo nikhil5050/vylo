@@ -4,7 +4,7 @@ import { buildMetadata } from "@/utils/metadata";
 
 export async function generateMetadata({
   params,
-}: PageProps<"/cart/shared/[token]">): Promise<Metadata> {
+}: LayoutProps<"/cart/shared/[token]">): Promise<Metadata> {
   const { token } = await params;
   return buildMetadata({
     title: "Shared Bag",

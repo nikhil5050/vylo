@@ -5,7 +5,7 @@ import { buildMetadata } from "@/utils/metadata";
 
 export async function generateMetadata({
   params,
-}: PageProps<"/category/[slug]">): Promise<Metadata> {
+}: LayoutProps<"/category/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   // getCategoryBySlug's underlying getCategories() call is unguarded, so a
   // backend outage here would otherwise crash metadata generation and take
