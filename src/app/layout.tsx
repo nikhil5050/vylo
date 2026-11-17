@@ -37,7 +37,10 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   // Renders <meta name="facebook-domain-verification" content="…"> in <head>.
   verification: {
-    other: { "facebook-domain-verification": "qz2ea7rowqd1y65eflcztucmnyowgc" },
+    other: {
+      "facebook-domain-verification": "qz2ea7rowqd1y65eflcztucmnyowgc",
+      "p:domain_verify": "d919c62d46359fe051012dc38b61abaf",
+    },
   },
   // Pages built with buildMetadata set this themselves; this covers any route
   // that doesn't (e.g. not-found) while the site is gated.
