@@ -10,6 +10,7 @@ import { Container } from "@/components/ui/Container";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { confirmExpressOrder } from "@/services/express-checkout.service";
 import { getOrderByNumber } from "@/services/order.service";
+import { useAuthStore } from "@/store/auth.store";
 import { useCartStore } from "@/store/cart.store";
 import type { Order } from "@/types/order";
 import { cn } from "@/utils/cn";
@@ -72,8 +73,16 @@ function ExpressOrderConfirmationContent({ oid }: { oid: string }) {
         if (result?.order_number && (result.state === "created" || result.state === "existing")) {
           clearCart();
           // shows the full summary when the order belongs to the logged-in
-          // account; otherwise just the order number
-          const order = await getOrderByNumber(result.order_number);
+          // account; otherwise just the order number. Only asked when logged
+          // in: apiFetch never resolves on a 401 (it hands off to the login
+          // redirect), which would leave this page loading forever. Capped too,
+          // in case a stored token has expired.
+          const order = useAuthStore.getState().token
+            ? await Promise.race([
+                getOrderByNumber(result.order_number),
+                new Promise<undefined>((resolve) => window.setTimeout(() => resolve(undefined), 5000)),
+              ])
+            : undefined;
           if (!cancelled) setView(order ? { kind: "order", order } : { kind: "placed", orderNumber: result.order_number });
           return;
         }
