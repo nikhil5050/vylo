@@ -14,7 +14,7 @@ import { ImagePlaceholder } from "@/components/admin/ImagePlaceholder";
 import { orderStatusTone, paymentStatusTone, shippingStatusTone } from "@/lib/admin/status";
 import { formatAdminDate, formatAdminDateTime } from "@/lib/admin/format";
 import { formatPrice } from "@/utils/formatPrice";
-import { bookOrderShipment, downloadOrderInvoice, updateOrderShipment } from "@/lib/admin/api";
+import { bookOrderShipment, downloadOrderInvoice, getShiprocketLabelUrl, updateOrderShipment } from "@/lib/admin/api";
 import { gstBreakdown, otherCharges } from "@/lib/gst";
 import type { AdminOrder, OrderShipment } from "@/types/admin";
 
@@ -34,6 +34,7 @@ export function OrderDetail({ order, shipment: initialShipment }: OrderDetailPro
   const [saving, setSaving] = useState(false);
   const [booking, setBooking] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [labelLoading, setLabelLoading] = useState(false);
 
   async function handleDownloadInvoice() {
     setDownloading(true);
@@ -57,11 +58,27 @@ export function OrderDetail({ order, shipment: initialShipment }: OrderDetailPro
         trackingNumber: updated.trackingNumber ?? "",
         trackingUrl: updated.trackingUrl ?? "",
       });
-      toast.success("Shipment booked with iCarry.");
+      toast.success(`Booked with Shiprocket — AWB ${updated.awbNumber ?? ""}`);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Couldn't book shipment with iCarry.");
+      toast.error(error instanceof Error ? error.message : "Couldn't book with Shiprocket.");
     } finally {
       setBooking(false);
+    }
+  }
+
+  async function openLabel() {
+    // opened before the request so the browser doesn't block it as a popup
+    const tab = window.open("", "_blank");
+    setLabelLoading(true);
+    try {
+      const url = await getShiprocketLabelUrl(order.id);
+      if (tab) tab.location.href = url;
+      else window.location.href = url;
+    } catch (error) {
+      tab?.close();
+      toast.error(error instanceof Error ? error.message : "Couldn't get the shipping label.");
+    } finally {
+      setLabelLoading(false);
     }
   }
 
@@ -243,14 +260,32 @@ export function OrderDetail({ order, shipment: initialShipment }: OrderDetailPro
                   {shipment.deliveredAt && <p>Delivered: {formatAdminDateTime(shipment.deliveredAt)}</p>}
                 </div>
               )}
-              {shipment?.status === "pending_manual" && (
+              {shipment?.status === "pending_manual" && !shipment.awbNumber && order.status !== "cancelled" && (
                 <div className="space-y-2 rounded-md border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900">
                   <p>
-                    Automatic iCarry booking failed for this order (e.g. low iCarry wallet balance). Fix the cause,
-                    then retry.
+                    Not booked for shipping yet. Booking picks the cheapest Shiprocket courier for this pincode,
+                    schedules pickup and creates the label (charged to the Shiprocket wallet).
                   </p>
                   <Button size="sm" variant="outline" className="w-full" onClick={bookShipment} disabled={booking}>
-                    {booking ? "Booking…" : "Book with iCarry"}
+                    {booking ? "Booking…" : "Book with Shiprocket"}
+                  </Button>
+                </div>
+              )}
+              {shipment?.provider === "shiprocket" && shipment.awbNumber && (
+                <div className="space-y-2 text-xs">
+                  <p className="text-muted-foreground">
+                    AWB <span className="font-medium text-foreground">{shipment.awbNumber}</span>
+                    {shipment.trackingUrl && (
+                      <>
+                        {" · "}
+                        <a href={shipment.trackingUrl} target="_blank" rel="noreferrer" className="underline">
+                          Track
+                        </a>
+                      </>
+                    )}
+                  </p>
+                  <Button size="sm" variant="outline" className="w-full" onClick={openLabel} disabled={labelLoading}>
+                    {labelLoading ? "Getting label…" : "Download Shipping Label"}
                   </Button>
                 </div>
               )}

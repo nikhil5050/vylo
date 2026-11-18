@@ -199,11 +199,15 @@ export async function updateOrderShipment(orderId: string, input: ShipmentUpdate
   };
 }
 
-// Retries the iCarry booking for a confirmed order whose automatic booking failed
-// (shipment left "pending_manual" — e.g. iCarry wallet below its reserve balance).
-// Errors carry iCarry's own reason, surfaced via the backend's 502 detail.
+// Books a confirmed order with Shiprocket (iCarry's API access is blocked): the
+// backend creates the Shiprocket order, picks the cheapest courier for the
+// pincode, schedules pickup and makes the label. Errors carry Shiprocket's own
+// reason (e.g. low wallet balance) via the backend's 502 detail; retrying after
+// fixing it is safe.
 export async function bookOrderShipment(orderId: string): Promise<OrderShipment> {
-  const shipment = await apiFetch<BackendShipment>(`/admin/orders/${orderId}/shipment/book`, { method: "POST" });
+  const shipment = await apiFetch<BackendShipment>(`/admin/orders/${orderId}/shipment/shiprocket/book`, {
+    method: "POST",
+  });
   return {
     provider: shipment.provider,
     status: shipment.status,
@@ -213,6 +217,12 @@ export async function bookOrderShipment(orderId: string): Promise<OrderShipment>
     shippedAt: shipment.shipped_at ?? undefined,
     deliveredAt: shipment.delivered_at ?? undefined,
   };
+}
+
+// A fresh link to the Shiprocket shipping label PDF for a booked order.
+export async function getShiprocketLabelUrl(orderId: string): Promise<string> {
+  const result = await apiFetch<{ label_url: string }>(`/admin/orders/${orderId}/shipment/shiprocket/label`);
+  return result.label_url;
 }
 
 export async function downloadAdminOrderInvoice(id: string, orderNumber: string): Promise<void> {

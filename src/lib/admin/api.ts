@@ -58,6 +58,7 @@ export const getOrder = orderService.getAdminOrder;
 export const getOrderShipment = orderService.getOrderShipment;
 export const updateOrderShipment = orderService.updateOrderShipment;
 export const bookOrderShipment = orderService.bookOrderShipment;
+export const getShiprocketLabelUrl = orderService.getShiprocketLabelUrl;
 
 // GET /api/v1/admin/orders/:id/invoice
 export const downloadOrderInvoice = orderService.downloadAdminOrderInvoice;
