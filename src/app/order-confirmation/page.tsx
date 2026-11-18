@@ -8,18 +8,127 @@ import { RequireAuth } from "@/components/auth/RequireAuth";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { confirmExpressOrder } from "@/services/express-checkout.service";
 import { getOrderByNumber } from "@/services/order.service";
+import { useCartStore } from "@/store/cart.store";
 import type { Order } from "@/types/order";
 import { cn } from "@/utils/cn";
 import { formatPrice } from "@/utils/formatPrice";
 
 export default function OrderConfirmationPage() {
   return (
+    <Suspense fallback={null}>
+      <OrderConfirmationRouter />
+    </Suspense>
+  );
+}
+
+// Shiprocket's express checkout redirects here with ?oid=<their order id>, often
+// for a customer who never logged in to vylore.in, so that path can't sit
+// behind RequireAuth. Our own checkout (?order_number=) still does.
+function OrderConfirmationRouter() {
+  const oid = useSearchParams().get("oid");
+  if (oid) return <ExpressOrderConfirmationContent oid={oid} />;
+  return (
     <RequireAuth>
-      <Suspense fallback={null}>
-        <OrderConfirmationContent />
-      </Suspense>
+      <OrderConfirmationContent />
     </RequireAuth>
+  );
+}
+
+const EXPRESS_POLL_ATTEMPTS = 8;
+const EXPRESS_POLL_INTERVAL_MS = 2500;
+
+type ExpressView =
+  | { kind: "loading" }
+  | { kind: "order"; order: Order }
+  | { kind: "placed"; orderNumber: string }
+  | { kind: "failed" }
+  | { kind: "pending" };
+
+function ExpressOrderConfirmationContent({ oid }: { oid: string }) {
+  const clearCart = useCartStore((state) => state.clear);
+  const [view, setView] = useState<ExpressView>({ kind: "loading" });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function run() {
+      // Shiprocket can redirect a moment before the payment is final, so keep
+      // asking for a short while before showing "still confirming"
+      for (let attempt = 0; attempt < EXPRESS_POLL_ATTEMPTS && !cancelled; attempt++) {
+        let result;
+        try {
+          result = await confirmExpressOrder(oid);
+        } catch {
+          result = null;
+        }
+        if (cancelled) return;
+
+        if (result?.state === "failed") {
+          setView({ kind: "failed" });
+          return;
+        }
+        if (result?.order_number && (result.state === "created" || result.state === "existing")) {
+          clearCart();
+          // shows the full summary when the order belongs to the logged-in
+          // account; otherwise just the order number
+          const order = await getOrderByNumber(result.order_number);
+          if (!cancelled) setView(order ? { kind: "order", order } : { kind: "placed", orderNumber: result.order_number });
+          return;
+        }
+        await new Promise((resolve) => window.setTimeout(resolve, EXPRESS_POLL_INTERVAL_MS));
+      }
+      if (!cancelled) setView({ kind: "pending" });
+    }
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [oid, clearCart]);
+
+  if (view.kind === "loading") return <ConfirmationSkeleton />;
+  if (view.kind === "order") return <Confirmation order={view.order} />;
+
+  const content = {
+    placed: {
+      title: `Order #${view.kind === "placed" ? view.orderNumber : ""} is confirmed`,
+      description:
+        "Thank you for shopping with Vylore. We've emailed your order details, and you'll get a tracking link as soon as it ships.",
+      action: (
+        <Button href="/shop" variant="primary" size="md">
+          Continue Shopping
+        </Button>
+      ),
+    },
+    failed: {
+      title: "Your order wasn't completed",
+      description: "The payment didn't go through, so nothing was charged. Your bag is saved if you'd like to try again.",
+      action: (
+        <Button href="/cart" variant="primary" size="md">
+          Back to Bag
+        </Button>
+      ),
+    },
+    pending: {
+      title: "We're confirming your order",
+      description:
+        "This is taking a little longer than usual. If you were charged, your order is safe and you'll receive a confirmation email shortly.",
+      action: (
+        <Button href="/contact" variant="primary" size="md">
+          Contact Us
+        </Button>
+      ),
+    },
+  }[view.kind];
+
+  return (
+    <main className="flex flex-1 flex-col py-16 lg:py-24">
+      <Container>
+        <EmptyState title={content.title} description={content.description} action={content.action} />
+      </Container>
+    </main>
   );
 }
 

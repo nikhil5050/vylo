@@ -4,6 +4,7 @@ import Link from "next/link";
 import { CloseIcon } from "@/components/icons/Icons";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useDialogA11y } from "@/hooks/useDialogA11y";
+import { useExpressCheckout } from "@/hooks/useExpressCheckout";
 import { useCartStore } from "@/store/cart.store";
 import { cn } from "@/utils/cn";
 import { formatPrice } from "@/utils/formatPrice";
@@ -18,6 +19,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
   const lines = useCartStore((state) => state.lines);
   const subtotal = lines.reduce((sum, line) => sum + line.product.price * line.quantity, 0);
   const panelRef = useDialogA11y(open, onClose);
+  const express = useExpressCheckout();
 
   return (
     <div
@@ -82,13 +84,27 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
               >
                 View Bag
               </Link>
-              <Link
-                href="/checkout"
-                onClick={onClose}
-                className="eyebrow flex h-11 items-center justify-center bg-burgundy text-xs text-ivory transition-colors hover:bg-burgundy-dark"
-              >
-                Checkout
-              </Link>
+              {express.enabled ? (
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    onClose();
+                    express.start(event);
+                  }}
+                  disabled={express.opening}
+                  className="eyebrow flex h-11 items-center justify-center bg-burgundy text-xs text-ivory transition-colors hover:bg-burgundy-dark disabled:opacity-60"
+                >
+                  {express.opening ? "Opening…" : "Checkout"}
+                </button>
+              ) : (
+                <Link
+                  href="/checkout"
+                  onClick={onClose}
+                  className="eyebrow flex h-11 items-center justify-center bg-burgundy text-xs text-ivory transition-colors hover:bg-burgundy-dark"
+                >
+                  Checkout
+                </Link>
+              )}
             </div>
           </div>
         )}

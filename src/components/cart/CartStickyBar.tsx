@@ -1,7 +1,11 @@
+"use client";
+
 import { Button } from "@/components/ui/Button";
+import { useExpressCheckout } from "@/hooks/useExpressCheckout";
 import { formatPrice } from "@/utils/formatPrice";
 
 export function CartStickyBar({ total }: { total: number }) {
+  const express = useExpressCheckout();
   return (
     // bottom-[...] sits this flush above the fixed mobile bottom nav (Header.tsx,
     // 4.75rem tall + safe-area-inset-bottom) instead of bottom-0, which put it
@@ -11,9 +15,15 @@ export function CartStickyBar({ total }: { total: number }) {
         <p className="text-xs text-muted">Total</p>
         <p className="text-base text-charcoal">{formatPrice(total)}</p>
       </div>
-      <Button href="/checkout" variant="primary" size="md" className="max-w-[220px] flex-1">
-        Checkout
-      </Button>
+      {express.enabled ? (
+        <Button type="button" onClick={express.start} disabled={express.opening} variant="primary" size="md" className="max-w-[220px] flex-1">
+          {express.opening ? "Opening…" : "Checkout"}
+        </Button>
+      ) : (
+        <Button href="/checkout" variant="primary" size="md" className="max-w-[220px] flex-1">
+          Checkout
+        </Button>
+      )}
     </div>
   );
 }

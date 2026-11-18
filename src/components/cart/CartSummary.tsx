@@ -1,9 +1,13 @@
+"use client";
+
 import { Button } from "@/components/ui/Button";
+import { useExpressCheckout } from "@/hooks/useExpressCheckout";
 import { formatPrice } from "@/utils/formatPrice";
 import { CouponForm } from "./CouponForm";
 import { ShareCartButton } from "./ShareCartButton";
 
 export function CartSummary({ subtotal }: { subtotal: number }) {
+  const express = useExpressCheckout();
   return (
     <div className="h-fit border border-silver/30 p-6">
       <h2 className="font-serif text-xl text-charcoal">Order Summary</h2>
@@ -26,9 +30,15 @@ export function CartSummary({ subtotal }: { subtotal: number }) {
         <span className="text-charcoal">{formatPrice(subtotal)}</span>
       </div>
 
-      <Button href="/checkout" variant="primary" size="lg" className="mt-6 w-full">
-        Proceed to Checkout
-      </Button>
+      {express.enabled ? (
+        <Button type="button" onClick={express.start} disabled={express.opening} variant="primary" size="lg" className="mt-6 w-full">
+          {express.opening ? "Opening Checkout…" : "Proceed to Checkout"}
+        </Button>
+      ) : (
+        <Button href="/checkout" variant="primary" size="lg" className="mt-6 w-full">
+          Proceed to Checkout
+        </Button>
+      )}
 
       <div className="mt-3">
         <ShareCartButton />
