@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { preconnect } from "react-dom";
-import { Cormorant_Garamond, Jost } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { AnalyticsScripts } from "@/components/layout/AnalyticsScripts";
 import { SiteChrome } from "@/components/layout/SiteChrome";
@@ -10,22 +10,29 @@ import { absoluteAssetUrl, absoluteUrl, organizationId, siteConfig, socialLinks,
 import { isComingSoon } from "@/config/launch";
 import { defaultOgImage } from "@/utils/metadata";
 
+// Both fonts are self-hosted (latin subset, variable weight, from Google Fonts,
+// SIL Open Font License) rather than loaded via next/font/google: that fetches
+// fonts.googleapis.com at build time, and Hostinger's build server failed it
+// ("Cannot read properties of null (reading '1')" in the font loader).
+
 // Primary (headings, --font-display): Cormorant Garamond — high-contrast serif
 // with a true italic for the gold accent lines. If the licensed "Black Mango"
-// files arrive, swap this for a next/font/local call and keep the variable name
-// so no other file needs to change.
-const display = Cormorant_Garamond({
+// files arrive, swap the src files here and keep the variable name so no other
+// file needs to change.
+const display = localFont({
   variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  display: "swap",
+  src: [
+    { path: "./fonts/cormorant-garamond-latin-variable.woff2", weight: "400 700", style: "normal" },
+    { path: "./fonts/cormorant-garamond-latin-italic-variable.woff2", weight: "400 700", style: "italic" },
+  ],
 });
 
 // Secondary (body and UI, --font-body): Jost — clean geometric sans.
-const body = Jost({
+const body = localFont({
   variable: "--font-body",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+  src: [{ path: "./fonts/jost-latin-variable.woff2", weight: "300 700", style: "normal" }],
 });
 
 export const metadata: Metadata = {
