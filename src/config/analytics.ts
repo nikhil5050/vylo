@@ -7,4 +7,5 @@ export const analyticsConfig = {
   ga4Id: process.env.NEXT_PUBLIC_GA4_ID || "G-GX4R2NYDD0",
   metaPixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID || "1035289126003863",
   clarityId: process.env.NEXT_PUBLIC_CLARITY_ID || "yrtm2bshlh",
+  
 };
