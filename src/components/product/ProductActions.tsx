@@ -2,10 +2,12 @@
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { HeartIcon } from "@/components/icons/Icons";
 import { showAddedToBag } from "@/components/ui/AddedToBagToast";
 import { Button } from "@/components/ui/Button";
+import { useExpressCheckout } from "@/hooks/useExpressCheckout";
+import { loadExpressCheckout } from "@/services/express-checkout.service";
 import { useCartStore } from "@/store/cart.store";
 import { useWishlistStore } from "@/store/wishlist.store";
 import type { Product } from "@/types/product";
@@ -18,6 +20,12 @@ export function ProductActions({ product }: { product: Product }) {
   // shared across unrelated size selectors.
   const pillLayoutId = `size-pill-${useId()}`;
   const addItem = useCartStore((state) => state.addItem);
+  const express = useExpressCheckout();
+
+  useEffect(() => {
+    // Buy Now opens the popup from here, so have its script ready
+    if (express.enabled) loadExpressCheckout().catch(() => {});
+  }, [express.enabled]);
   const saved = useWishlistStore((state) => state.items.some((item) => item.id === product.id));
   const toggleWishlist = useWishlistStore((state) => state.toggle);
 
@@ -34,7 +42,12 @@ export function ProductActions({ product }: { product: Product }) {
     window.setTimeout(() => setAdded(false), 2000);
   }
 
-  function handleBuyNow() {
+  function handleBuyNow(event: React.MouseEvent) {
+    if (express.enabled) {
+      // straight to the Shiprocket popup for this product only
+      express.buyNow(event, [{ product, size: selectedSize, variantId: selectedVariantId, quantity }]);
+      return;
+    }
     addItem(product, { size: selectedSize, variantId: selectedVariantId, quantity });
     router.push("/cart");
   }
@@ -110,11 +123,11 @@ export function ProductActions({ product }: { product: Product }) {
           <Button
             variant="secondary"
             size="lg"
-            disabled={!product.inStock}
+            disabled={!product.inStock || express.opening}
             onClick={handleBuyNow}
             className="flex-1 sm:flex-none"
           >
-            Buy Now
+            {express.opening ? "Opening…" : "Buy Now"}
           </Button>
           <button
             type="button"

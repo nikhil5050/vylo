@@ -8,7 +8,7 @@ import {
   loadExpressCheckout,
   openExpressCheckout,
 } from "@/services/express-checkout.service";
-import { useCartStore } from "@/store/cart.store";
+import { type CartLine, useCartStore } from "@/store/cart.store";
 
 // Drives every "Checkout" button. With express checkout on, a click opens the
 // Shiprocket popup for the current bag; if anything fails (script blocked,
@@ -17,10 +17,12 @@ import { useCartStore } from "@/store/cart.store";
 export function useExpressCheckout() {
   const router = useRouter();
   const lines = useCartStore((state) => state.lines);
+  const addItem = useCartStore((state) => state.addItem);
   const [opening, setOpening] = useState(false);
 
   useEffect(() => {
-    // warm the script so the popup opens without a visible wait
+    // warm the script so the popup opens without a visible wait — only once
+    // there's something to buy, so browsing pages don't load it
     if (EXPRESS_CHECKOUT_ENABLED && lines.length > 0) loadExpressCheckout().catch(() => {});
   }, [lines.length]);
 
@@ -31,7 +33,7 @@ export function useExpressCheckout() {
       const nativeEvent = event.nativeEvent;
       setOpening(true);
       try {
-        await openExpressCheckout(nativeEvent, lines);
+        await openExpressCheckout(nativeEvent, lines, "bag");
       } catch {
         router.push(FALLBACK_URL);
       } finally {
@@ -41,5 +43,27 @@ export function useExpressCheckout() {
     [lines, opening, router],
   );
 
-  return { enabled: EXPRESS_CHECKOUT_ENABLED, start, opening };
+  // Buy Now: the popup for just these lines (one product), bag untouched. If the
+  // popup can't open, the product goes into the bag and the customer lands on
+  // our own checkout, as Buy Now did before.
+  const buyNow = useCallback(
+    async (event: React.MouseEvent, buyLines: CartLine[]) => {
+      if (opening) return;
+      const nativeEvent = event.nativeEvent;
+      setOpening(true);
+      try {
+        await openExpressCheckout(nativeEvent, buyLines, "buy-now");
+      } catch {
+        for (const line of buyLines) {
+          addItem(line.product, { size: line.size, variantId: line.variantId, quantity: line.quantity });
+        }
+        router.push(FALLBACK_URL);
+      } finally {
+        setOpening(false);
+      }
+    },
+    [addItem, opening, router],
+  );
+
+  return { enabled: EXPRESS_CHECKOUT_ENABLED, start, buyNow, opening };
 }

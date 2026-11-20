@@ -78,9 +78,38 @@ export async function createExpressSession(lines: CartLine[]): Promise<string> {
   return session.token;
 }
 
-export async function openExpressCheckout(event: Event, lines: CartLine[]): Promise<void> {
+// Where the popup was opened from: "bag" (the whole bag) or "buy-now" (one
+// product, bag untouched). The confirmation page empties the bag only after a
+// "bag" checkout, so a Buy Now purchase never wipes what's saved in the bag.
+export type ExpressCheckoutSource = "bag" | "buy-now";
+const SOURCE_KEY = "vylore-express-source";
+
+function rememberSource(source: ExpressCheckoutSource) {
+  try {
+    window.sessionStorage.setItem(SOURCE_KEY, source);
+  } catch {
+    // storage blocked: the bag just won't be emptied after checkout
+  }
+}
+
+export function takeExpressSource(): ExpressCheckoutSource | null {
+  try {
+    const value = window.sessionStorage.getItem(SOURCE_KEY);
+    window.sessionStorage.removeItem(SOURCE_KEY);
+    return value === "bag" || value === "buy-now" ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function openExpressCheckout(
+  event: Event,
+  lines: CartLine[],
+  source: ExpressCheckoutSource = "bag",
+): Promise<void> {
   // load the script and create the session in parallel
   const [checkout, token] = await Promise.all([loadExpressCheckout(), createExpressSession(lines)]);
+  rememberSource(source);
   checkout.addToCart(event, token, { fallbackUrl: FALLBACK_URL });
 }
 

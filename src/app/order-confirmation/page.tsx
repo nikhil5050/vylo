@@ -8,7 +8,7 @@ import { RequireAuth } from "@/components/auth/RequireAuth";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { confirmExpressOrder } from "@/services/express-checkout.service";
+import { confirmExpressOrder, takeExpressSource } from "@/services/express-checkout.service";
 import { getOrderByNumber } from "@/services/order.service";
 import { useAuthStore } from "@/store/auth.store";
 import { useCartStore } from "@/store/cart.store";
@@ -71,7 +71,8 @@ function ExpressOrderConfirmationContent({ oid }: { oid: string }) {
           return;
         }
         if (result?.order_number && (result.state === "created" || result.state === "existing")) {
-          clearCart();
+          // a Buy Now purchase leaves the bag as it was
+          if (takeExpressSource() === "bag") clearCart();
           // shows the full summary when the order belongs to the logged-in
           // account; otherwise just the order number. Only asked when logged
           // in: apiFetch never resolves on a 401 (it hands off to the login
