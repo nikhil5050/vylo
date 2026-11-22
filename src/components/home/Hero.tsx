@@ -80,9 +80,12 @@ export function Hero() {
         <div className="hero-rise relative z-10 max-w-xl lg:max-w-[56%] xl:max-w-[50%]">
           <div className="flex items-center gap-4">
             <span className="h-px w-12 bg-gold" />
-            <p className="text-[11px] font-medium uppercase tracking-[0.32em] text-white/85 sm:text-xs">
-              Vylore
-            </p>
+            {/* Fixed to the old text's line height (16px); width follows the logo's aspect ratio. */}
+            <img
+              src="https://ik.imagekit.io/vyloreimgs/vylore/Secondary%20Logo-03.png"
+              alt="Vylore"
+              className="h-4 w-auto"
+            />
           </div>
 
           {/* Each line kept whole; the phone size scales with the viewport so the
