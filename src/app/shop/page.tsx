@@ -183,14 +183,13 @@ function ShopIntro({ categories }: { categories: Category[] }) {
           {heading}
         </h1>
         {/* Gold hairline divider with a centre sparkle. */}
-        <div aria-hidden className="mx-auto mt-5 flex w-48 items-center gap-3 text-gold">
+        {/* <div aria-hidden className="mx-auto mt-5 flex w-48 items-center gap-3 text-gold">
           <span className="h-px flex-1 bg-gradient-to-r from-transparent to-gold/70" />
           <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1">
             <path d="M8 1Q9 7 15 8Q9 9 8 15Q7 9 1 8Q7 7 8 1Z" />
           </svg>
           <span className="h-px flex-1 bg-gradient-to-l from-transparent to-gold/70" />
-        </div>
-        <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-ivory/80 sm:text-base">{shopIntro.body}</p>
+        </div> */}
         {live.length > 0 && (
           <nav aria-label="Shop by category" className="mt-7 flex flex-wrap justify-center gap-2 sm:gap-3">
             {live.map((guide) => (
