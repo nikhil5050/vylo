@@ -21,9 +21,9 @@ const features = [
 // `updatedAt` pins the ImageKit version, so a re-upload under the same name
 // isn't masked by a cached copy; bump it after replacing either file.
 const HERO_BG =
-  "https://ik.imagekit.io/vyloreimgs/vylore/banners/vylore-bg.webp?updatedAt=1792892283352";
+  "https://ik.imagekit.io/vyloreimgs/vylore/banners/Sapphire%20Elegance%20on%20Burgundy%20Leather.png";
 const HERO_BG_MOBILE =
-  "https://ik.imagekit.io/vyloreimgs/vylore/banners/vylore_mobileview-bg.webp?updatedAt=1792893195453";
+  "https://ik.imagekit.io/vyloreimgs/vylore/banners/mobile-view";
 
 /**
  * Home hero — full-bleed burgundy lounge photo (served from ImageKit, see HERO_BG),

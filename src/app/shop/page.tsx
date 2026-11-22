@@ -19,7 +19,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const shopPosters = {
-  top: "https://ik.imagekit.io/vyloreimgs/vylore/banners/shopbannertop.jpeg",
+  top: "https://ik.imagekit.io/vyloreimgs/vylore/banners/Timeless%20Elegance%20Jewellery%20Advertisement.png",
   bottom: "https://ik.imagekit.io/vyloreimgs/vylore/banners/posterbottom.png",
 };
 
